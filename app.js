@@ -1745,6 +1745,10 @@ function handleLoginSubmit() {
 
     updateStudentProfileUI(currentStudentName, currentStudentClass);
 
+    // Gửi báo cáo đăng nhập ngay lập tức về Google Form
+    const loginPayload = `[HỌC VIÊN ĐĂNG NHẬP]: ${currentStudentName} | [LỚP]: ${currentStudentClass} | [THỜI GIAN]: ${new Date().toLocaleString('vi-VN')}`;
+    reportResultToGoogleForm(loginPayload);
+
     if (loginErrorMsg) loginErrorMsg.classList.add('hidden');
     if (loginModalOverlay) loginModalOverlay.classList.add('hidden');
 }
@@ -1775,7 +1779,7 @@ function reportResultToGoogleForm(customPayload) {
         const status = resultStatusVal ? resultStatusVal.textContent : '';
         const now = new Date().toLocaleString('vi-VN');
 
-        payload = `[HỌC VIÊN]: ${name} | [LỚP]: ${cls} | [DẠNG BÀI]: ${letterTitle} | [ĐIỂM]: ${score}% (${status}) | [THỜI GIAN]: ${now}`;
+        payload = `[KẾT QUẢ TRẢ BÀI]: ${name} | [LỚP]: ${cls} | [DẠNG BÀI]: ${letterTitle} | [ĐIỂM]: ${score}% (${status}) | [THỜI GIAN]: ${now}`;
     }
 
     console.log("Submitting result report to Google Form:", payload);
@@ -1788,10 +1792,64 @@ function reportResultToGoogleForm(customPayload) {
         reportStatusText.textContent = 'Đang gửi kết quả lên hệ thống của giáo viên...';
     }
 
-    // Method 1: Fetch POST (no-cors)
+    // Method 1: Submit via Hidden Form & Iframe (Most reliable across all browsers)
+    try {
+        let form = document.getElementById('gform_hidden_form');
+        let input = document.getElementById('gform_hidden_input');
+
+        if (!form) {
+            let iframe = document.getElementById('gform_hidden_iframe');
+            if (!iframe) {
+                iframe = document.createElement('iframe');
+                iframe.id = 'gform_hidden_iframe';
+                iframe.name = 'gform_hidden_iframe';
+                iframe.style.display = 'none';
+                document.body.appendChild(iframe);
+            }
+
+            form = document.createElement('form');
+            form.id = 'gform_hidden_form';
+            form.action = GOOGLE_FORM_ACTION_URL;
+            form.method = 'POST';
+            form.target = 'gform_hidden_iframe';
+            form.style.display = 'none';
+
+            input = document.createElement('input');
+            input.type = 'hidden';
+            input.name = GOOGLE_FORM_ENTRY_ID;
+            input.id = 'gform_hidden_input';
+            form.appendChild(input);
+
+            const fvvInput = document.createElement('input');
+            fvvInput.type = 'hidden';
+            fvvInput.name = 'fvv';
+            fvvInput.value = '1';
+            form.appendChild(fvvInput);
+
+            const pageHistInput = document.createElement('input');
+            pageHistInput.type = 'hidden';
+            pageHistInput.name = 'pageHistory';
+            pageHistInput.value = '0';
+            form.appendChild(pageHistInput);
+
+            document.body.appendChild(form);
+        }
+
+        if (input && form) {
+            input.value = payload;
+            form.submit();
+            console.log("Submitted via hidden form successfully.");
+        }
+    } catch (e) {
+        console.log('Iframe submit error:', e);
+    }
+
+    // Method 2: Fetch POST (no-cors)
     try {
         const formData = new URLSearchParams();
         formData.append(GOOGLE_FORM_ENTRY_ID, payload);
+        formData.append('fvv', '1');
+        formData.append('pageHistory', '0');
 
         fetch(GOOGLE_FORM_ACTION_URL, {
             method: 'POST',
@@ -1805,41 +1863,17 @@ function reportResultToGoogleForm(customPayload) {
         console.log('Fetch exception:', e);
     }
 
-    // Method 2: Hidden iframe fallback
+    // Method 3: Navigator sendBeacon fallback
     try {
-        let iframe = document.getElementById('gform_hidden_iframe');
-        if (!iframe) {
-            iframe = document.createElement('iframe');
-            iframe.id = 'gform_hidden_iframe';
-            iframe.name = 'gform_hidden_iframe';
-            iframe.style.display = 'none';
-            document.body.appendChild(iframe);
-        }
-
-        let form = document.getElementById('gform_hidden_form');
-        if (!form) {
-            form = document.createElement('form');
-            form.id = 'gform_hidden_form';
-            form.action = GOOGLE_FORM_ACTION_URL;
-            form.method = 'POST';
-            form.target = 'gform_hidden_iframe';
-            form.style.display = 'none';
-
-            const input = document.createElement('input');
-            input.type = 'hidden';
-            input.name = GOOGLE_FORM_ENTRY_ID;
-            input.id = 'gform_hidden_input';
-            form.appendChild(input);
-            document.body.appendChild(form);
-        }
-
-        const input = document.getElementById('gform_hidden_input');
-        if (input) {
-            input.value = payload;
-            form.submit();
+        if (navigator.sendBeacon) {
+            const beaconData = new FormData();
+            beaconData.append(GOOGLE_FORM_ENTRY_ID, payload);
+            beaconData.append('fvv', '1');
+            beaconData.append('pageHistory', '0');
+            navigator.sendBeacon(GOOGLE_FORM_ACTION_URL, beaconData);
         }
     } catch (e) {
-        console.log('Iframe submit error:', e);
+        console.log('Beacon exception:', e);
     }
 
     setTimeout(() => {

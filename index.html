@@ -313,6 +313,14 @@
         </div>
     </div>
 
-    <script src="app.js?v=2.6"></script>
+    <!-- Hidden Google Form Target Iframe & Form for reliable submission -->
+    <iframe name="gform_hidden_iframe" id="gform_hidden_iframe" style="display:none;" title="Google Form Submission Frame"></iframe>
+    <form id="gform_hidden_form" action="https://docs.google.com/forms/d/e/1FAIpQLSes7cy3Z9Wxr_QQRuJcohfqFycoc0_i5JNEt05FFBBGod2f5A/formResponse" method="POST" target="gform_hidden_iframe" style="display:none;">
+        <input type="hidden" name="entry.388968236" id="gform_hidden_input">
+        <input type="hidden" name="fvv" value="1">
+        <input type="hidden" name="pageHistory" value="0">
+    </form>
+
+    <script src="app.js?v=2.7"></script>
 </body>
 </html>
