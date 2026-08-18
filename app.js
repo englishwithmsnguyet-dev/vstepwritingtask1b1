@@ -1696,23 +1696,17 @@ function selectLetterType(id) {
 
 // --- Authentication & Student Profile Management ---
 function initAuthSystem() {
-    const savedName = localStorage.getItem('vstep_student_name');
-    const savedClass = localStorage.getItem('vstep_student_class');
-
-    if (savedName && savedClass && ALLOWED_CLASSES.includes(savedClass.trim().toUpperCase())) {
-        currentStudentName = savedName.trim();
-        currentStudentClass = savedClass.trim().toUpperCase();
-        updateStudentProfileUI(currentStudentName, currentStudentClass);
-        if (loginModalOverlay) loginModalOverlay.classList.add('hidden');
-    } else {
-        openLoginModal();
-    }
+    // Luôn luôn yêu cầu đăng nhập lại mỗi khi F5 hoặc mở lại trang web
+    currentStudentName = '';
+    currentStudentClass = '';
+    updateStudentProfileUI('', '');
+    openLoginModal();
 }
 
 function openLoginModal() {
     if (!loginModalOverlay) return;
-    if (studentNameInput) studentNameInput.value = currentStudentName || '';
-    if (studentClassInput) studentClassInput.value = currentStudentClass || '';
+    if (studentNameInput) studentNameInput.value = '';
+    if (studentClassInput) studentClassInput.value = '';
     if (loginErrorMsg) loginErrorMsg.classList.add('hidden');
     loginModalOverlay.classList.remove('hidden');
     setTimeout(() => {
