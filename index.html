@@ -291,43 +291,28 @@
     <!-- Login Modal Overlay -->
     <div class="login-modal-overlay" id="loginModalOverlay">
         <div class="login-modal-card">
-            <div class="login-modal-header">
-                <div class="login-icon">
-                    <i class="fa-solid fa-graduation-cap"></i>
-                </div>
-                <h2>ĐĂNG NHẬP HỆ THỐNG</h2>
-                <p>VSTEP WRITING TASK 01 - B1 LEVEL</p>
+            <div class="login-circle-icon">
+                <i class="fa-solid fa-pencil"></i>
             </div>
-            <div class="login-modal-body">
-                <div class="login-form-group">
-                    <label for="studentNameInput"><i class="fa-solid fa-user"></i> Họ và tên của bạn:</label>
-                    <input type="text" id="studentNameInput" placeholder="Ví dụ: Nguyễn Văn An" autocomplete="name">
-                </div>
-                <div class="login-form-group">
-                    <label for="studentClassSelect"><i class="fa-solid fa-school"></i> Lớp học:</label>
-                    <select id="studentClassSelect">
-                        <option value="" disabled selected>-- Chọn lớp học của bạn --</option>
-                        <option value="CB201">Lớp CB201</option>
-                        <option value="CB202">Lớp CB202</option>
-                        <option value="B209">Lớp B209</option>
-                    </select>
-                </div>
-                <div class="login-note-box">
-                    <i class="fa-solid fa-circle-info"></i> <span>Hệ thống chỉ tiếp nhận học viên thuộc các lớp: <strong>CB201</strong>, <strong>CB202</strong>, <strong>B209</strong>. Kết quả học tập sẽ được tự động báo cáo lên hệ thống của giáo viên.</span>
-                </div>
-                <div class="login-error-msg hidden" id="loginErrorMsg">
-                    <i class="fa-solid fa-circle-exclamation"></i> <span id="loginErrorText">Vui lòng nhập họ tên và chọn lớp hợp lệ.</span>
-                </div>
-                <button class="btn-login-submit" id="btnLoginSubmit">
-                    <i class="fa-solid fa-arrow-right-to-bracket"></i> BẮT ĐẦU VÀO HỌC
-                </button>
+            
+            <h2 class="login-title">CHÀO MỪNG BẠN ĐẾN VỚI LỚP HỌC CỦA MISS NGUYET</h2>
+            <p class="login-subtitle">Vui lòng điền Họ tên và Lớp học của bạn để bắt đầu học. Kết quả luyện tập sẽ được ghi nhận và gửi báo cáo cho giáo viên.</p>
+            
+            <div class="login-form-inputs">
+                <input type="text" id="studentNameInput" class="login-input-clean" placeholder="HỌ VÀ TÊN" autocomplete="off">
+                <input type="text" id="studentClassInput" class="login-input-clean" placeholder="LỚP HỌC" autocomplete="off">
             </div>
-            <div class="login-modal-footer">
-                <span>#englishwithmissnguyet</span>
+
+            <div class="login-error-msg hidden" id="loginErrorMsg">
+                <i class="fa-solid fa-circle-exclamation"></i> <span id="loginErrorText">Vui lòng điền đúng Họ tên và Lớp học.</span>
             </div>
+
+            <button class="btn-login-submit" id="btnLoginSubmit">
+                BẮT ĐẦU HỌC NGAY
+            </button>
         </div>
     </div>
 
-    <script src="app.js?v=2.5"></script>
+    <script src="app.js?v=2.6"></script>
 </body>
 </html>

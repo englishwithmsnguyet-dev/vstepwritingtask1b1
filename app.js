@@ -1138,7 +1138,7 @@ let currentStudentClass = '';
 
 let loginModalOverlay;
 let studentNameInput;
-let studentClassSelect;
+let studentClassInput;
 let btnLoginSubmit;
 let loginErrorMsg;
 let loginErrorText;
@@ -1712,7 +1712,7 @@ function initAuthSystem() {
 function openLoginModal() {
     if (!loginModalOverlay) return;
     if (studentNameInput) studentNameInput.value = currentStudentName || '';
-    if (studentClassSelect) studentClassSelect.value = currentStudentClass || '';
+    if (studentClassInput) studentClassInput.value = currentStudentClass || '';
     if (loginErrorMsg) loginErrorMsg.classList.add('hidden');
     loginModalOverlay.classList.remove('hidden');
     setTimeout(() => {
@@ -1722,22 +1722,22 @@ function openLoginModal() {
 
 function handleLoginSubmit() {
     const nameVal = studentNameInput ? studentNameInput.value.trim() : '';
-    const classVal = studentClassSelect ? studentClassSelect.value.trim().toUpperCase() : '';
+    const rawClassVal = studentClassInput ? studentClassInput.value.trim().toUpperCase().replace(/\s+/g, '') : '';
 
     if (!nameVal || nameVal.length < 2) {
-        showLoginError('Vui lòng nhập đầy đủ Họ và tên (tối thiểu 2 ký tự).');
+        showLoginError('Vui lòng điền đầy đủ Họ và tên.');
         if (studentNameInput) studentNameInput.focus();
         return;
     }
 
-    if (!classVal || !ALLOWED_CLASSES.includes(classVal)) {
-        showLoginError('Hệ thống chỉ tiếp nhận học viên thuộc các lớp: CB201, CB202, B209.');
-        if (studentClassSelect) studentClassSelect.focus();
+    if (!rawClassVal || !ALLOWED_CLASSES.includes(rawClassVal)) {
+        showLoginError('Lớp học không đúng. Vui lòng kiểm tra lại tên lớp!');
+        if (studentClassInput) studentClassInput.focus();
         return;
     }
 
     currentStudentName = nameVal;
-    currentStudentClass = classVal;
+    currentStudentClass = rawClassVal;
 
     localStorage.setItem('vstep_student_name', currentStudentName);
     localStorage.setItem('vstep_student_class', currentStudentClass);
@@ -1864,7 +1864,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Query Auth Elements
     loginModalOverlay = document.getElementById('loginModalOverlay');
     studentNameInput = document.getElementById('studentNameInput');
-    studentClassSelect = document.getElementById('studentClassSelect');
+    studentClassInput = document.getElementById('studentClassInput');
     btnLoginSubmit = document.getElementById('btnLoginSubmit');
     loginErrorMsg = document.getElementById('loginErrorMsg');
     loginErrorText = document.getElementById('loginErrorText');
@@ -1923,6 +1923,11 @@ document.addEventListener('DOMContentLoaded', () => {
     if (btnEditStudent) btnEditStudent.addEventListener('click', openLoginModal);
     if (studentNameInput) {
         studentNameInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') handleLoginSubmit();
+        });
+    }
+    if (studentClassInput) {
+        studentClassInput.addEventListener('keydown', (e) => {
             if (e.key === 'Enter') handleLoginSubmit();
         });
     }
