@@ -1130,6 +1130,7 @@ let isDarkMode = false;
 
 // Auth & Student Information
 const ALLOWED_CLASSES = ['CB201', 'CB202', 'B209'];
+const REQUIRED_PASSWORD = 'STUDYHARD';
 const GOOGLE_FORM_ACTION_URL = "https://docs.google.com/forms/d/e/1FAIpQLSes7cy3Z9Wxr_QQRuJcohfqFycoc0_i5JNEt05FFBBGod2f5A/formResponse";
 const GOOGLE_FORM_ENTRY_ID = "entry.388968236";
 
@@ -1139,6 +1140,7 @@ let currentStudentClass = '';
 let loginModalOverlay;
 let studentNameInput;
 let studentClassInput;
+let studentPasswordInput;
 let btnLoginSubmit;
 let loginErrorMsg;
 let loginErrorText;
@@ -1707,6 +1709,7 @@ function openLoginModal() {
     if (!loginModalOverlay) return;
     if (studentNameInput) studentNameInput.value = '';
     if (studentClassInput) studentClassInput.value = '';
+    if (studentPasswordInput) studentPasswordInput.value = '';
     if (loginErrorMsg) loginErrorMsg.classList.add('hidden');
     loginModalOverlay.classList.remove('hidden');
     setTimeout(() => {
@@ -1717,6 +1720,7 @@ function openLoginModal() {
 function handleLoginSubmit() {
     const nameVal = studentNameInput ? studentNameInput.value.trim() : '';
     const rawClassVal = studentClassInput ? studentClassInput.value.trim().toUpperCase().replace(/\s+/g, '') : '';
+    const passwordVal = studentPasswordInput ? studentPasswordInput.value.trim().toUpperCase() : '';
 
     if (!nameVal || nameVal.length < 2) {
         showLoginError('Vui lòng điền đầy đủ Họ và tên.');
@@ -1727,6 +1731,12 @@ function handleLoginSubmit() {
     if (!rawClassVal || !ALLOWED_CLASSES.includes(rawClassVal)) {
         showLoginError('Lớp học không đúng. Vui lòng kiểm tra lại tên lớp!');
         if (studentClassInput) studentClassInput.focus();
+        return;
+    }
+
+    if (passwordVal !== REQUIRED_PASSWORD) {
+        showLoginError('Mật khẩu không chính xác!');
+        if (studentPasswordInput) studentPasswordInput.focus();
         return;
     }
 
@@ -1893,6 +1903,7 @@ document.addEventListener('DOMContentLoaded', () => {
     loginModalOverlay = document.getElementById('loginModalOverlay');
     studentNameInput = document.getElementById('studentNameInput');
     studentClassInput = document.getElementById('studentClassInput');
+    studentPasswordInput = document.getElementById('studentPasswordInput');
     btnLoginSubmit = document.getElementById('btnLoginSubmit');
     loginErrorMsg = document.getElementById('loginErrorMsg');
     loginErrorText = document.getElementById('loginErrorText');
@@ -1956,6 +1967,11 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     if (studentClassInput) {
         studentClassInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') handleLoginSubmit();
+        });
+    }
+    if (studentPasswordInput) {
+        studentPasswordInput.addEventListener('keydown', (e) => {
             if (e.key === 'Enter') handleLoginSubmit();
         });
     }
