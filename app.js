@@ -1131,6 +1131,34 @@ let isDarkMode = false;
 // Auth & Student Information
 const ALLOWED_CLASSES = ['CB201', 'CB202', 'B209'];
 const REQUIRED_PASSWORD = 'STUDYHARD';
+const ALLOWED_STUDENT_NAMES = [
+    "Nguyễn Thị Vân Anh",
+    "Nguyễn Thị Hồng Duyên",
+    "Nguyễn Thị Thúy Hồng",
+    "Trương Ngọc Nhi",
+    "Nguyễn Phạm Như Quỳnh",
+    "Trần Lê Quỳnh",
+    "Thị Mỹ Tâm",
+    "Ông Lê Thành",
+    "Trần Nguyễn Thanh Thảo",
+    "Phan Nhật Thiện",
+    "Nguyễn Mỹ Tiên",
+    "Trần Thị Cẩm Tiên",
+    "Võ Trần Bảo Tính",
+    "Trương Thanh Toàn",
+    "Phạm Ngọc Trâm",
+    "Nguyễn Võ Bảo Trân"
+];
+
+function normalizeVietnameseString(str) {
+    if (!str) return '';
+    return str
+        .normalize('NFC')
+        .toLowerCase()
+        .replace(/\s+/g, ' ')
+        .trim();
+}
+
 const GOOGLE_FORM_ACTION_URL = "https://docs.google.com/forms/d/e/1FAIpQLSes7cy3Z9Wxr_QQRuJcohfqFycoc0_i5JNEt05FFBBGod2f5A/formResponse";
 const GOOGLE_FORM_ENTRY_ID = "entry.388968236";
 
@@ -1728,6 +1756,17 @@ function handleLoginSubmit() {
         return;
     }
 
+    const normalizedInputName = normalizeVietnameseString(nameVal);
+    const matchedStudent = ALLOWED_STUDENT_NAMES.find(allowed => 
+        normalizeVietnameseString(allowed) === normalizedInputName
+    );
+
+    if (!matchedStudent) {
+        showLoginError('Họ và tên không thuộc danh sách học viên của lớp!');
+        if (studentNameInput) studentNameInput.focus();
+        return;
+    }
+
     if (!rawClassVal || !ALLOWED_CLASSES.includes(rawClassVal)) {
         showLoginError('Lớp học không đúng. Vui lòng kiểm tra lại tên lớp!');
         if (studentClassInput) studentClassInput.focus();
@@ -1740,7 +1779,7 @@ function handleLoginSubmit() {
         return;
     }
 
-    currentStudentName = nameVal;
+    currentStudentName = matchedStudent;
     currentStudentClass = rawClassVal;
 
     localStorage.setItem('vstep_student_name', currentStudentName);
