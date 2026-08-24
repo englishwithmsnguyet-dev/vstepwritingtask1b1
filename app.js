@@ -1129,7 +1129,7 @@ let themeToggle;
 let isDarkMode = false;
 
 // Auth & Student Information
-const ALLOWED_CLASSES = ['CB201', 'CB202', 'B209'];
+const ALLOWED_CLASSES = ['CB206'];
 const REQUIRED_PASSWORD = 'STUDYHARD';
 const ALLOWED_STUDENT_NAMES = [
     "Nguyễn Thị Vân Anh",
