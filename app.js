@@ -805,6 +805,112 @@ Cậu khỏe không? Tớ hy vọng cậu vẫn khỏe. Trong thư của cậu, 
 Tớ hy vọng cậu sẽ thấy những thông tin này hữu ích. Hãy cho tớ biết nếu cậu cần thêm chi tiết nhé. Hãy viết thư lại sớm nhé.
 
 Chúc cậu mọi điều tốt lành,`
+    },
+complaint: {
+        title: "DẠNG 04: LETTER OF COMPLAINT (THƯ PHÀN NÀN)",
+        prompt: `You recently stayed at a hotel during your holiday. Unfortunately, you were not satisfied with your room. Write a letter to the hotel manager to complain about your stay. In your letter, you should:
+• describe the problems with the room
+• explain how you felt about the experience
+• suggest some improvements
+You should write at least 120 words. Do not include your name or address.`,
+        analysis: {
+            recipient: "Quản lý khách sạn (The Hotel Manager)",
+            purpose: "Phàn nàn về chất lượng phòng và đề xuất phương án cải thiện",
+            style: "Trang trọng (Formal Letter)",
+            requirements: "Mô tả vấn đề của phòng, Bày tỏ cảm xúc, Đề xuất cải thiện"
+        },
+        hints: [
+            {
+                title: "1. Describe the problems with the room (Mô tả các vấn đề của phòng)",
+                type: "standard",
+                items: [
+                    {
+                        en: "The air conditioner was broken and made a very loud noise all night",
+                        vi: "Máy điều hòa bị hỏng và phát ra tiếng ồn rất lớn suốt đêm",
+                        reasonEn: "which made it impossible for me to sleep well.",
+                        reasonVi: "khiến tôi không thể nào ngủ ngon được."
+                    },
+                    {
+                        en: "The bathroom was not properly cleaned and the shower had no hot water",
+                        vi: "Phòng tắm không được dọn dẹp sạch sẽ và vòi sen không có nước nóng",
+                        reasonEn: "which was extremely inconvenient and uncomfortable.",
+                        reasonVi: "điều này cực kỳ bất tiện và gây khó chịu."
+                    },
+                    {
+                        en: "The bed sheets and towels were stained and looked old",
+                        vi: "Ga trải giường và khăn tắm bị ố bẩn và trông đã cũ",
+                        reasonEn: "so I had to ask the housekeeping staff to replace them.",
+                        reasonVi: "nên tôi đã phải yêu cầu nhân viên dọn phòng thay mới."
+                    }
+                ]
+            },
+            {
+                title: "2. Explain how you felt about the experience (Bày tỏ cảm xúc về trải nghiệm)",
+                type: "standard",
+                items: [
+                    {
+                        en: "I was extremely disappointed with the poor quality of the room",
+                        vi: "Tôi vô cùng thất vọng với chất lượng kém của căn phòng",
+                        reasonEn: "because I chose your hotel based on its high ratings and reputation.",
+                        reasonVi: "vì tôi đã chọn khách sạn của quý vị dựa trên đánh giá cao và danh tiếng."
+                    },
+                    {
+                        en: "This unpleasant experience completely ruined my holiday with my family",
+                        vi: "Trải nghiệm không mấy dễ chịu này đã làm hỏng hoàn toàn kỳ nghỉ của tôi với gia đình",
+                        reasonEn: "as we could not relax and enjoy our stay.",
+                        reasonVi: "vì chúng tôi không thể thư giãn và tận hưởng kỳ nghỉ."
+                    },
+                    {
+                        en: "I felt quite frustrated with the slow response from the reception desk",
+                        vi: "Tôi cảm thấy khá bực bội với sự hỗ trợ chậm chạp từ quầy lễ tân",
+                        reasonEn: "when I reported these issues to the staff.",
+                        reasonVi: "khi tôi phản ánh những vấn đề này với nhân viên."
+                    }
+                ]
+            },
+            {
+                title: "3. Suggest some improvements (Đề xuất giải pháp cải thiện)",
+                type: "standard",
+                items: [
+                    {
+                        en: "I would appreciate it if you could inspect and repair the broken air conditioners",
+                        vi: "Tôi sẽ rất cảm kích nếu quý vị có thể kiểm tra và sửa chữa các máy điều hòa bị hỏng",
+                        reasonEn: "to ensure future guests do not experience the same problem.",
+                        reasonVi: "để đảm bảo các khách hàng sau không gặp phải vấn đề tương tự."
+                    },
+                    {
+                        en: "The housekeeping team should clean the rooms and bathrooms more thoroughly",
+                        vi: "Đội ngũ dọn phòng nên vệ sinh phòng ốc và phòng tắm kỹ lưỡng hơn",
+                        reasonEn: "to maintain high hygiene standards throughout the hotel.",
+                        reasonVi: "để duy trì tiêu chuẩn vệ sinh cao trong toàn bộ khách sạn."
+                    },
+                    {
+                        en: "I hope you will consider offering a partial refund or compensation for the inconvenience",
+                        vi: "Tôi hy vọng quý vị sẽ xem xét hoàn lại một phần tiền hoặc bồi thường cho sự bất tiện này",
+                        reasonEn: "which would show your commitment to customer satisfaction.",
+                        reasonVi: "điều này sẽ thể hiện sự cam kết của quý vị đối với sự hài lòng của khách hàng."
+                    }
+                ]
+            }
+        ],
+        sampleModel: `Dear Sir/Madam,
+
+I am writing to complain about the room condition during my recent stay at your hotel from 10th to 12th August. Unfortunately, I was not satisfied with the quality of the accommodation and service.
+
+Firstly, the main problem was that the air conditioner in my room was broken and made a very loud noise throughout the night, which made it impossible for me to sleep. Secondly, the bathroom was not properly cleaned and the shower did not have any hot water. Finally, the bed sheets and towels were stained and looked very old. I was extremely disappointed with these issues because I chose your hotel based on its high reputation. This unpleasant experience completely ruined my holiday. Therefore, I would appreciate it if you could inspect and repair the air conditioners immediately, as well as ensure that the housekeeping team cleans the rooms more thoroughly. Furthermore, I hope you will consider offering a partial refund for the inconvenience caused.
+
+I hope you will look into these matters soon. I look forward to receiving your reply.
+
+Yours faithfully,`,
+        sampleModelVi: `Kính gửi Ông/Bà,
+
+Tôi viết thư này để phàn nàn về tình trạng phòng ốc trong kỳ nghỉ gần đây của tôi tại khách sạn của quý vị từ ngày 10 đến ngày 12 tháng Tám. Thật không may, tôi đã không hài lòng với chất lượng chỗ ở và dịch vụ.
+
+Đầu tiên, vấn đề chính là máy điều hòa trong phòng tôi bị hỏng và phát ra tiếng ồn rất lớn suốt đêm, khiến tôi không thể nào chợp mắt được. Thứ hai, phòng tắm không được dọn dẹp sạch sẽ và vòi hoa sen hoàn toàn không có nước nóng. Cuối cùng, ga trải giường và khăn tắm bị ố bẩn và trông rất cũ. Tôi vô cùng thất vọng với những vấn đề này vì tôi đã chọn khách sạn của quý vị dựa trên danh tiếng cao của khách sạn. Trải nghiệm khó chịu này đã làm hỏng hoàn toàn kỳ nghỉ của tôi. Do đó, tôi sẽ rất cảm kích nếu quý vị có thể kiểm tra và sửa chữa máy điều hòa ngay lập tức, cũng như đảm bảo đội ngũ dọn phòng vệ sinh phòng ốc kỹ lưỡng hơn. Hơn nữa, tôi hy vọng quý vị sẽ xem xét hoàn lại một phần tiền cho sự bất tiện mà tôi đã gặp phải.
+
+Tôi hy vọng quý vị sẽ sớm xem xét các vấn đề này. Tôi rất mong sớm nhận được phản hồi từ quý vị.
+
+Trân trọng,`
     }
 };
 
@@ -818,7 +924,7 @@ function renderExtraPracticePanel(typeId) {
             <div class="content-block" style="text-align: center; padding: 40px 20px;">
                 <i class="fa-solid fa-clock" style="font-size: 42px; color: var(--primary-light); margin-bottom: 16px;"></i>
                 <h3 style="font-size: 18px; margin-bottom: 8px;">Đang cập nhật đề luyện tập thêm cho dạng thư này</h3>
-                <p style="color: var(--text-muted);">Vui lòng chọn <strong>Dạng 01</strong>, <strong>Dạng 02</strong> hoặc <strong>Dạng 03</strong> để làm bài luyện tập.</p>
+                <p style="color: var(--text-muted);">Vui lòng chọn <strong>Dạng 01</strong>, <strong>Dạng 02</strong>, <strong>Dạng 03</strong> hoặc <strong>Dạng 04</strong> để làm bài luyện tập.</p>
             </div>
         `;
         return;
@@ -1464,6 +1570,39 @@ function diagnoseVstepErrors(rawText, promptData) {
         });
     }
 
+    if (/\b(complain\s+with)\b/gi.test(rawText)) {
+        errors.push({
+            type: "Giới từ đi kèm động từ",
+            category: "grammar",
+            wrong: "complain with",
+            correct: "complain about",
+            reason: "Phàn nàn về điều gì dùng 'complain about', không dùng 'complain with'."
+        });
+    }
+
+    if (/\b(was|were)\s+not\s+satisfy\b/gi.test(rawText)) {
+        errors.push({
+            type: "Từ loại / Thể bị động",
+            category: "grammar",
+            wrong: "was not satisfy",
+            correct: "was not satisfied",
+            reason: "Sau to be diễn tả cảm xúc/tình trạng không hài lòng phải dùng tính từ/quá khứ phân từ 'satisfied'."
+        });
+    }
+
+    if (/\blook\s+forward\s+to\s+(hear|receive)\b/gi.test(rawText)) {
+        const m = rawText.match(/\blook\s+forward\s+to\s+(hear|receive)\b/i);
+        if (m) {
+            errors.push({
+                type: "Dạng động từ sau giới từ",
+                category: "grammar",
+                wrong: m[0],
+                correct: m[0].replace(m[1], m[1] === 'hear' ? 'hearing' : 'receiving'),
+                reason: "Sau cụm 'look forward to' (to là giới từ) bắt buộc phải dùng V-ing ('look forward to hearing/receiving...')."
+            });
+        }
+    }
+
     return errors;
 }
 
@@ -1506,7 +1645,17 @@ function gradeExtraPractice(typeId) {
     let hasReq1 = false, hasReq2 = false, hasReq3 = false, hasReq4 = false;
     let reqLabels = [];
 
-    if (typeId === 'request' || typeId === 'description') {
+    if (typeId === 'complaint') {
+        hasReq1 = /(problem|problems|air\s*conditioner|ac|dirty|bathroom|shower|noise|noisy|broken|stained|towel|bed|sheet|issue|water)/i.test(lower);
+        hasReq2 = /(feel|felt|disappoint|unhappy|annoyed|upset|ruin|ruined|terrible|bad\s*experience|frustrated)/i.test(lower);
+        hasReq3 = /(suggest|improvement|improve|repair|replace|clean|refund|discount|train|service|better|compensation)/i.test(lower);
+        hasReq4 = true; // 3 core prompts in complaint
+        reqLabels = [
+            hasReq1 ? '✓ Mô tả vấn đề phòng' : '✗ Mô tả vấn đề phòng',
+            hasReq2 ? '✓ Bày tỏ cảm xúc' : '✗ Bày tỏ cảm xúc',
+            hasReq3 ? '✓ Đề xuất cải thiện' : '✗ Đề xuất cải thiện'
+        ];
+    } else if (typeId === 'request' || typeId === 'description') {
         hasReq1 = /(address|location|where\s+(is\s+)?the\s+center|near\s+my\s+(house|home)|street|district|easy\s+to\s+(get|find)|located|tran\s+phu)/i.test(lower);
         hasReq2 = /(fee|tuition|cost|price|money|how\s+much|budget|discount|pay|million|vnd)/i.test(lower);
         hasReq3 = /(teacher|teachers|instructor|friendly|experienced|enthusiastic|native|teach|explain|helpful)/i.test(lower);
