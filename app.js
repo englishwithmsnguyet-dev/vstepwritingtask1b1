@@ -81,7 +81,7 @@ const letterTypes = [
 
 
 // ==========================================================================
-// VSTEP TASK 1 EXTRA PRACTICE & DIAGNOSTIC GRADING SYSTEM
+// VSTEP TASK 1 EXTRA PRACTICE & ULTRA-DETAILED DIAGNOSTIC GRADING SYSTEM
 // ==========================================================================
 
 const extraPracticeData = {
@@ -295,7 +295,7 @@ function renderExtraPracticePanel(typeId) {
                         <i class="fa-solid fa-rotate-left"></i> Viết lại
                     </button>
                     <button class="btn btn-primary" id="btnSubmitExtraWriting">
-                        <i class="fa-solid fa-wand-magic-sparkles"></i> Nộp bài & Chấm điểm VSTEP
+                        <i class="fa-solid fa-wand-magic-sparkles"></i> Nộp bài & Chấm điểm VSTEP (30%)
                     </button>
                 </div>
             </div>
@@ -367,125 +367,491 @@ function gradeExtraPractice(typeId) {
 
     const errors = [];
 
-    // --- 1. COMPREHENSIVE ERROR DETECTION (VSTEP TASK 1) ---
+    // =========================================================================
+    // 1. ULTRA-DETAILED VSTEP TASK 1 ERROR DIAGNOSTIC RULES
+    // =========================================================================
 
-    // A. Greeting & Opening
+    // --- A. GREETINGS, OPENINGS & CLOSINGS ---
+    if (/\bDear\s+[a-z]/g.test(rawText)) {
+        const m = rawText.match(/\bDear\s+([a-z][a-zA-Z]*)/);
+        if (m) {
+            errors.push({
+                type: "Chính tả / Viết hoa",
+                category: "spelling",
+                wrong: `Dear ${m[1]}`,
+                correct: `Dear ${m[1].charAt(0).toUpperCase() + m[1].slice(1)},`,
+                reason: `Tên riêng '${m[1]}' sau 'Dear' bắt buộc phải viết hoa chữ cái đầu và có dấu phẩy ở cuối.`
+            });
+        }
+    }
+
+    if (/\bDear\s+[A-Z][a-zA-Z]*\./g.test(rawText)) {
+        errors.push({
+            type: "Dấu câu (Punctuation)",
+            category: "punctuation",
+            wrong: "Dear [Name].",
+            correct: "Dear [Name], (dùng dấu phẩy)",
+            reason: "Lời chào đầu thư bằng tiếng Anh bắt buộc kết thúc bằng dấu phẩy (,), không dùng dấu chấm (.)."
+        });
+    }
+
     if (/\bThank\s+for\b/i.test(rawText)) {
         errors.push({
             type: "Ngữ pháp / Lời mở đầu",
+            category: "grammar",
             wrong: "Thank for your letter",
             correct: "Thanks for your letter / Thank you for your letter",
             reason: "Cụm từ cảm ơn mở thư đúng ngữ pháp phải có 's' ('Thanks for...') hoặc dùng 'Thank you for...'."
         });
     }
 
-    // B. Missing articles with singular countable nouns
-    // 1. stay in/at hotel / homestay
+    if (/\bThanks\s+you\s+for\b/i.test(rawText)) {
+        errors.push({
+            type: "Ngữ pháp / Lời mở đầu",
+            category: "grammar",
+            wrong: "Thanks you for",
+            correct: "Thank you for / Thanks for",
+            reason: "Không dùng 'Thanks you'. Chọn một trong hai: 'Thank you for...' hoặc 'Thanks for...'."
+        });
+    }
+
+    if (/\b(i\s+am\s+write|i'm\s+write)\b/i.test(rawText)) {
+        errors.push({
+            type: "Ngữ pháp (Thì HTTD)",
+            category: "grammar",
+            wrong: "I am write / I'm write",
+            correct: "I am writing / I'm writing",
+            reason: "Cấu trúc thì hiện tại tiếp diễn: S + am/is/are + V-ing ('I am writing to...')."
+        });
+    }
+
+    if (/\bI\s+write\s+this\s+letter\s+to\b/i.test(rawText)) {
+        errors.push({
+            type: "Cách diễn đạt mở thư",
+            category: "vocab",
+            wrong: "I write this letter to",
+            correct: "I am writing this letter to / I am writing to",
+            reason: "Trong thư tiếng Anh, chuẩn văn phong tự nhiên là dùng Hiện tại tiếp diễn: 'I am writing to give you some advice...'."
+        });
+    }
+
+    if (/\bhope\s+you\s+well\b/i.test(rawText) && !/hope\s+you\s+are\s+well/i.test(rawText)) {
+        errors.push({
+            type: "Ngữ pháp (Thiếu động từ to be)",
+            category: "grammar",
+            wrong: "hope you well",
+            correct: "I hope you are well / I hope you are doing well",
+            reason: "Cần có động từ 'are' trước tính từ 'well': 'I hope you are well'."
+        });
+    }
+
+    if (/\blook\s+forward\s+to\s+hear\b/i.test(rawText)) {
+        errors.push({
+            type: "Ngữ pháp (V-ing sau giới từ)",
+            category: "grammar",
+            wrong: "look forward to hear",
+            correct: "look forward to hearing from you",
+            reason: "Cấu trúc: 'look forward to + V-ing' ('look forward to hearing from you')."
+        });
+    }
+
+    if (/\bBest\s+wish\b/i.test(rawText) && !/\bBest\s+wishes\b/i.test(rawText)) {
+        errors.push({
+            type: "Lời chào kết thúc",
+            category: "spelling",
+            wrong: "Best wish",
+            correct: "Best wishes,",
+            reason: "Lời chào kết thư chuẩn là 'Best wishes,' (danh từ số nhiều có 'es' kèm dấu phẩy)."
+        });
+    }
+
+    if (/\bYours\s+sincere\b/i.test(rawText)) {
+        errors.push({
+            type: "Lời chào kết thúc",
+            category: "grammar",
+            wrong: "Yours sincere",
+            correct: "Yours sincerely,",
+            reason: "Cần dùng trạng từ: 'Yours sincerely,'."
+        });
+    }
+
+    // --- B. ARTICLES (A / AN / THE / ZERO ARTICLE) ---
     const rStayHotel = /\bstay\s+(in|at)\s+(hotel|homestay)\b/gi;
     let mStay;
     while ((mStay = rStayHotel.exec(rawText)) !== null) {
         errors.push({
             type: "Mạo từ (Articles)",
+            category: "article",
             wrong: mStay[0],
             correct: `stay ${mStay[1]} a ${mStay[2]}`,
             reason: `Danh từ đếm được số ít '${mStay[2]}' bắt buộc phải có mạo từ 'a' phía trước.`
         });
     }
 
-    // 2. wear / bring / take + singular clothing/item without article
-    const rWearSingular = /\b(wear|bring|take|buy)\s+(ba\s*ba\s+shirt|shirt|conical\s+hat|jacket|hat|umbrella|camera)\b/gi;
-    let mWear;
-    while ((mWear = rWearSingular.exec(rawText)) !== null) {
-        const noun = mWear[2];
+    const rSingularItems = /\b(wear|bring|take|buy|choose|visit|rent|book)\s+(ba\s*ba\s+shirt|shirt|dress|hat|jacket|camera|conical\s+hat|umbrella|raincoat|room|hotel|homestay|taxi|bus|boat|museum|market|temple|pagoda)\b/gi;
+    let mSingular;
+    while ((mSingular = rSingularItems.exec(rawText)) !== null) {
+        const verb = mSingular[1];
+        const noun = mSingular[2];
         const art = noun.toLowerCase().startsWith('u') ? 'an' : 'a';
         errors.push({
             type: "Mạo từ (Articles)",
-            wrong: mWear[0],
-            correct: `${mWear[1]} ${art} ${noun}`,
-            reason: `Danh từ số ít '${noun}' cần mạo từ '${art}' phía trước (ví dụ: ${mWear[1]} ${art} ${noun}).`
+            category: "article",
+            wrong: mSingular[0],
+            correct: `${verb} ${art} ${noun}`,
+            reason: `Danh từ đếm được số ít '${noun}' cần mạo từ '${art}' phía trước (${verb} ${art} ${noun}).`
         });
     }
 
-    if (/\bin\s+city\s+center\b/gi.test(rawText)) {
+    if (/\bin\s+city\s+center\b/gi.test(rawText) || /\bin\s+city\s+centre\b/gi.test(rawText)) {
         errors.push({
             type: "Mạo từ (Articles)",
+            category: "article",
             wrong: "in city center",
             correct: "in the city center",
             reason: "Cụm từ chỉ trung tâm thành phố cần mạo từ xác định 'the': 'in the city center'."
         });
     }
 
-    // C. Word Form & Part of Speech
+    if (/\b(in\s+morning|in\s+afternoon|in\s+evening)\b/gi.test(rawText)) {
+        const m = rawText.match(/\b(in\s+morning|in\s+afternoon|in\s+evening)\b/i);
+        if (m) {
+            errors.push({
+                type: "Mạo từ (Articles)",
+                category: "article",
+                wrong: m[0],
+                correct: m[0].replace('in ', 'in the '),
+                reason: `Cụm từ chỉ buổi trong ngày cần mạo từ 'the' (${m[0].replace('in ', 'in the ')}).`
+            });
+        }
+    }
+
+    if (/\bby\s+a\s+(bus|taxi|car|train|plane|boat)\b/gi.test(rawText)) {
+        const m = rawText.match(/\bby\s+a\s+(bus|taxi|car|train|plane|boat)\b/i);
+        if (m) {
+            errors.push({
+                type: "Mạo từ (Zero Article)",
+                category: "article",
+                wrong: m[0],
+                correct: `by ${m[1]}`,
+                reason: `Cụm từ 'by + phương tiện giao thông' không dùng mạo từ (ví dụ: by ${m[1]}).`
+            });
+        }
+    }
+
+    // --- C. UNCOUNTABLE NOUNS ---
+    if (/\badvices\b/gi.test(rawText)) {
+        errors.push({
+            type: "Danh từ không đếm được",
+            category: "grammar",
+            wrong: "advices",
+            correct: "some advice / advice",
+            reason: "'advice' là danh từ không đếm được trong tiếng Anh, không được thêm 's'."
+        });
+    }
+    if (/\ban\s+advice\b/gi.test(rawText)) {
+        errors.push({
+            type: "Danh từ không đếm được",
+            category: "grammar",
+            wrong: "an advice",
+            correct: "a piece of advice / some advice",
+            reason: "'advice' không dùng với mạo từ 'an'. Hãy dùng 'some advice' hoặc 'a piece of advice'."
+        });
+    }
+    if (/\binformations\b/gi.test(rawText)) {
+        errors.push({
+            type: "Danh từ không đếm được",
+            category: "grammar",
+            wrong: "informations",
+            correct: "information / some information",
+            reason: "'information' là danh từ không đếm được, không có dạng số nhiều 'informations'."
+        });
+    }
+    if (/\bclothings\b/gi.test(rawText)) {
+        errors.push({
+            type: "Danh từ không đếm được",
+            category: "grammar",
+            wrong: "clothings",
+            correct: "clothes / clothing",
+            reason: "'clothing' không thêm 's'. Muốn chỉ quần áo hãy dùng 'clothes'."
+        });
+    }
+
+    // --- D. PARTS OF SPEECH & COLLOCATIONS ---
     if (/\bthe\s+cultural\s+of\b/gi.test(rawText)) {
         errors.push({
             type: "Từ loại (Part of Speech)",
+            category: "word_form",
             wrong: "the cultural of Can Tho",
             correct: "the culture of Can Tho / the cultural identity of Can Tho",
             reason: "'cultural' là tính từ. Đứng sau mạo từ 'the' và trước 'of' bắt buộc phải dùng danh từ 'culture'."
         });
     }
 
-    if (/\badvices\b/gi.test(rawText)) {
+    if (/\bvery\s+beauty\b/gi.test(rawText)) {
         errors.push({
-            type: "Danh từ không đếm được",
-            wrong: "advices",
-            correct: "some advice / advice",
-            reason: "'advice' là danh từ không đếm được, không thêm 's'."
+            type: "Từ loại (Part of Speech)",
+            category: "word_form",
+            wrong: "very beauty",
+            correct: "very beautiful",
+            reason: "'beauty' là danh từ. Sau trạng từ chỉ mức độ 'very' cần dùng tính từ 'beautiful'."
         });
     }
 
-    if (/\binformations\b/gi.test(rawText)) {
+    if (/\bdeliciously\s+food\b/gi.test(rawText)) {
         errors.push({
-            type: "Danh từ không đếm được",
-            wrong: "informations",
-            correct: "information",
-            reason: "'information' là danh từ không đếm được."
+            type: "Từ loại (Part of Speech)",
+            category: "word_form",
+            wrong: "deliciously food",
+            correct: "delicious food",
+            reason: "Trước danh từ 'food' cần dùng tính từ 'delicious' để bổ nghĩa, không dùng trạng từ 'deliciously'."
         });
     }
 
-    // D. Proper Noun & Collocation
+    if (/\btradition\s+(dishes|food|culture|clothes)\b/gi.test(rawText)) {
+        const m = rawText.match(/\btradition\s+(dishes|food|culture|clothes)\b/i);
+        if (m) {
+            errors.push({
+                type: "Từ loại (Part of Speech)",
+                category: "word_form",
+                wrong: m[0],
+                correct: `traditional ${m[1]}`,
+                reason: `Trước danh từ '${m[1]}' cần dùng tính từ 'traditional' (truyền thống).`
+            });
+        }
+    }
+
+    if (/\bfame\s+(places|attractions|restaurants)\b/gi.test(rawText)) {
+        const m = rawText.match(/\bfame\s+(places|attractions|restaurants)\b/i);
+        if (m) {
+            errors.push({
+                type: "Từ loại (Part of Speech)",
+                category: "word_form",
+                wrong: m[0],
+                correct: `famous ${m[1]}`,
+                reason: `Cần dùng tính từ 'famous' (nổi tiếng) trước danh từ '${m[1]}'.`
+            });
+        }
+    }
+
+    if (/\bgive\s+you\s+some\s+advise\b/gi.test(rawText)) {
+        errors.push({
+            type: "Nhầm lẫn từ (Confusing words)",
+            category: "word_form",
+            wrong: "give you some advise",
+            correct: "give you some advice",
+            reason: "'advise' là động từ (khuyên), còn danh từ lời khuyên là 'advice' (đuôi -ce)."
+        });
+    }
+
+    // Proper Noun & Collocations
     if (/\bNinh\s+Kieu\s+way\b/gi.test(rawText)) {
         errors.push({
             type: "Dùng từ / Địa danh",
+            category: "vocab",
             wrong: "Ninh Kieu way",
             correct: "Ninh Kieu Wharf / Ninh Kieu Pedestrian Bridge",
             reason: "Địa danh Bến Ninh Kiều dùng 'Wharf', Cầu đi bộ dùng 'Pedestrian Bridge', không dùng 'way'."
         });
     }
 
-    // E. Sentence Structure & Parallelism
+    // --- E. ADVICE STRUCTURES & VERB PATTERNS ---
+    if (/\bshould\s+to\s+[a-z]+/gi.test(rawText)) {
+        errors.push({
+            type: "Dạng động từ (Verb Form)",
+            category: "grammar",
+            wrong: "should to + V",
+            correct: "should + Vo (không dùng 'to')",
+            reason: "Sau modal verb 'should' dùng động từ nguyên mẫu không 'to'."
+        });
+    }
+
+    if (/\bshould\s+(stays|visits|wears|eats|tries|goes)\b/gi.test(rawText)) {
+        const m = rawText.match(/\bshould\s+(stays|visits|wears|eats|tries|goes)\b/i);
+        if (m) {
+            const vo = m[1].replace(/s$/, '');
+            errors.push({
+                type: "Dạng động từ (Verb Form)",
+                category: "grammar",
+                wrong: m[0],
+                correct: `should ${vo}`,
+                reason: `Sau 'should' luôn là động từ nguyên mẫu không chia 's/es' (should ${vo}).`
+            });
+        }
+    }
+
+    if (/\bwould\s+be\s+a\s+good\s+idea\s+(try|stay|visit|wear|go|eat|book)\b/gi.test(rawText)) {
+        const m = rawText.match(/\bwould\s+be\s+a\s+good\s+idea\s+(try|stay|visit|wear|go|eat|book)\b/i);
+        if (m) {
+            errors.push({
+                type: "Cấu trúc khuyên bảo (Advice)",
+                category: "grammar",
+                wrong: m[0],
+                correct: `would be a good idea to ${m[1]}`,
+                reason: `Cấu trúc chuẩn: 'It would be a good idea to + Vo' (cần có 'to').`
+            });
+        }
+    }
+
+    if (/\bif\s+i\s+was\s+you\b/gi.test(rawText)) {
+        errors.push({
+            type: "Câu điều kiện loại 2",
+            category: "grammar",
+            wrong: "If I was you",
+            correct: "If I were you",
+            reason: "Trong câu điều kiện loại 2 đưa ra lời khuyên, quy tắc ngữ pháp chuẩn dùng 'were' cho tất cả các ngôi (If I were you, I would...)."
+        });
+    }
+
+    if (/\bif\s+i\s+were\s+you[,\s]+i\s+will\b/gi.test(rawText)) {
+        errors.push({
+            type: "Câu điều kiện loại 2",
+            category: "grammar",
+            wrong: "If I were you, I will",
+            correct: "If I were you, I would",
+            reason: "Mệnh đề chính của câu điều kiện loại 2 dùng 'would + Vo', không dùng 'will'."
+        });
+    }
+
+    if (/\bremember\s+(wear|bring|take|try|visit|book|stay)\b/gi.test(rawText)) {
+        const m = rawText.match(/\bremember\s+(wear|bring|take|try|visit|book|stay)\b/i);
+        if (m) {
+            errors.push({
+                type: "Dạng động từ (Verb pattern)",
+                category: "grammar",
+                wrong: m[0],
+                correct: `remember to ${m[1]}`,
+                reason: `Cấu trúc nhắc nhở ai nhớ làm việc gì: 'Remember to + Vo'.`
+            });
+        }
+    }
+
+    if (/\bdon't\s+forget\s+(bring|wear|take|visit|try|book|stay)\b/gi.test(rawText)) {
+        const m = rawText.match(/\bdon't\s+forget\s+(bring|wear|take|visit|try|book|stay)\b/i);
+        if (m) {
+            errors.push({
+                type: "Dạng động từ (Verb pattern)",
+                category: "grammar",
+                wrong: m[0],
+                correct: `don't forget to ${m[1]}`,
+                reason: `Cấu trúc: 'Don't forget to + Vo'.`
+            });
+        }
+    }
+
+    if (/\bsuggest\s+you\s+to\b/gi.test(rawText)) {
+        errors.push({
+            type: "Cấu trúc động từ Suggest",
+            category: "grammar",
+            wrong: "suggest you to [V]",
+            correct: "suggest that you should [V] / suggest [V-ing]",
+            reason: "'suggest' không đi với tân ngữ + to-V (không dùng 'suggest you to'). Dùng 'suggest that you (should) + Vo' hoặc 'suggest + V-ing'."
+        });
+    }
+
+    // --- F. PREPOSITIONS OF TIME & PLACE ---
+    if (/\b(on\s+December|at\s+December)\b/gi.test(rawText)) {
+        errors.push({
+            type: "Giới từ chỉ thời gian",
+            category: "preposition",
+            wrong: "on December / at December",
+            correct: "in December",
+            reason: "Với tháng trong năm, bắt buộc dùng giới từ 'in' ('in December')."
+        });
+    }
+
+    if (/\bin\s+(Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday)\b/gi.test(rawText)) {
+        const m = rawText.match(/\bin\s+(Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday)\b/i);
+        if (m) {
+            errors.push({
+                type: "Giới từ chỉ thời gian",
+                category: "preposition",
+                wrong: m[0],
+                correct: `on ${m[1]}`,
+                reason: `Với thứ trong tuần, bắt buộc dùng giới từ 'on' (on ${m[1]}).`
+            });
+        }
+    }
+
+    if (/\barrive\s+to\s+Can\s+Tho\b/gi.test(rawText)) {
+        errors.push({
+            type: "Giới từ (Preposition)",
+            category: "preposition",
+            wrong: "arrive to Can Tho",
+            correct: "arrive in Can Tho",
+            reason: "Đến một thành phố/quốc gia dùng 'arrive in', không dùng 'arrive to'."
+        });
+    }
+
+    if (/\bfamous\s+with\b/gi.test(rawText)) {
+        errors.push({
+            type: "Giới từ đi với tính từ",
+            category: "preposition",
+            wrong: "famous with",
+            correct: "famous for",
+            reason: "Nổi tiếng vì điều gì dùng cấu trúc 'famous for', không dùng 'famous with'."
+        });
+    }
+
+    // --- G. SENTENCE STRUCTURE & PARALLELISM ---
     if (/weather.*?can be.*?and an ideal time/gi.test(rawText)) {
         errors.push({
             type: "Cấu trúc câu (Sentence Structure)",
+            category: "grammar",
             wrong: "...because the weather in Can Tho can be very pleasant in December and an ideal time for tourism.",
             correct: "...because the weather in Can Tho is very pleasant in December, making it an ideal time for tourism (hoặc: and December is an ideal time for tourism).",
             reason: "Lỗi cấu trúc câu không song hành: 'weather' (thời tiết) không thể là 'an ideal time' (khoảng thời gian). Cần dùng mệnh đề phân từ 'making it an ideal time' hoặc tách mệnh đề."
         });
     }
 
-    // F. Missing Comma after transitions
-    const rTransitionNoComma = /(^|[.!?])\s*(Firstly|Secondly|Finally|Moreover|Besides|Furthermore|In addition|Therefore|For example)\s+([a-zA-Z])/gi;
+    if (/\bAlthough\b[^.!?\n]+,\s*but\b/gi.test(rawText)) {
+        errors.push({
+            type: "Cấu trúc liên từ kép",
+            category: "grammar",
+            wrong: "Although ..., but ...",
+            correct: "Although ... [không dùng 'but'] (hoặc chỉ dùng '... but ...')",
+            reason: "Trong tiếng Anh không dùng song song 'Although' và 'but' trong cùng một câu."
+        });
+    }
+
+    if (/\bBecause\b[^.!?\n]+,\s*so\b/gi.test(rawText)) {
+        errors.push({
+            type: "Cấu trúc liên từ kép",
+            category: "grammar",
+            wrong: "Because ..., so ...",
+            correct: "Because ... [không dùng 'so'] (hoặc chỉ dùng '... so ...')",
+            reason: "Trong tiếng Anh không dùng song song 'Because' và 'so' trong cùng một câu."
+        });
+    }
+
+    // Missing Comma after transition words
+    const rTransitionNoComma = /(^|[.!?])\s*(Firstly|Secondly|Finally|Moreover|Besides|Furthermore|In addition|Therefore|For example|However)\s+([a-zA-Z])/gi;
     let mTrans;
     while ((mTrans = rTransitionNoComma.exec(rawText)) !== null) {
         errors.push({
             type: "Dấu câu (Punctuation)",
+            category: "punctuation",
             wrong: `${mTrans[2]} ${mTrans[3]}`,
             correct: `${mTrans[2]}, ${mTrans[3]}`,
-            reason: `Sau liên từ đầu câu '${mTrans[2]}' cần có dấu phẩy (,).`
+            reason: `Sau liên từ đầu câu '${mTrans[2]}' bắt buộc phải có dấu phẩy (,).`
         });
     }
 
-    // G. Verb form errors
-    if (/\bshould\s+to\s+[a-z]+/gi.test(rawText)) {
-        errors.push({
-            type: "Dạng động từ (Verb Form)",
-            wrong: "should to + V",
-            correct: "should + Vo (không dùng 'to')",
-            reason: "Sau 'should' dùng động từ nguyên mẫu không 'to'."
-        });
+    // --- H. SUBJECT - VERB AGREEMENT ---
+    if (/\b(places|attractions|dishes|hotels|homestays|prices)\s+is\b/gi.test(rawText)) {
+        const m = rawText.match(/\b(places|attractions|dishes|hotels|homestays|prices)\s+is\b/i);
+        if (m) {
+            errors.push({
+                type: "Hòa hợp Chủ ngữ - Động từ",
+                category: "grammar",
+                wrong: m[0],
+                correct: `${m[1]} are`,
+                reason: `Chủ ngữ số nhiều '${m[1]}' đi với động từ to be số nhiều 'are', không dùng 'is'.`
+            });
+        }
     }
 
-    // H. Common Spelling Errors
+    // --- I. COMMON SPELLING ERRORS DICTIONARY ---
     const spellDict = {
         'recieve': 'receive',
         'untill': 'until',
@@ -509,7 +875,13 @@ function gradeExtraPractice(typeId) {
         'touristm': 'tourism',
         'adviced': 'advised',
         'helpfull': 'helpful',
-        'alot': 'a lot'
+        'alot': 'a lot',
+        'seperate': 'separate',
+        'tomorow': 'tomorrow',
+        'truely': 'truly',
+        'freind': 'friend',
+        'exciteing': 'exciting',
+        'specialy': 'specially / especially'
     };
 
     for (const [wrongSp, correctSp] of Object.entries(spellDict)) {
@@ -517,6 +889,7 @@ function gradeExtraPractice(typeId) {
         if (regexSp.test(rawText)) {
             errors.push({
                 type: "Chính tả (Spelling)",
+                category: "spelling",
                 wrong: wrongSp,
                 correct: correctSp,
                 reason: `Lỗi chính tả từ '${wrongSp}'. Từ đúng chuẩn là '${correctSp}'.`
@@ -524,18 +897,43 @@ function gradeExtraPractice(typeId) {
         }
     }
 
-    // I. Punctuation Spacing Errors (e.g. "word.Word" or "word ,word")
+    // Lowercase 'i' as pronoun
+    if (/(^|[.\s])i\s+(hope|am|think|suggest|would|was|were|can|will|have)\b/g.test(rawText)) {
+        errors.push({
+            type: "Viết hoa đại từ 'I'",
+            category: "spelling",
+            wrong: "i [động từ]",
+            correct: "I [viết hoa]",
+            reason: "Đại từ nhân xưng ngôi thứ nhất 'I' (tôi) trong tiếng Anh luôn luôn phải viết hoa."
+        });
+    }
+
+    // Punctuation Spacing Errors (e.g. "word.Word" or "word ,word")
     const punctSpacingErrors = rawText.match(/[a-zA-Z][,\.?!][a-zA-Z]/g);
     if (punctSpacingErrors && punctSpacingErrors.length > 0) {
         errors.push({
             type: "Dấu câu / Khoảng trắng",
+            category: "punctuation",
             wrong: punctSpacingErrors.slice(0, 3).join(', '),
             correct: "Thêm dấu cách sau dấu câu",
             reason: "Cần có một dấu cách sau dấu phẩy (,), dấu chấm (.) hoặc dấu chấm hỏi (?)."
         });
     }
 
-    // --- 2. VSTEP SCORING ON 10.0 SCALE (OFFICIAL VSTEP BAND CRITERIA) ---
+    // Space before punctuation: "word ,"
+    if (/\s+[,.?!]/g.test(rawText)) {
+        errors.push({
+            type: "Dấu câu / Khoảng trắng",
+            category: "punctuation",
+            wrong: "Có dấu cách trước dấu câu (ví dụ: 'từ ,')",
+            correct: "Đặt dấu câu liền ngay sau từ (ví dụ: 'từ,')",
+            reason: "Không đặt khoảng trắng trước dấu phẩy, dấu chấm hay dấu hỏi."
+        });
+    }
+
+    // =========================================================================
+    // 2. VSTEP SCORING ON 10.0 SCALE (OFFICIAL VSTEP BAND CRITERIA)
+    // =========================================================================
 
     // 1. Task Fulfilment (Thang 10)
     let tfScore = 8.0;
@@ -575,8 +973,10 @@ function gradeExtraPractice(typeId) {
 
     // 3. Vocabulary (Thang 10)
     let vocScore = 7.5;
-    const vocabErrors = errors.filter(e => e.type.includes('Từ loại') || e.type.includes('Dùng từ'));
-    if (vocabErrors.length >= 2) {
+    const vocabErrors = errors.filter(e => e.category === 'vocab' || e.category === 'word_form');
+    if (vocabErrors.length >= 3) {
+        vocScore = 6.0;
+    } else if (vocabErrors.length === 2) {
         vocScore = 6.5;
     } else if (vocabErrors.length === 1) {
         vocScore = 7.0;
@@ -585,12 +985,16 @@ function gradeExtraPractice(typeId) {
 
     // 4. Grammar (Thang 10)
     let gramScore = 8.0;
-    const grammarCount = errors.filter(e => !e.type.includes('Từ loại') && !e.type.includes('Dùng từ')).length;
-    if (grammarCount >= 5) {
+    const grammarErrors = errors.filter(e => e.category === 'grammar' || e.category === 'article' || e.category === 'preposition');
+    const totalGrammarCount = grammarErrors.length + (errors.filter(e => e.category === 'punctuation' || e.category === 'spelling').length > 0 ? 1 : 0);
+
+    if (totalGrammarCount >= 6) {
+        gramScore = 5.5;
+    } else if (totalGrammarCount >= 4) {
         gramScore = 6.0;
-    } else if (grammarCount >= 3) {
+    } else if (totalGrammarCount >= 2) {
         gramScore = 6.5;
-    } else if (grammarCount >= 1) {
+    } else if (totalGrammarCount === 1) {
         gramScore = 7.0;
     } else {
         gramScore = 8.5;
@@ -601,7 +1005,7 @@ function gradeExtraPractice(typeId) {
     overallBand = Math.round(overallBand * 10) / 10;
 
     // Quy đổi Thư (Task 1) chiếm 30% tổng điểm bài thi Writing (Thang 3.0 điểm)
-    let convertedScore = Math.round((overallBand / 10.0) * 3.0 * 100) / 100; // ví dụ 2.19 / 3.00
+    let convertedScore = Math.round((overallBand / 10.0) * 3.0 * 100) / 100;
 
     // Quy đổi 4 tiêu chí ra thang 0.75 điểm mỗi tiêu chí (0.75 x 4 = 3.00 điểm)
     let tfConv = Math.round((tfScore / 10.0) * 0.75 * 100) / 100;
@@ -638,17 +1042,17 @@ function gradeExtraPractice(typeId) {
             <div class="extra-error-table-wrapper">
                 <div class="error-table-title">
                     <i class="fa-solid fa-triangle-exclamation" style="color: #ef4444;"></i>
-                    DANH SÁCH ${errors.length} LỖI CẦN SỬA (NGỮ PHÁP, MẠO TỪ, TỪ LOẠI, DÙNG TỪ):
+                    DANH SÁCH ${errors.length} LỖI CẦN SỬA CHI TIẾT (NGỮ PHÁP, MẠO TỪ, TỪ LOẠI, DÙNG TỪ, CHÍNH TẢ):
                 </div>
                 <div class="table-responsive">
                     <table class="error-table">
                         <thead>
                             <tr>
                                 <th style="width: 40px; text-align: center;">#</th>
-                                <th style="width: 150px;">Phân loại</th>
-                                <th style="width: 170px;">Học viên viết</th>
-                                <th style="width: 210px;">Đề xuất sửa đúng</th>
-                                <th>Giải thích chi tiết</th>
+                                <th style="width: 160px;">Phân loại lỗi</th>
+                                <th style="width: 180px;">Học viên viết</th>
+                                <th style="width: 220px;">Đề xuất sửa đúng</th>
+                                <th>Giải thích ngữ pháp chi tiết</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -723,7 +1127,7 @@ function gradeExtraPractice(typeId) {
                     <span class="criterion-score">${gramConv.toFixed(2)}/0.75 <small style="font-size: 11px; font-weight: normal; color: var(--text-muted);">(${gramScore.toFixed(1)}/10)</small></span>
                 </div>
                 <div class="criterion-desc">
-                    Áp dụng tốt cấu trúc khuyên bảo B1. ${grammarCount > 0 ? `Bị trừ điểm do mắc ${grammarCount} lỗi ngữ pháp/mạo từ/câu ghép.` : 'Ngữ pháp chuẩn xác.'}
+                    Áp dụng tốt cấu trúc khuyên bảo B1. ${totalGrammarCount > 0 ? `Bị trừ điểm do mắc ${totalGrammarCount} lỗi ngữ pháp/mạo từ/câu ghép.` : 'Ngữ pháp chuẩn xác.'}
                 </div>
             </div>
         </div>
