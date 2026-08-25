@@ -1159,76 +1159,185 @@ You should write at least 120 words. Do not include your name or address. Your r
             style: "Trang trọng / Lịch sự (Formal Letter)",
             requirements: "Xin lỗi vì nộp muộn, Giải thích lý do chính đáng, Nêu rõ thời gian và cách thức nộp bài"
         },
-        hints: [
+        apologyOutlineSections: [
             {
-                title: "1. Apologize for submitting your assignment late (Xin lỗi vì nộp bài muộn)",
-                type: "standard",
-                items: [
+                sectionNumber: "1",
+                sectionTitle: "Apologize for submitting your assignment late (Xin lỗi vì nộp bài muộn)",
+                themeColor: "#dc2626",
+                type: "phrase_list",
+                description: "Các cụm từ xin lỗi thông dụng để ghép vào câu mở đầu:",
+                phrases: [
+                    { en: "submitting my assignment late", vi: "nộp bài tập muộn" },
+                    { en: "not submitting my assignment earlier / on time", vi: "không nộp bài tập sớm hơn / đúng hạn" },
+                    { en: "missing the deadline last Friday", vi: "lỡ hạn chót vào thứ Sáu tuần trước" },
+                    { en: "the delay in submitting my coursework", vi: "sự chậm trễ trong việc nộp bài tập học phần" }
+                ]
+            },
+            {
+                sectionNumber: "2",
+                sectionTitle: "Explain why you could not submit on time (Giải thích lý do không thể nộp đúng hạn)",
+                themeColor: "#2563eb",
+                type: "scenario_list",
+                scenarios: [
                     {
-                        en: "I am writing this email to sincerely apologize for submitting my assignment late",
-                        vi: "Em viết email này để chân thành xin lỗi Thầy/Cô vì nộp bài tập muộn",
-                        reasonEn: "and I am very sorry for any inconvenience this delay may have caused you.",
-                        reasonVi: "và em vô cùng xin lỗi vì sự bất tiện mà sự chậm trễ này đã gây ra cho Thầy/Cô."
+                        name: "Gợi ý 1: Bị ốm nặng / Sốt và cảm cúm (Severe illness & fever)",
+                        mainSent: {
+                            en: "I am really sorry that I could not submit my assignment on time because I was severely ill.",
+                            vi: "Em rất xin lỗi vì đã không thể nộp bài tập đúng hạn do em bị ốm nặng."
+                        },
+                        explainSents: [
+                            {
+                                en: "I caught a high fever and a bad flu early last week.",
+                                vi: "Em bị sốt cao và cảm cúm nặng vào đầu tuần trước."
+                            },
+                            {
+                                en: "The doctor advised me to rest completely in bed for several days, so I could not concentrate on studying.",
+                                vi: "Bác sĩ khuyên em phải nghỉ ngơi tĩnh dưỡng trên giường vài ngày nên em không thể tập trung học tập."
+                            }
+                        ]
                     },
                     {
-                        en: "I understand that the deadline was last Friday and submitting on time is extremely important",
-                        vi: "Em hiểu rằng hạn chót là thứ Sáu tuần trước và việc nộp bài đúng hạn là vô cùng quan trọng",
-                        reasonEn: "which is why I feel very regretful about this situation.",
-                        reasonVi: "đó là lý do em cảm thấy rất hối lỗi về tình huống này."
+                        name: "Gợi ý 2: Máy tính bị hỏng / Mất dữ liệu bài làm (Laptop technical crash & data loss)",
+                        mainSent: {
+                            en: "I sincerely apologize for the delay because my laptop had a serious technical problem.",
+                            vi: "Em chân thành xin lỗi về sự chậm trễ vì máy tính xách tay của em gặp sự cố kỹ thuật nghiêm trọng."
+                        },
+                        explainSents: [
+                            {
+                                en: "My laptop suddenly crashed and would not turn on while I was writing the assignment.",
+                                vi: "Máy tính của em đột nhiên bị sập nguồn và không thể khởi động lại khi em đang làm bài."
+                            },
+                            {
+                                en: "I had to take it to the repair shop and unfortunately lost some of my research notes.",
+                                vi: "Em phải mang máy đi sửa và không may bị mất một số ghi chú nghiên cứu."
+                            }
+                        ]
                     },
                     {
-                        en: "I take full responsibility for not informing you about my delay earlier",
-                        vi: "Em xin nhận hoàn toàn trách nhiệm vì đã không thông báo cho Thầy/Cô về sự chậm trễ sớm hơn",
-                        reasonEn: "due to my unexpected personal circumstances.",
-                        reasonVi: "do hoàn cảnh cá nhân đột xuất của em."
+                        name: "Gợi ý 3: Gia đình có việc đột xuất / Người thân bị bệnh (Unexpected family emergency)",
+                        mainSent: {
+                            en: "I am very sorry for the late submission because I had an urgent family emergency.",
+                            vi: "Em vô cùng xin lỗi vì nộp bài muộn do gia đình em gặp việc khẩn cấp đột xuất."
+                        },
+                        explainSents: [
+                            {
+                                en: "My mother suddenly fell ill, so I had to travel back to my hometown to take care of her.",
+                                vi: "Mẹ em đột ngột đổ bệnh nên em phải về quê để chăm sóc mẹ."
+                            },
+                            {
+                                en: "I only returned to the university yesterday, and everything at home is much better now.",
+                                vi: "Em chỉ mới quay lại trường đại học hôm qua, và hiện tại mọi việc ở nhà đã ổn hơn nhiều."
+                            }
+                        ]
                     }
                 ]
             },
             {
-                title: "2. Explain why you could not submit on time (Giải thích lý do không thể nộp đúng hạn)",
-                type: "standard",
-                items: [
+                sectionNumber: "3",
+                sectionTitle: "Say your current progress on the assignment (Nêu tiến độ hoàn thành bài tập)",
+                themeColor: "#8b5cf6",
+                type: "case_list",
+                cases: [
                     {
-                        en: "The reason for my delay is that I caught a severe fever and flu early last week",
-                        vi: "Lý do của sự chậm trễ là vì em bị sốt cao và cảm cúm nặng vào đầu tuần trước",
-                        reasonEn: "so the doctor advised me to rest completely in bed for a few days.",
-                        reasonVi: "nên bác sĩ khuyên em phải nghỉ ngơi tĩnh dưỡng hoàn toàn trong vài ngày."
+                        name: "Trường hợp 1: Đã hoàn thành bản thảo và đang rà soát lại (Almost finished / Reviewing final draft)",
+                        mainSent: {
+                            en: "I have now finished the final draft of my assignment.",
+                            vi: "Hiện em đã hoàn thành xong bản thảo cuối cùng của bài tập."
+                        },
+                        expandSents: [
+                            {
+                                en: "I have revised all the main arguments and checked the references carefully.",
+                                vi: "Em đã chỉnh sửa lại các luận điểm chính và kiểm tra tài liệu tham khảo cẩn thận."
+                            },
+                            {
+                                en: "I am confident that the quality of my paper meets your academic requirements.",
+                                vi: "Em tin tưởng rằng chất lượng bài viết đáp ứng đúng các yêu cầu học thuật của Thầy/Cô."
+                            },
+                            {
+                                en: "Thank you very much for giving me more time to finalize it.",
+                                vi: "Em chân thành cảm ơn Thầy/Cô đã cho em thêm thời gian để hoàn thiện bài."
+                            }
+                        ]
                     },
                     {
-                        en: "My laptop suddenly had a serious technical malfunction and shut down unexpectedly",
-                        vi: "Máy tính xách tay của em đột nhiên bị lỗi kỹ thuật nghiêm trọng và sập nguồn",
-                        reasonEn: "which caused me to lose some of my research notes and draft outlines.",
-                        reasonVi: "khiến em bị mất một số ghi chú nghiên cứu và dàn ý bản thảo."
-                    },
-                    {
-                        en: "Because of my illness and computer issues, I was unable to concentrate and finish the work",
-                        vi: "Vì bị bệnh và gặp sự cố máy tính, em đã không thể tập trung và hoàn thành bài kịp hạn",
-                        reasonEn: "despite my best efforts to meet the deadline.",
-                        reasonVi: "mặc dù em đã rất cố gắng để kịp hạn chót."
+                        name: "Trường hợp 2: Đang hoàn thiện những phần cuối cùng (Completing the last section)",
+                        mainSent: {
+                            en: "I am currently putting the finishing touches on the conclusion and reference list.",
+                            vi: "Hiện em đang hoàn thiện nốt phần kết luận và danh mục tài liệu tham khảo."
+                        },
+                        expandSents: [
+                            {
+                                en: "I have done most of the research and only need a few more hours to review everything.",
+                                vi: "Em đã làm xong hầu hết phần nghiên cứu và chỉ cần thêm vài giờ để rà soát lại tất cả."
+                            },
+                            {
+                                en: "I am very sorry that I could not finish it before the deadline.",
+                                vi: "Em rất tiếc vì đã không thể hoàn thành bài trước hạn chót."
+                            },
+                            {
+                                en: "I promise to deliver a well-written assignment as soon as possible.",
+                                vi: "Em xin hứa sẽ nộp một bài viết chỉn chu trong thời gian sớm nhất."
+                            }
+                        ]
                     }
                 ]
             },
             {
-                title: "3. Say when and how you will submit your assignment (Nêu thời gian & cách thức nộp)",
-                type: "standard",
-                items: [
+                sectionNumber: "4",
+                sectionTitle: "Say when and how you will submit your assignment (Nêu rõ thời gian & cách thức nộp)",
+                themeColor: "#059669",
+                type: "scenario_list",
+                scenarios: [
                     {
-                        en: "I have almost finished the final draft and am reviewing it carefully",
-                        vi: "Hiện em đã gần hoàn thành bản thảo cuối cùng và đang rà soát lại cẩn thận",
-                        reasonEn: "to ensure the highest quality of my research paper.",
-                        reasonVi: "để đảm bảo chất lượng bài viết tốt nhất."
+                        name: "Gợi ý 1: Nộp qua cổng sinh viên và gửi email vào chiều mai (Online portal & email tomorrow afternoon)",
+                        mainSent: {
+                            en: "I will submit my completed assignment by 5 PM tomorrow afternoon.",
+                            vi: "Em sẽ nộp bài tập hoàn chỉnh trước 5 giờ chiều mai."
+                        },
+                        explainSents: [
+                            {
+                                en: "I will upload the Word and PDF files to the student portal and also send a copy directly to your email.",
+                                vi: "Em sẽ tải các tệp Word và PDF lên cổng sinh viên và gửi một bản trực tiếp vào email của Thầy/Cô."
+                            },
+                            {
+                                en: "Please let me know if you receive the files successfully.",
+                                vi: "Xin Thầy/Cô vui lòng báo cho em biết nếu đã nhận được tệp thành công."
+                            }
+                        ]
                     },
                     {
-                        en: "I promise to email the completed assignment to you and upload it to the student portal by 5 PM tomorrow",
-                        vi: "Em xin hứa sẽ gửi bài tập hoàn chỉnh qua email và nộp lên cổng thông tin sinh viên trước 5 giờ chiều ngày mai",
-                        reasonEn: "so that you can evaluate my work.",
-                        reasonVi: "để Thầy/Cô có thể chấm bài giúp em."
+                        name: "Gợi ý 2: Nộp bản in trực tiếp tại văn phòng khoa vào sáng thứ Tư (In-person at faculty office on Wednesday morning)",
+                        mainSent: {
+                            en: "I will hand in my printed assignment directly to your office on Wednesday morning.",
+                            vi: "Em sẽ nộp bản in bài tập trực tiếp tại văn phòng của Thầy/Cô vào sáng thứ Tư."
+                        },
+                        explainSents: [
+                            {
+                                en: "I will bring the hard copy to your office room at 9 AM after my morning class.",
+                                vi: "Em sẽ mang bản in đến phòng làm việc của Thầy/Cô lúc 9 giờ sáng sau giờ học buổi sáng."
+                            },
+                            {
+                                en: "I hope I can meet you briefly to explain my situation in person.",
+                                vi: "Em hy vọng có thể gặp Thầy/Cô trong giây lát để giải thích trực tiếp hoàn cảnh của mình."
+                            }
+                        ]
                     },
                     {
-                        en: "I have attached my medical certificate to this email for your verification",
-                        vi: "Em xin đính kèm giấy khám bệnh vào email này để Thầy/Cô tiện xác nhận",
-                        reasonEn: "and I assure you that this mistake will not happen again in the future.",
-                        reasonVi: "và em xin cam đoan rằng sự cố này sẽ không tái diễn trong tương lai."
+                        name: "Gợi ý 3: Nộp đính kèm giấy chứng nhận y tế/khám bệnh (Submit with attached medical certificate)",
+                        mainSent: {
+                            en: "I will send my completed assignment via email tonight before 10 PM.",
+                            vi: "Em sẽ gửi bài tập hoàn chỉnh qua email tối nay trước 10 giờ tối."
+                        },
+                        explainSents: [
+                            {
+                                en: "I have also attached the hospital medical certificate to this email for your verification.",
+                                vi: "Em cũng đã đính kèm giấy chứng nhận khám bệnh của bệnh viện vào email này để Thầy/Cô tiện xác nhận."
+                            },
+                            {
+                                en: "I sincerely assure you that this delay will never happen again in future courses.",
+                                vi: "Em xin chân thành cam đoan rằng sự chậm trễ này sẽ không bao giờ tái diễn trong các học phần sau."
+                            }
+                        ]
                     }
                 ]
             }
@@ -1404,7 +1513,98 @@ function renderExtraPracticePanel(typeId) {
 
     let hintsHtml = '';
 
-    if (data.feedbackSections) {
+    if (data.apologyOutlineSections) {
+        hintsHtml = data.apologyOutlineSections.map(sec => {
+            let bodyHtml = '';
+
+            if (sec.type === 'phrase_list') {
+                let phrasesHtml = sec.phrases.map(p => `
+                    <div style="margin-bottom: 8px; padding-left: 12px;">
+                        <span style="font-weight: 600; color: var(--text-main);">• ${p.en}</span>
+                        <span style="color: var(--text-muted); font-size: 13.5px; font-style: italic;"> (${p.vi})</span>
+                    </div>
+                `).join('');
+
+                bodyHtml = `
+                    <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 14px 16px;">
+                        <p style="font-weight: 600; color: var(--primary-color); margin-bottom: 10px; font-size: 14px;">
+                            ${sec.description}
+                        </p>
+                        ${phrasesHtml}
+                    </div>
+                `;
+            } else if (sec.type === 'scenario_list') {
+                bodyHtml = sec.scenarios.map(sc => {
+                    let explainHtml = sc.explainSents.map(st => `
+                        <div style="margin-bottom: 6px; padding-left: 12px;">
+                            <p style="margin-bottom: 2px; color: var(--text-main); font-weight: 500;">• ${st.en}</p>
+                            <p style="margin-bottom: 0; color: var(--text-muted); font-size: 13.5px; font-style: italic; padding-left: 8px;">(${st.vi})</p>
+                        </div>
+                    `).join('');
+
+                    return `
+                        <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 8px; padding: 14px 16px; margin-bottom: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.03);">
+                            <h5 style="color: ${sec.themeColor}; font-size: 15px; margin-bottom: 10px; font-weight: 700;">
+                                ${sc.name}
+                            </h5>
+                            <div style="margin-bottom: 10px; padding-left: 4px;">
+                                <span style="font-weight: 700; color: var(--text-main); font-size: 13.5px; display: block; margin-bottom: 3px;">
+                                    <i class="fa-solid fa-star" style="color: #f59e0b; font-size: 12px;"></i> Câu chính:
+                                </span>
+                                <p style="margin-bottom: 2px; padding-left: 12px; font-weight: 600; color: #1e293b;">${sc.mainSent.en}</p>
+                                <p style="margin-bottom: 0; padding-left: 12px; color: var(--text-muted); font-size: 13.5px; font-style: italic;">(${sc.mainSent.vi})</p>
+                            </div>
+                            <div style="padding-left: 4px; border-top: 1px dashed #e2e8f0; padding-top: 8px;">
+                                <span style="font-weight: 700; color: var(--text-main); font-size: 13.5px; display: block; margin-bottom: 4px;">
+                                    <i class="fa-solid fa-circle-info" style="color: ${sec.themeColor}; font-size: 12px;"></i> Câu giải thích / mở rộng:
+                                </span>
+                                ${explainHtml}
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+            } else if (sec.type === 'case_list') {
+                bodyHtml = sec.cases.map(cs => {
+                    let expandHtml = cs.expandSents.map(st => `
+                        <div style="margin-bottom: 6px; padding-left: 12px;">
+                            <p style="margin-bottom: 2px; color: var(--text-main); font-weight: 500;">• ${st.en}</p>
+                            <p style="margin-bottom: 0; color: var(--text-muted); font-size: 13.5px; font-style: italic; padding-left: 8px;">(${st.vi})</p>
+                        </div>
+                    `).join('');
+
+                    return `
+                        <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 8px; padding: 14px 16px; margin-bottom: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.03);">
+                            <h5 style="color: ${sec.themeColor}; font-size: 15px; margin-bottom: 10px; font-weight: 700;">
+                                ${cs.name}
+                            </h5>
+                            <div style="margin-bottom: 10px; padding-left: 4px;">
+                                <span style="font-weight: 700; color: var(--text-main); font-size: 13.5px; display: block; margin-bottom: 3px;">
+                                    <i class="fa-solid fa-star" style="color: #f59e0b; font-size: 12px;"></i> Câu chính:
+                                </span>
+                                <p style="margin-bottom: 2px; padding-left: 12px; font-weight: 600; color: #1e293b;">${cs.mainSent.en}</p>
+                                <p style="margin-bottom: 0; padding-left: 12px; color: var(--text-muted); font-size: 13.5px; font-style: italic;">(${cs.mainSent.vi})</p>
+                            </div>
+                            <div style="padding-left: 4px; border-top: 1px dashed #e2e8f0; padding-top: 8px;">
+                                <span style="font-weight: 700; color: var(--text-main); font-size: 13.5px; display: block; margin-bottom: 4px;">
+                                    <i class="fa-solid fa-circle-info" style="color: ${sec.themeColor}; font-size: 12px;"></i> Câu mở rộng:
+                                </span>
+                                ${expandHtml}
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+            }
+
+            return `
+                <div class="outline-step" style="margin-bottom: 20px; border-left: 4px solid ${sec.themeColor};">
+                    <h4 style="margin-bottom: 14px; color: ${sec.themeColor}; font-size: 16.5px; font-weight: 700;">
+                        ${sec.sectionNumber}. ${sec.sectionTitle}
+                    </h4>
+                    ${bodyHtml}
+                </div>
+            `;
+        }).join('');
+    } else if (data.feedbackSections) {
         hintsHtml = data.feedbackSections.map(sec => {
             let catCardsHtml = sec.categories.map(cat => {
                 let reasonsHtml = cat.reasons.map(r => `
@@ -1604,7 +1804,7 @@ function renderExtraPracticePanel(typeId) {
                     <span>Nhập bài viết tại đây (Yêu cầu ≥ 120 từ):</span>
                     <div class="word-count" id="extraLiveWordCount">Số từ: <strong>0</strong></div>
                 </div>
-                <textarea id="extraWritingArea" placeholder="Dear Sir/Madam,&#10;&#10;I am writing to share my feedback..." rows="12"></textarea>
+                <textarea id="extraWritingArea" placeholder="Dear Professor Smith,&#10;&#10;I am writing this email to sincerely apologize for..." rows="12"></textarea>
                 <div class="editor-actions">
                     <button class="btn btn-secondary" onclick="resetExtraPracticeArea()"><i class="fa-solid fa-rotate-left"></i> Viết lại</button>
                     <button class="btn btn-primary" onclick="gradeExtraPractice('${typeId}')"><i class="fa-solid fa-circle-check"></i> Nộp bài & Chấm điểm VSTEP (30%)</button>
