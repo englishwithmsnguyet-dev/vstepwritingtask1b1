@@ -409,9 +409,16 @@ const extraPracticeData = {
 • Which tourist attractions to visit
 • What to wear
 You should write at least 120 words. Do not include your name. Your response will be evaluated in terms of Task Fulfillment, Organization, Vocabulary, and Grammar.`,
+        analysis: {
+            recipient: "Emily (Bạn bè)",
+            purpose: "Gợi ý cho chuyến du lịch Cần Thơ vào tháng 12",
+            style: "Thân mật (Informal Letter)",
+            requirements: "Nơi ở, món ăn, điểm tham quan, trang phục"
+        },
         hints: [
             {
                 title: "1. Where to stay (Nơi ở)",
+                type: "standard",
                 items: [
                     {
                         en: "stay at a hotel in the city centre",
@@ -435,6 +442,7 @@ You should write at least 120 words. Do not include your name. Your response wil
             },
             {
                 title: "2. What dishes to try (Món ăn)",
+                type: "standard",
                 items: [
                     {
                         en: "try local dishes such as Vietnamese pancake (banh xeo) and grilled pork noodles",
@@ -458,6 +466,7 @@ You should write at least 120 words. Do not include your name. Your response wil
             },
             {
                 title: "3. Which tourist attractions to visit (Điểm tham quan)",
+                type: "standard",
                 items: [
                     {
                         en: "take a boat trip to Cai Rang Floating Market",
@@ -481,6 +490,7 @@ You should write at least 120 words. Do not include your name. Your response wil
             },
             {
                 title: "4. What to wear (Trang phục)",
+                type: "standard",
                 items: [
                     {
                         en: "wear light and comfortable clothes",
@@ -521,6 +531,166 @@ Cảm ơn thư của cậu. Tớ hy vọng cậu vẫn khỏe. Tớ viết thư 
 Tớ hy vọng những lời khuyên của tớ sẽ giúp ích cho cậu. Hãy cho tớ biết chuyến đi diễn ra thế nào nhé. Hãy viết thư lại sớm nhé.
 
 Chúc cậu mọi điều tốt lành,`
+    },
+
+    request: {
+        title: "DẠNG 02: LETTER OF REQUEST (THƯ YÊU CẦU / HỎI THÔNG TIN)",
+        prompt: `Your friend has just completed an English course at Rainbow Language Center and had a great experience. You are planning to study English as well and would like to know more about the course. Write a letter to your friend asking for more information about the course. In your email, you should ask about:
+• The address of the center
+• The tuition fee
+• The teachers
+• The training program
+You should write at least 120 words. Do not include your name. Your response will be evaluated in terms of Task Fulfillment, Organization, Vocabulary, and Grammar.`,
+        analysis: {
+            recipient: "Bạn của bạn (Moonie / Peter / John)",
+            purpose: "Hỏi thông tin về khóa học tiếng Anh tại Rainbow Language Center",
+            style: "Thân mật (Informal Letter)",
+            requirements: "Địa chỉ trung tâm, học phí, giáo viên, chương trình đào tạo"
+        },
+        hints: [
+            {
+                title: "1. The address of the center (Địa chỉ của trung tâm)",
+                type: "structures_and_sentences",
+                structures: [
+                    "Can you tell me the address of the center?",
+                    "Could you let me know where the center is located?",
+                    "I would like to know the exact address of the center."
+                ],
+                sentences: [
+                    {
+                        en: "I want to choose a center that is easy to get to.",
+                        vi: "Mình muốn chọn một trung tâm dễ đi đến."
+                    },
+                    {
+                        en: "It would be more convenient for me if the center was near my home.",
+                        vi: "Sẽ thuận tiện hơn cho mình nếu trung tâm ở gần nhà."
+                    },
+                    {
+                        en: "I want to make sure I can get there easily every day.",
+                        vi: "Mình muốn đảm bảo rằng mình có thể dễ dàng đến đó mỗi ngày."
+                    },
+                    {
+                        en: "A convenient location would help me save time when travelling.",
+                        vi: "Một địa điểm thuận tiện sẽ giúp mình tiết kiệm thời gian đi lại."
+                    },
+                    {
+                        en: "I want to know if/whether I can get there by motorbike.",
+                        vi: "Mình cũng muốn biết liệu mình có thể đi xe máy đến đó không."
+                    }
+                ]
+            },
+            {
+                title: "2. The tuition fee (Học phí)",
+                type: "structures_and_sentences",
+                structures: [
+                    "Can you tell me how much the tuition fee is?",
+                    "Could you give me more information about the course fee?",
+                    "I want to know about the cost of the course."
+                ],
+                sentences: [
+                    {
+                        en: "I need to know the cost before I decide to join the course.",
+                        vi: "Mình cần biết chi phí trước khi quyết định tham gia khóa học."
+                    },
+                    {
+                        en: "I want to make sure the course is suitable for my budget.",
+                        vi: "Mình muốn đảm bảo khóa học phù hợp với ngân sách của mình."
+                    },
+                    {
+                        en: "I also want to know if there are any discounts for students or group registration.",
+                        vi: "Mình cũng muốn biết liệu có giảm giá cho sinh viên hoặc đăng ký nhóm không."
+                    },
+                    {
+                        en: "I need to prepare enough money for the whole course.",
+                        vi: "Mình cần chuẩn bị đủ tiền cho toàn bộ khóa học."
+                    },
+                    {
+                        en: "The tuition fee is important because I am still a student.",
+                        vi: "Học phí quan trọng vì mình vẫn còn là sinh viên."
+                    }
+                ]
+            },
+            {
+                title: "3. The teachers (Giáo viên)",
+                type: "structures_and_sentences",
+                structures: [
+                    "Can you tell me more about the teachers at the center?",
+                    "Could you let me know what the teachers are like?",
+                    "I was wondering if the teachers are friendly and helpful."
+                ],
+                sentences: [
+                    {
+                        en: "I would like to know if they are experienced and friendly.",
+                        vi: "Mình muốn biết liệu họ có kinh nghiệm và thân thiện không."
+                    },
+                    {
+                        en: "I want to learn from teachers who can explain things clearly.",
+                        vi: "Mình muốn học từ những giáo viên có thể giải thích mọi thứ rõ ràng."
+                    },
+                    {
+                        en: "Good teachers are important because I want to improve my English effectively.",
+                        vi: "Giáo viên tốt rất quan trọng vì mình muốn cải thiện tiếng Anh hiệu quả."
+                    },
+                    {
+                        en: "I would feel more comfortable learning with friendly teachers.",
+                        vi: "Mình sẽ cảm thấy thoải mái hơn khi học với những giáo viên thân thiện."
+                    },
+                    {
+                        en: "Experienced teachers can help students learn more effectively.",
+                        vi: "Giáo viên có kinh nghiệm có thể giúp học viên học hiệu quả hơn."
+                    }
+                ]
+            },
+            {
+                title: "4. The training program (Chương trình đào tạo)",
+                type: "structures_and_sentences",
+                structures: [
+                    "Could you give me some details about the training program?",
+                    "Can you tell me what the curriculum includes?",
+                    "I would like to know more about the course schedule and materials."
+                ],
+                sentences: [
+                    {
+                        en: "I want to know what skills the course focuses on.",
+                        vi: "Mình muốn biết khóa học tập trung vào những kỹ năng nào."
+                    },
+                    {
+                        en: "I would like to know what topics students will study.",
+                        vi: "Mình muốn biết học viên sẽ học những chủ đề nào."
+                    },
+                    {
+                        en: "It would be helpful to know the class schedule and course length.",
+                        vi: "Sẽ hữu ích nếu biết lịch học và thời lượng khóa học."
+                    },
+                    {
+                        en: "I want to make sure the program is suitable for my English level.",
+                        vi: "Mình muốn đảm bảo chương trình phù hợp với trình độ tiếng Anh của mình."
+                    },
+                    {
+                        en: "I also want to know if students have enough opportunities to practise English.",
+                        vi: "Mình cũng muốn biết liệu học viên có đủ cơ hội để thực hành tiếng Anh không."
+                    }
+                ]
+            }
+        ],
+        sampleModel: `Dear Moonie,
+
+How are you? I hope you are doing well. I’m writing to ask for some information about the English course at Rainbow Language Center because I am planning to study English there soon.
+
+First of all, could you tell me the address of the center? I want to know if it is near my house so that I can get there easily every day. In addition, I would like to know about the tuition fee for the course. I need to know the cost before I decide to join because I want to make sure it is suitable for my budget. Furthermore, can you tell me more about the teachers? Are they friendly and experienced? I want to learn from teachers who can explain things clearly. Finally, I was wondering if you could give me some details about the training program and class schedule. It would be helpful to know what skills the course focuses on.
+
+I hope you can help me with this. Write back soon.
+
+Best wishes,`,
+        sampleModelVi: `Moonie thân mến,
+
+Cậu khỏe không? Tớ hy vọng cậu vẫn khỏe. Tớ viết thư này để hỏi xin một vài thông tin về khóa học tiếng Anh tại Trung tâm Ngoại ngữ Rainbow vì tớ đang có kế hoạch học tiếng Anh ở đó sắp tới.
+
+Trước hết, cậu có thể cho tớ biết địa chỉ của trung tâm không? Tớ muốn biết liệu nó có gần nhà tớ không để tớ có thể dễ dàng đến đó mỗi ngày. Ngoài ra, tớ muốn biết về học phí của khóa học. Tớ cần biết chi phí trước khi quyết định tham gia vì tớ muốn đảm bảo nó phù hợp với ngân sách của mình. Hơn nữa, cậu có thể kể thêm cho tớ về các giáo viên ở đó không? Họ có thân thiện và giàu kinh nghiệm không? Tớ muốn học từ những giáo viên có thể giải thích mọi thứ rõ ràng. Cuối cùng, tớ đang băn khoăn liệu cậu có thể cho tớ biết thêm chi tiết về chương trình đào tạo và lịch học không. Sẽ rất hữu ích nếu biết khóa học tập trung vào những kỹ năng nào.
+
+Tớ hy vọng cậu có thể giúp tớ việc này. Hãy trả lời thư sớm nhé.
+
+Chúc cậu mọi điều tốt lành,`
     }
 };
 
@@ -534,65 +704,92 @@ function renderExtraPracticePanel(typeId) {
             <div class="content-block" style="text-align: center; padding: 40px 20px;">
                 <i class="fa-solid fa-clock" style="font-size: 42px; color: var(--primary-light); margin-bottom: 16px;"></i>
                 <h3 style="font-size: 18px; margin-bottom: 8px;">Đang cập nhật đề luyện tập thêm cho dạng thư này</h3>
-                <p style="color: var(--text-muted);">Vui lòng chọn <strong>Dạng 01: Letter of Advice (Thư khuyên bảo)</strong> để làm bài luyện tập.</p>
+                <p style="color: var(--text-muted);">Vui lòng chọn <strong>Dạng 01: Letter of Advice</strong> hoặc <strong>Dạng 02: Letter of Request</strong> để làm bài luyện tập.</p>
             </div>
         `;
         return;
     }
 
     let hintsHtml = data.hints.map(hint => {
-        let itemsHtml = hint.items.map(item => `
-            <div style="margin-bottom: 14px; padding-left: 6px;">
-                <p style="margin-bottom: 2px;">• <strong>${item.en}</strong> (${item.vi})</p>
-                <p style="margin-bottom: 2px; color: var(--primary-color); padding-left: 16px;">➔ <em>${item.reasonEn}</em></p>
-                <p style="margin-bottom: 0; color: var(--text-muted); font-size: 14px; padding-left: 16px;">(${item.reasonVi})</p>
-            </div>
-        `).join('');
+        if (hint.type === "structures_and_sentences") {
+            let structHtml = hint.structures.map(st => `
+                <p style="margin-bottom: 4px; color: var(--primary-color); padding-left: 14px;">↳ <span class="outline-phrase">${st}</span></p>
+            `).join('');
 
-        return `
-            <div class="outline-step" style="margin-bottom: 16px;">
-                <h4 style="margin-bottom: 12px; color: var(--accent-red); font-size: 17px;">${hint.title}</h4>
-                ${itemsHtml}
-            </div>
-        `;
+            let sentHtml = hint.sentences.map(st => `
+                <div style="margin-bottom: 8px; padding-left: 14px;">
+                    <p style="margin-bottom: 2px;">• <strong>${st.en}</strong></p>
+                    <p style="margin-bottom: 0; color: var(--text-muted); font-size: 13.5px; font-style: italic;">(${st.vi})</p>
+                </div>
+            `).join('');
+
+            return `
+                <div class="outline-step" style="margin-bottom: 18px;">
+                    <h4 style="margin-bottom: 10px; color: var(--accent-red); font-size: 17px;">${hint.title}</h4>
+                    <div style="margin-bottom: 12px;">
+                        <p style="font-weight: 700; color: var(--text-main); margin-bottom: 6px;"><i class="fa-solid fa-code-fork" style="color: var(--primary-color);"></i> Cấu trúc hỏi thông tin (Tự chọn 1 cấu trúc ghép vô):</p>
+                        ${structHtml}
+                    </div>
+                    <div>
+                        <p style="font-weight: 700; color: var(--text-main); margin-bottom: 6px;"><i class="fa-solid fa-angles-right" style="color: var(--secondary-color);"></i> Câu mở rộng (Lựa chọn câu phù hợp):</p>
+                        ${sentHtml}
+                    </div>
+                </div>
+            `;
+        } else {
+            let itemsHtml = hint.items.map(item => `
+                <div style="margin-bottom: 14px; padding-left: 6px;">
+                    <p style="margin-bottom: 2px;">• <strong>${item.en}</strong> (${item.vi})</p>
+                    <p style="margin-bottom: 2px; color: var(--primary-color); padding-left: 16px;">➔ <em>${item.reasonEn}</em></p>
+                    <p style="margin-bottom: 0; color: var(--text-muted); font-size: 14px; padding-left: 16px;">(${item.reasonVi})</p>
+                </div>
+            `).join('');
+
+            return `
+                <div class="outline-step" style="margin-bottom: 16px;">
+                    <h4 style="margin-bottom: 12px; color: var(--accent-red); font-size: 17px;">${hint.title}</h4>
+                    ${itemsHtml}
+                </div>
+            `;
+        }
     }).join('');
+
+    const promptBullets = data.prompt.split('\n').filter(l => l.startsWith('•')).map(l => `<li>${l.replace('•', '').trim()}</li>`).join('');
+    const promptIntro = data.prompt.substring(0, data.prompt.indexOf('•')).trim();
 
     container.innerHTML = `
         <!-- Prompt Card (Using standard website style) -->
         <div class="sample-prompt-container">
             <div class="sample-prompt-header">
-                <i class="fa-solid fa-file-circle-question"></i> ĐỀ BÀI (TOPIC PROMPT)
+                <i class="fa-solid fa-file-circle-question"></i> ĐỀ BÀI (TOPIC PROMPT) - ${data.title}
             </div>
             <div class="sample-prompt-text">
-                <p>You have received a letter from a friend, <strong>Emily</strong>. She is going to visit Can Tho in December. Write a letter to give her some suggestions. You should tell her:</p>
+                <p>${promptIntro.replace(/\n+/g, ' ')}</p>
                 <ul>
-                    <li>Where to stay</li>
-                    <li>What dishes to try</li>
-                    <li>Which tourist attractions to visit</li>
-                    <li>What to wear</li>
+                    ${promptBullets}
                 </ul>
                 <p style="margin-top: 10px; font-style: italic; color: var(--text-muted);">
                     <i class="fa-solid fa-triangle-exclamation" style="color: #f59e0b;"></i> You should write at least 120 words. Do not include your name. Your response will be evaluated in terms of Task Fulfillment, Organization, Vocabulary, and Grammar.
                 </p>
             </div>
-                <div class="sample-analysis-grid">
-                    <div class="sample-analysis-item">
-                        <strong>Người nhận</strong>
-                        <span>Emily (Bạn bè)</span>
-                    </div>
-                    <div class="sample-analysis-item">
-                        <strong>Mục đích</strong>
-                        <span>Gợi ý cho chuyến du lịch Cần Thơ vào tháng 12</span>
-                    </div>
-                    <div class="sample-analysis-item">
-                        <strong>Văn phong</strong>
-                        <span>Thân mật (Informal Letter)</span>
-                    </div>
-                    <div class="sample-analysis-item">
-                        <strong>Yêu cầu cốt lõi</strong>
-                        <span>Nơi ở, món ăn, điểm tham quan, trang phục</span>
-                    </div>
+            <div class="sample-analysis-grid">
+                <div class="sample-analysis-item">
+                    <strong>Người nhận</strong>
+                    <span>${data.analysis.recipient}</span>
                 </div>
+                <div class="sample-analysis-item">
+                    <strong>Mục đích</strong>
+                    <span>${data.analysis.purpose}</span>
+                </div>
+                <div class="sample-analysis-item">
+                    <strong>Văn phong</strong>
+                    <span>${data.analysis.style}</span>
+                </div>
+                <div class="sample-analysis-item">
+                    <strong>Yêu cầu cốt lõi</strong>
+                    <span>${data.analysis.requirements}</span>
+                </div>
+            </div>
         </div>
 
         <!-- Suggestions Collapsible Accordion (Bấm vào mới hiện) -->
@@ -616,7 +813,7 @@ function renderExtraPracticePanel(typeId) {
                     <span>Nhập bài viết tại đây (Yêu cầu ≥ 120 từ):</span>
                     <div class="word-count" id="extraLiveWordCount">Số từ: <strong>0</strong></div>
                 </div>
-                <textarea id="extraWritingArea" placeholder="Dear Emily,&#10;&#10;Thanks for your letter. I hope you are doing well..." rows="12"></textarea>
+                <textarea id="extraWritingArea" placeholder="Dear friend,&#10;&#10;How are you? I hope you are doing well..." rows="12"></textarea>
                 <div class="editor-actions">
                     <button class="btn btn-secondary" onclick="resetExtraPracticeArea()"><i class="fa-solid fa-rotate-left"></i> Viết lại</button>
                     <button class="btn btn-primary" onclick="gradeExtraPractice('${typeId}')"><i class="fa-solid fa-circle-check"></i> Nộp bài & Chấm điểm VSTEP (30%)</button>
@@ -677,14 +874,17 @@ function diagnoseVstepErrors(rawText, promptData) {
     const lower = rawText.toLowerCase();
 
     // --- A. SALUTATION & GREETING ---
-    if (/\bDear\s+emily\b/i.test(rawText) && !/\bDear\s+Emily\b/.test(rawText)) {
-        errors.push({
-            type: "Lời mở đầu (Chính tả)",
-            category: "spelling",
-            wrong: "Dear emily",
-            correct: "Dear Emily,",
-            reason: "Tên riêng 'Emily' bắt buộc phải viết hoa chữ cái đầu và có dấu phẩy sau lời chào."
-        });
+    if (/\bDear\s+[a-z]+/i.test(rawText)) {
+        const m = rawText.match(/\bDear\s+([a-zA-Z]+)/);
+        if (m && m[1][0] !== m[1][0].toUpperCase()) {
+            errors.push({
+                type: "Lời mở đầu (Chính tả)",
+                category: "spelling",
+                wrong: m[0],
+                correct: `Dear ${m[1][0].toUpperCase() + m[1].slice(1)},`,
+                reason: "Tên riêng của người nhận bắt buộc phải viết hoa chữ cái đầu và có dấu phẩy sau lời chào."
+            });
+        }
     }
 
     if (/\bThank\s+for\b/i.test(rawText) && !/\bThanks\s+for\b/i.test(rawText) && !/\bThank\s+you\s+for\b/i.test(rawText)) {
@@ -737,7 +937,25 @@ function diagnoseVstepErrors(rawText, promptData) {
         });
     }
 
-    // --- B. ARTICLES (A / AN / THE / ZERO ARTICLE) ---
+    // --- B. INDIRECT QUESTIONS (CÂU HỎI GIÁN TIẾP - ĐẶC TRƯNG THƯ REQUEST) ---
+    const rIndirectInversion = /\b(tell\s+me|know|wondering|wonder)\s+(where\s+is|what\s+is|how\s+much\s+is|how\s+is|who\s+is)\s+([a-zA-Z\s]+?)([.?!,]|$)/gi;
+    let mInd;
+    while ((mInd = rIndirectInversion.exec(rawText)) !== null) {
+        const lead = mInd[1];
+        const whVerb = mInd[2].split(/\s+/);
+        const whWord = whVerb[0];
+        const verb = whVerb[1];
+        const subject = mInd[3].trim();
+        errors.push({
+            type: "Cấu trúc câu hỏi gián tiếp",
+            category: "grammar",
+            wrong: mInd[0].trim(),
+            correct: `${lead} ${whWord} ${subject} ${verb}`,
+            reason: `Trong câu hỏi gián tiếp sau '${lead}', không đảo trợ động từ/to be lên trước chủ ngữ. Cấu trúc chuẩn là: '${whWord} + Chủ ngữ (${subject}) + Động từ (${verb})'.`
+        });
+    }
+
+    // --- C. ARTICLES (A / AN / THE / ZERO ARTICLE) ---
     const rStayHotel = /\bstay\s+(in|at)\s+(hotel|homestay)\b/gi;
     let mStay;
     while ((mStay = rStayHotel.exec(rawText)) !== null) {
@@ -750,7 +968,7 @@ function diagnoseVstepErrors(rawText, promptData) {
         });
     }
 
-    const rSingularItems = /\b(wear|bring|take|buy|choose|visit|rent|book)\s+(ba\s*ba\s+shirt|shirt|dress|hat|jacket|camera|conical\s+hat|umbrella|raincoat|room|hotel|homestay|taxi|bus|boat|museum|market|temple|pagoda)\b/gi;
+    const rSingularItems = /\b(wear|bring|take|buy|choose|visit|rent|book|join|take)\s+(ba\s*ba\s+shirt|shirt|dress|hat|jacket|camera|conical\s+hat|umbrella|raincoat|room|hotel|homestay|taxi|bus|boat|museum|market|temple|pagoda|course|center)\b/gi;
     let mSingular;
     while ((mSingular = rSingularItems.exec(rawText)) !== null) {
         const verb = mSingular[1];
@@ -803,8 +1021,8 @@ function diagnoseVstepErrors(rawText, promptData) {
         }
     }
 
-    if (/\bby\s+a\s+(bus|taxi|car|train|plane|boat)\b/gi.test(rawText)) {
-        const m = rawText.match(/\bby\s+a\s+(bus|taxi|car|train|plane|boat)\b/i);
+    if (/\bby\s+a\s+(bus|taxi|car|train|plane|boat|motorbike)\b/gi.test(rawText)) {
+        const m = rawText.match(/\bby\s+a\s+(bus|taxi|car|train|plane|boat|motorbike)\b/i);
         if (m) {
             errors.push({
                 type: "Mạo từ (Articles)",
@@ -816,7 +1034,7 @@ function diagnoseVstepErrors(rawText, promptData) {
         }
     }
 
-    // --- C. UNCOUNTABLE NOUNS ---
+    // --- D. UNCOUNTABLE NOUNS ---
     if (/\b(advices|an\s+advice)\b/gi.test(rawText)) {
         const m = rawText.match(/\b(advices|an\s+advice)\b/i);
         errors.push({
@@ -849,7 +1067,17 @@ function diagnoseVstepErrors(rawText, promptData) {
         });
     }
 
-    // --- D. PARTS OF SPEECH & CONFUSING WORDS ---
+    // --- E. PARTS OF SPEECH & CONFUSING WORDS ---
+    if (/\bexperience\s+teachers\b/gi.test(rawText)) {
+        errors.push({
+            type: "Từ loại (Part of Speech)",
+            category: "vocab",
+            wrong: "experience teachers",
+            correct: "experienced teachers",
+            reason: "Cần dùng tính từ 'experienced' (giàu kinh nghiệm) để bổ nghĩa cho danh từ 'teachers'."
+        });
+    }
+
     if (/\bthe\s+cultural\s+of\b/gi.test(rawText)) {
         errors.push({
             type: "Từ loại (Part of Speech)",
@@ -867,38 +1095,6 @@ function diagnoseVstepErrors(rawText, promptData) {
             wrong: "very beauty",
             correct: "very beautiful",
             reason: "Sau phó từ 'very' bổ nghĩa cho địa điểm/cảnh quan phải dùng tính từ 'beautiful', không dùng danh từ 'beauty'."
-        });
-    }
-
-    if (/\bdeliciously\s+(food|dishes|fruits)\b/gi.test(rawText)) {
-        const m = rawText.match(/\bdeliciously\s+(food|dishes|fruits)\b/i);
-        errors.push({
-            type: "Từ loại (Part of Speech)",
-            category: "vocab",
-            wrong: m ? m[0] : "deliciously food",
-            correct: m ? m[0].replace('deliciously', 'delicious') : "delicious food",
-            reason: "Đứng trước danh từ phải dùng tính từ 'delicious' để bổ nghĩa, không dùng trạng từ 'deliciously'."
-        });
-    }
-
-    if (/\btradition\s+(dishes|food|clothes|costumes)\b/gi.test(rawText)) {
-        const m = rawText.match(/\btradition\s+(dishes|food|clothes|costumes)\b/i);
-        errors.push({
-            type: "Từ loại (Part of Speech)",
-            category: "vocab",
-            wrong: m ? m[0] : "tradition dishes",
-            correct: m ? m[0].replace('tradition', 'traditional') : "traditional dishes",
-            reason: "Cần dùng tính từ 'traditional' để bổ nghĩa cho danh từ, không dùng danh từ 'tradition'."
-        });
-    }
-
-    if (/\bfame\s+places\b/gi.test(rawText)) {
-        errors.push({
-            type: "Từ loại (Part of Speech)",
-            category: "vocab",
-            wrong: "fame places",
-            correct: "famous places",
-            reason: "Cần dùng tính từ 'famous' trước danh từ 'places', không dùng danh từ 'fame'."
         });
     }
 
@@ -922,7 +1118,51 @@ function diagnoseVstepErrors(rawText, promptData) {
         });
     }
 
-    // --- E. ADVICE STRUCTURES & VERB PATTERNS ---
+    // --- F. PREPOSITIONS & COLLOCATIONS ---
+    if (/\bsuitable\s+with\b/gi.test(rawText)) {
+        errors.push({
+            type: "Giới từ đi kèm tính từ",
+            category: "grammar",
+            wrong: "suitable with",
+            correct: "suitable for",
+            reason: "'suitable' đi với giới từ 'for' (suitable for my budget / suitable for me)."
+        });
+    }
+
+    if (/\bconvenient\s+with\s+me\b/gi.test(rawText)) {
+        errors.push({
+            type: "Giới từ đi kèm tính từ",
+            category: "grammar",
+            wrong: "convenient with me",
+            correct: "convenient for me",
+            reason: "'convenient' đi với giới từ 'for' (convenient for me)."
+        });
+    }
+
+    if (/\bfocus\s+in\b/gi.test(rawText)) {
+        errors.push({
+            type: "Giới từ đi kèm động từ",
+            category: "grammar",
+            wrong: "focus in",
+            correct: "focus on",
+            reason: "Động từ 'focus' đi kèm giới từ 'on' (focus on skills)."
+        });
+    }
+
+    if (/\b(on\s+December|at\s+December|on\s+January|on\s+February|on\s+June|on\s+July)\b/gi.test(rawText)) {
+        const m = rawText.match(/\b(on|at)\s+(December|January|February|March|April|May|June|July|August|September|October|November)\b/i);
+        if (m) {
+            errors.push({
+                type: "Giới từ chỉ thời gian",
+                category: "grammar",
+                wrong: m[0],
+                correct: `in ${m[2]}`,
+                reason: `Trước tháng (không có ngày cụ thể) bắt buộc phải dùng giới từ 'in' (ví dụ: in ${m[2]}).`
+            });
+        }
+    }
+
+    // --- G. VERB PATTERNS & ADVICE STRUCTURES ---
     if (/\bshould\s+to\s+[a-z]+\b/gi.test(rawText)) {
         const m = rawText.match(/\bshould\s+to\s+([a-z]+)\b/i);
         if (m) {
@@ -936,20 +1176,7 @@ function diagnoseVstepErrors(rawText, promptData) {
         }
     }
 
-    if (/\bshould\s+(stays|wears|brings|tries|visits|goes|buys)\b/gi.test(rawText)) {
-        const m = rawText.match(/\bshould\s+([a-z]+)\b/i);
-        if (m) {
-            errors.push({
-                type: "Cấu trúc động từ khuyết thiếu",
-                category: "grammar",
-                wrong: m[0],
-                correct: `should ${m[1].replace(/s$/, '')}`,
-                reason: "Sau 'should' động từ luôn ở dạng nguyên mẫu không chia (Vo)."
-            });
-        }
-    }
-
-    if (/\bwould\s+be\s+a\s+good\s+idea\s+(try|stay|visit|wear|bring|go)\b/gi.test(rawText)) {
+    if (/\bwould\s+be\s+a\s+good\s+idea\s+(try|stay|visit|wear|bring|go|ask|join)\b/gi.test(rawText)) {
         const m = rawText.match(/\bwould\s+be\s+a\s+good\s+idea\s+([a-z]+)\b/i);
         if (m) {
             errors.push({
@@ -972,90 +1199,7 @@ function diagnoseVstepErrors(rawText, promptData) {
         });
     }
 
-    if (/\bIf\s+I\s+were\s+you,\s*I\s+will\b/gi.test(rawText)) {
-        errors.push({
-            type: "Câu điều kiện loại 2",
-            category: "grammar",
-            wrong: "If I were you, I will",
-            correct: "If I were you, I would",
-            reason: "Mệnh đề chính của câu điều kiện loại 2 phải dùng 'would + Vo' (không dùng 'will')."
-        });
-    }
-
-    if (/\b(remember|don't\s+forget)\s+(wear|bring|take|try|visit|stay)\b/gi.test(rawText)) {
-        const m = rawText.match(/\b(remember|don't\s+forget)\s+([a-z]+)\b/i);
-        if (m) {
-            errors.push({
-                type: "Dạng động từ (Verb Patterns)",
-                category: "grammar",
-                wrong: m[0],
-                correct: `${m[1]} to ${m[2]}`,
-                reason: `Cấu trúc nhắc nhở làm việc gì: '${m[1]} TO + Vo' (ví dụ: ${m[1]} to ${m[2]}).`
-            });
-        }
-    }
-
-    if (/\bsuggest\s+you\s+to\s+[a-z]+\b/gi.test(rawText)) {
-        const m = rawText.match(/\bsuggest\s+you\s+to\s+([a-z]+)\b/i);
-        if (m) {
-            errors.push({
-                type: "Cấu trúc với 'Suggest'",
-                category: "grammar",
-                wrong: m[0],
-                correct: `suggest that you should ${m[1]} (hoặc: suggest ${m[1]}ing)`,
-                reason: "Động từ 'suggest' không đi với 'suggest someone to do sth'. Cần dùng 'suggest (that) you (should) do sth' hoặc 'suggest V-ing'."
-            });
-        }
-    }
-
-    // --- F. PREPOSITIONS ---
-    if (/\b(on\s+December|at\s+December|on\s+January|on\s+February|on\s+June|on\s+July)\b/gi.test(rawText)) {
-        const m = rawText.match(/\b(on|at)\s+(December|January|February|March|April|May|June|July|August|September|October|November)\b/i);
-        if (m) {
-            errors.push({
-                type: "Giới từ chỉ thời gian",
-                category: "grammar",
-                wrong: m[0],
-                correct: `in ${m[2]}`,
-                reason: `Trước tháng (không có ngày cụ thể) bắt buộc phải dùng giới từ 'in' (ví dụ: in ${m[2]}).`
-            });
-        }
-    }
-
-    if (/\bin\s+(Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday)\b/gi.test(rawText)) {
-        const m = rawText.match(/\bin\s+(Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday)\b/i);
-        if (m) {
-            errors.push({
-                type: "Giới từ chỉ thời gian",
-                category: "grammar",
-                wrong: m[0],
-                correct: `on ${m[1]}`,
-                reason: `Trước các thứ trong tuần dùng giới từ 'on' (on ${m[1]}).`
-            });
-        }
-    }
-
-    if (/\barrive\s+to\s+Can\s+Tho\b/gi.test(rawText)) {
-        errors.push({
-            type: "Giới từ chỉ nơi chốn",
-            category: "grammar",
-            wrong: "arrive to Can Tho",
-            correct: "arrive in Can Tho",
-            reason: "Đến một thành phố/quốc gia dùng 'arrive in' (arrive in Can Tho), không dùng 'arrive to'."
-        });
-    }
-
-    if (/\bfamous\s+with\b/gi.test(rawText)) {
-        errors.push({
-            type: "Giới từ đi kèm tính từ",
-            category: "grammar",
-            wrong: "famous with",
-            correct: "famous for",
-            reason: "Nổi tiếng về điều gì dùng cấu trúc 'famous for', không dùng 'famous with'."
-        });
-    }
-
-    // --- G. SENTENCE STRUCTURE & CONJUNCTIONS ---
+    // --- H. SENTENCE STRUCTURE & CONJUNCTIONS ---
     if (/the weather in Can Tho can be very pleasant in December and an ideal time/i.test(rawText)) {
         errors.push({
             type: "Cấu trúc câu (Sentence Structure)",
@@ -1089,7 +1233,7 @@ function diagnoseVstepErrors(rawText, promptData) {
     // Missing comma after transition words
     const transitions = [
         "Firstly", "Secondly", "Finally", "Moreover", "Besides",
-        "Furthermore", "In addition", "Therefore", "For example", "However"
+        "Furthermore", "In addition", "Therefore", "For example", "However", "First of all"
     ];
     transitions.forEach(tr => {
         const reg = new RegExp(`(^|[.!?]\\s+)${tr}\\s+([a-zA-Z])`, 'g');
@@ -1105,9 +1249,9 @@ function diagnoseVstepErrors(rawText, promptData) {
         }
     });
 
-    // --- H. SUBJECT-VERB AGREEMENT & COMMON SPELLINGS ---
-    if (/\b(places|dishes|clothes)\s+is\b/gi.test(rawText)) {
-        const m = rawText.match(/\b(places|dishes|clothes)\s+is\b/i);
+    // --- I. SUBJECT-VERB AGREEMENT & COMMON SPELLINGS ---
+    if (/\b(places|dishes|clothes|teachers|skills|topics)\s+is\b/gi.test(rawText)) {
+        const m = rawText.match(/\b(places|dishes|clothes|teachers|skills|topics)\s+is\b/i);
         if (m) {
             errors.push({
                 type: "Hòa hợp Chủ - Vị",
@@ -1119,7 +1263,7 @@ function diagnoseVstepErrors(rawText, promptData) {
         }
     }
 
-    const rLowerI = /(^|\s)i\s+(am|hope|think|want|would|will|can|suggest|recommend)\b/g;
+    const rLowerI = /(^|\s)i\s+(am|hope|think|want|would|will|can|suggest|recommend|need|also)\b/g;
     let mLowerI;
     while ((mLowerI = rLowerI.exec(rawText)) !== null) {
         errors.push({
@@ -1155,7 +1299,11 @@ function diagnoseVstepErrors(rawText, promptData) {
         "pleasent": "pleasant",
         "floting": "floating",
         "villige": "village",
-        "tourist attraction": "tourist attractions"
+        "tutition": "tuition",
+        "tution": "tuition",
+        "schedul": "schedule",
+        "materiels": "materials",
+        "curiculum": "curriculum"
     };
 
     Object.keys(spellingDict).forEach(wrongWord => {
@@ -1237,12 +1385,35 @@ function gradeExtraPractice(typeId) {
 
     // --- 1. TASK FULFILMENT (Thang 10) ---
     const lower = rawText.toLowerCase();
-    const hasStay = /(stay|hotel|homestay|room|guest\s*house|resort|city\s*cent)/i.test(lower);
-    const hasDishes = /(dish|dishes|food|pancake|banh\s*xeo|lau\s*mam|fish|fruit|fruits|eat|taste|try|specialt)/i.test(lower);
-    const hasAttractions = /(attraction|visit|place|market|ninh\s*kieu|cai\s*rang|floating|ancient\s*house|village|tourist|pagoda|temple)/i.test(lower);
-    const hasWear = /(wear|clothes|cloth|jacket|umbrella|hat|sunglass|shoes|sneaker|raincoat|t-shirt|shorts|dress)/i.test(lower);
+    let hasReq1 = false, hasReq2 = false, hasReq3 = false, hasReq4 = false;
+    let reqLabels = [];
 
-    let bulletsCount = (hasStay ? 1 : 0) + (hasDishes ? 1 : 0) + (hasAttractions ? 1 : 0) + (hasWear ? 1 : 0);
+    if (typeId === 'request') {
+        hasReq1 = /(address|location|where\s+(is\s+)?the\s+center|near\s+my\s+(house|home)|street|district|easy\s+to\s+get|located)/i.test(lower);
+        hasReq2 = /(fee|tuition|cost|price|money|how\s+much|budget|discount|pay)/i.test(lower);
+        hasReq3 = /(teacher|teachers|instructor|friendly|experienced|teach|explain)/i.test(lower);
+        hasReq4 = /(program|training|course|curriculum|skill|skills|schedule|length|study|practise|practice|topic|topics)/i.test(lower);
+        reqLabels = [
+            hasReq1 ? '✓ Địa chỉ' : '✗ Địa chỉ',
+            hasReq2 ? '✓ Học phí' : '✗ Học phí',
+            hasReq3 ? '✓ Giáo viên' : '✗ Giáo viên',
+            hasReq4 ? '✓ Chương trình đào tạo' : '✗ Chương trình đào tạo'
+        ];
+    } else {
+        // Default: advice
+        hasReq1 = /(stay|hotel|homestay|room|guest\s*house|resort|city\s*cent)/i.test(lower);
+        hasReq2 = /(dish|dishes|food|pancake|banh\s*xeo|lau\s*mam|fish|fruit|fruits|eat|taste|try|specialt)/i.test(lower);
+        hasReq3 = /(attraction|visit|place|market|ninh\s*kieu|cai\s*rang|floating|ancient\s*house|village|tourist|pagoda|temple)/i.test(lower);
+        hasReq4 = /(wear|clothes|cloth|jacket|umbrella|hat|sunglass|shoes|sneaker|raincoat|t-shirt|shorts|dress)/i.test(lower);
+        reqLabels = [
+            hasReq1 ? '✓ Nơi ở' : '✗ Nơi ở',
+            hasReq2 ? '✓ Món ăn' : '✗ Món ăn',
+            hasReq3 ? '✓ Điểm tham quan' : '✗ Điểm tham quan',
+            hasReq4 ? '✓ Trang phục' : '✗ Trang phục'
+        ];
+    }
+
+    let bulletsCount = (hasReq1 ? 1 : 0) + (hasReq2 ? 1 : 0) + (hasReq3 ? 1 : 0) + (hasReq4 ? 1 : 0);
 
     let tfScore = 8.5;
     if (bulletsCount === 4) {
@@ -1257,11 +1428,11 @@ function gradeExtraPractice(typeId) {
 
     // --- 2. ORGANIZATION (Thang 10) ---
     const hasGreeting = /^dear\s+[a-z]+/i.test(rawText.trim());
-    const hasOpening = /(thanks?\s+for|hope\s+you|writing\s+to)/i.test(lower);
-    const hasClosingSentence = /(hope\s+my\s+advice|write\s+back|let\s+me\s+know|look\s+forward)/i.test(lower);
+    const hasOpening = /(thanks?\s+for|hope\s+you|writing\s+to|how\s+are\s+you)/i.test(lower);
+    const hasClosingSentence = /(hope\s+my\s+advice|write\s+back|let\s+me\s+know|look\s+forward|hope\s+you\s+can\s+help)/i.test(lower);
     const hasSignOff = /(best\s+wishes|yours|regards|love)/i.test(lower);
 
-    const linkingWords = ["firstly", "secondly", "next", "finally", "moreover", "besides", "furthermore", "in addition", "therefore", "for example", "also", "because"];
+    const linkingWords = ["firstly", "secondly", "next", "finally", "moreover", "besides", "furthermore", "in addition", "therefore", "for example", "first of all", "also", "because"];
     let linkCount = 0;
     linkingWords.forEach(lw => {
         if (lower.includes(lw)) linkCount++;
@@ -1326,7 +1497,7 @@ function gradeExtraPractice(typeId) {
     let levelDesc = "Bài viết đáp ứng đầy đủ yêu cầu đề bài, cấu trúc đoạn rõ ràng. Tuy nhiên còn một số lỗi ngữ pháp, mạo từ và dùng từ cần lưu ý sửa chữa.";
     if (overallBand >= 8.5) {
         vstepLevel = "B2 LEVEL (XUẤT SẮC - VƯỢT CHUẨN)";
-        levelDesc = "Bài viết rất ấn tượng! Bố cục chuẩn mực 5 bước, từ vựng và ngữ pháp khuyên bảo đa dạng, hầu như không có lỗi sai.";
+        levelDesc = "Bài viết rất ấn tượng! Bố cục chuẩn mực 5 bước, từ vựng và ngữ pháp đa dạng, hầu như không có lỗi sai.";
     } else if (overallBand < 6.0) {
         vstepLevel = "DƯỚI CHUẨN B1 (CẦN CẢI THIỆN)";
         levelDesc = "Bài viết còn nhiều lỗi ngữ pháp hoặc chưa đủ số từ (yêu cầu ≥ 120 từ). Hãy xem kỹ bảng sửa lỗi và bài mẫu bên dưới nhé!";
@@ -1407,10 +1578,7 @@ function gradeExtraPractice(typeId) {
                     <span class="criterion-score">${tfConv.toFixed(2)}/0.75 <small style="font-size: 11px; font-weight: normal; color: var(--text-muted);">(${tfScore.toFixed(1)}/10)</small></span>
                 </div>
                 <div class="criterion-desc">
-                    ${hasStay ? '✓ Nơi ở ' : '✗ Nơi ở '}| 
-                    ${hasDishes ? '✓ Món ăn ' : '✗ Món ăn '}| 
-                    ${hasAttractions ? '✓ Điểm tham quan ' : '✗ Điểm tham quan '}| 
-                    ${hasWear ? '✓ Trang phục' : '✗ Trang phục'}.
+                    ${reqLabels.join(' | ')}.
                     Độ dài: ${wordCount >= 120 ? 'Đạt chuẩn (≥120 từ)' : 'Chưa đủ từ'}.
                 </div>
             </div>
@@ -1420,7 +1588,7 @@ function gradeExtraPractice(typeId) {
                     <span class="criterion-score">${orgConv.toFixed(2)}/0.75 <small style="font-size: 11px; font-weight: normal; color: var(--text-muted);">(${orgScore.toFixed(1)}/10)</small></span>
                 </div>
                 <div class="criterion-desc">
-                    Bố cục 5 phần hoàn chỉnh. Sử dụng linh hoạt các liên từ nối (Firstly, Secondly, Next, Finally, Moreover, Besides).
+                    Bố cục 5 phần hoàn chỉnh. Sử dụng linh hoạt các liên từ nối chuyển tiếp câu.
                 </div>
             </div>
             <div class="criterion-card">
@@ -1438,7 +1606,7 @@ function gradeExtraPractice(typeId) {
                     <span class="criterion-score">${gramConv.toFixed(2)}/0.75 <small style="font-size: 11px; font-weight: normal; color: var(--text-muted);">(${gramScore.toFixed(1)}/10)</small></span>
                 </div>
                 <div class="criterion-desc">
-                    Áp dụng tốt cấu trúc khuyên bảo B1. ${totalGrammarCount > 0 ? `Bị trừ điểm do mắc ${totalGrammarCount} lỗi ngữ pháp/mạo từ/câu ghép.` : 'Ngữ pháp chuẩn xác.'}
+                    Áp dụng tốt cấu trúc câu chuẩn B1. ${totalGrammarCount > 0 ? `Bị trừ điểm do mắc ${totalGrammarCount} lỗi ngữ pháp/mạo từ/câu ghép.` : 'Ngữ pháp chuẩn xác.'}
                 </div>
             </div>
         </div>
