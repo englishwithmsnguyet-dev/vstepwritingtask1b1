@@ -402,7 +402,7 @@ target: "I would be grateful if you could consider my application. I look forwar
 
 const extraPracticeData = {
     advice: {
-        title: "BÀI LUYỆN TẬP THÊM - DẠNG 01: LETTER OF ADVICE (THƯ KHUYÊN BẢO)",
+        title: "DẠNG 01: LETTER OF ADVICE (THƯ KHUYÊN BẢO)",
         prompt: `You have received a letter from a friend, Emily. She is going to visit Can Tho in December. Write a letter to give her some suggestions. You should tell her:
 • Where to stay
 • What dishes to try
@@ -411,8 +411,8 @@ const extraPracticeData = {
 You should write at least 120 words. Do not include your name. Your response will be evaluated in terms of Task Fulfillment, Organization, Vocabulary, and Grammar.`,
         hints: [
             {
-                bullet: "1. Where to stay (Nơi ở)",
-                ideas: [
+                title: "1. Where to stay (Nơi ở)",
+                items: [
                     {
                         en: "stay at a hotel in the city centre",
                         vi: "ở khách sạn tại trung tâm thành phố",
@@ -434,8 +434,8 @@ You should write at least 120 words. Do not include your name. Your response wil
                 ]
             },
             {
-                bullet: "2. What dishes to try (Món ăn)",
-                ideas: [
+                title: "2. What dishes to try (Món ăn)",
+                items: [
                     {
                         en: "try local dishes such as Vietnamese pancake (banh xeo) and grilled pork noodles",
                         vi: "thử các món ăn địa phương như bánh xèo và bún thịt nướng",
@@ -457,8 +457,8 @@ You should write at least 120 words. Do not include your name. Your response wil
                 ]
             },
             {
-                bullet: "3. Which tourist attractions to visit (Điểm tham quan)",
-                ideas: [
+                title: "3. Which tourist attractions to visit (Điểm tham quan)",
+                items: [
                     {
                         en: "take a boat trip to Cai Rang Floating Market",
                         vi: "đi thuyền tham quan Chợ nổi Cái Răng",
@@ -480,8 +480,8 @@ You should write at least 120 words. Do not include your name. Your response wil
                 ]
             },
             {
-                bullet: "4. What to wear (Trang phục)",
-                ideas: [
+                title: "4. What to wear (Trang phục)",
+                items: [
                     {
                         en: "wear light and comfortable clothes",
                         vi: "mặc quần áo mỏng nhẹ và thoải mái",
@@ -534,74 +534,74 @@ function renderExtraPracticePanel(typeId) {
             <div class="content-block" style="text-align: center; padding: 40px 20px;">
                 <i class="fa-solid fa-clock" style="font-size: 42px; color: var(--primary-light); margin-bottom: 16px;"></i>
                 <h3 style="font-size: 18px; margin-bottom: 8px;">Đang cập nhật đề luyện tập thêm cho dạng thư này</h3>
-                <p style="color: var(--text-muted);">Vui lòng chọn <strong>Dạng 01: Letter of Advice (Thư khuyên bảo)</strong> để trải nghiệm hệ thống chấm điểm và sửa lỗi tự động.</p>
+                <p style="color: var(--text-muted);">Vui lòng chọn <strong>Dạng 01: Letter of Advice (Thư khuyên bảo)</strong> để làm bài luyện tập.</p>
             </div>
         `;
         return;
     }
 
     let hintsHtml = data.hints.map(hint => {
-        let ideasHtml = hint.ideas.map(item => `
-            <li class="extra-hint-item">
-                <div class="extra-idea-en">↳ <strong>${item.en}</strong></div>
-                <div class="extra-idea-vi">${item.vi}</div>
-                <div class="extra-reason-en">➔ <em>${item.reasonEn}</em></div>
-                <div class="extra-reason-vi">(${item.reasonVi})</div>
-            </li>
+        let itemsHtml = hint.items.map(item => `
+            <div style="margin-bottom: 14px; padding-left: 6px;">
+                <p style="margin-bottom: 2px;">• <strong>${item.en}</strong> (${item.vi})</p>
+                <p style="margin-bottom: 2px; color: var(--primary-color); padding-left: 16px;">➔ <em>${item.reasonEn}</em></p>
+                <p style="margin-bottom: 0; color: var(--text-muted); font-size: 14px; padding-left: 16px;">(${item.reasonVi})</p>
+            </div>
         `).join('');
 
         return `
-            <div class="extra-hint-section">
-                <h4 class="extra-hint-bullet-title"><i class="fa-solid fa-circle-dot"></i> ${hint.bullet}</h4>
-                <ul class="extra-ideas-list">${ideasHtml}</ul>
+            <div class="outline-step" style="margin-bottom: 16px;">
+                <h4 style="margin-bottom: 12px; color: var(--accent-red); font-size: 17px;">${hint.title}</h4>
+                ${itemsHtml}
             </div>
         `;
     }).join('');
 
     container.innerHTML = `
-        <div class="extra-practice-container">
-            <div class="extra-prompt-box">
-                <div class="extra-prompt-header">
-                    <i class="fa-solid fa-file-pen"></i> ĐỀ BÀI (TOPIC PROMPT)
-                </div>
-                <div class="extra-prompt-content">
-                    <p>You have received a letter from a friend, <strong>Emily</strong>. She is going to visit Can Tho in December. Write a letter to give her some suggestions. You should tell her:</p>
-                    <ul class="extra-prompt-list">
-                        <li>Where to stay</li>
-                        <li>What dishes to try</li>
-                        <li>Which tourist attractions to visit</li>
-                        <li>What to wear</li>
-                    </ul>
-                    <p class="extra-prompt-req"><i class="fa-solid fa-triangle-exclamation"></i> Yêu cầu: Viết tối thiểu <strong>120 từ</strong>. Thang điểm đánh giá: Task Fulfillment (30%), Organization (30%), Vocabulary (30%), Grammar (30%).</p>
-                </div>
+        <!-- Prompt Card (Using standard website style) -->
+        <div class="sample-prompt-container">
+            <div class="sample-prompt-header">
+                <i class="fa-solid fa-file-circle-question"></i> ĐỀ BÀI (TOPIC PROMPT)
             </div>
+            <div class="sample-prompt-text">
+                <p>You have received a letter from a friend, <strong>Emily</strong>. She is going to visit Can Tho in December. Write a letter to give her some suggestions. You should tell her:</p>
+                <ul>
+                    <li>Where to stay</li>
+                    <li>What dishes to try</li>
+                    <li>Which tourist attractions to visit</li>
+                    <li>What to wear</li>
+                </ul>
+                <p style="margin-top: 10px; font-style: italic; color: var(--text-muted);">
+                    <i class="fa-solid fa-triangle-exclamation" style="color: #f59e0b;"></i> You should write at least 120 words. Do not include your name. Your response will be evaluated in terms of Task Fulfillment, Organization, Vocabulary, and Grammar.
+                </p>
+            </div>
+        </div>
 
-            <div class="extra-hints-box">
-                <div class="extra-hints-header" onclick="toggleExtraHints()">
-                    <span><i class="fa-solid fa-wand-magic-sparkles"></i> GỢI Ý Ý TƯỞNG & CẤU TRÚC (BẤM ĐỂ XEM/ẨN)</span>
-                    <i class="fa-solid fa-chevron-down extra-hints-icon" id="extraHintsIcon"></i>
-                </div>
-                <div class="extra-hints-body" id="extraHintsBody">
-                    <p class="extra-hints-note"><i class="fa-solid fa-circle-info"></i> Hãy vận dụng các gợi ý phong phú bên dưới để hoàn thiện bài viết đủ 4 ý:</p>
-                    ${hintsHtml}
-                </div>
-            </div>
+        <!-- Suggestions Block (Using standard outline style) -->
+        <div class="content-block" style="margin-top: 25px;">
+            <h3><i class="fa-solid fa-lightbulb"></i> GỢI Ý Ý TƯỞNG (SUGGESTIONS)</h3>
+            ${hintsHtml}
+        </div>
 
-            <div class="extra-editor-card">
-                <div class="extra-editor-header">
-                    <span class="extra-editor-title"><i class="fa-solid fa-keyboard"></i> KHUNG LÀM BÀI CỦA HỌC VIÊN:</span>
-                    <span class="extra-live-wordcount" id="extraLiveWordCount">0 từ</span>
+        <!-- Student Writing Area (Using standard editor style) -->
+        <div class="content-block" style="margin-top: 25px;">
+            <h3><i class="fa-solid fa-pen-nib"></i> BÀI LÀM CỦA HỌC VIÊN</h3>
+            <div class="editor-area">
+                <div class="editor-header">
+                    <span>Nhập bài viết tại đây (Yêu cầu ≥ 120 từ):</span>
+                    <div class="word-count" id="extraLiveWordCount">Số từ: <strong>0</strong></div>
                 </div>
-                <textarea id="extraWritingArea" class="extra-textarea" placeholder="Nhập bài viết của bạn tại đây (Bắt đầu với Dear Emily,...)..." rows="14"></textarea>
-                <div class="extra-editor-footer">
-                    <button class="btn btn-outline" onclick="resetExtraPracticeArea()"><i class="fa-solid fa-rotate-left"></i> Viết lại</button>
-                    <button class="btn btn-primary btn-submit-vstep" onclick="gradeExtraPractice('${typeId}')"><i class="fa-solid fa-wand-magic-sparkles"></i> Nộp bài & Chấm điểm VSTEP (30%)</button>
+                <textarea id="extraWritingArea" placeholder="Dear Emily,&#10;&#10;Thanks for your letter. I hope you are doing well..." rows="12"></textarea>
+                <div class="editor-actions">
+                    <button class="btn btn-secondary" onclick="resetExtraPracticeArea()"><i class="fa-solid fa-rotate-left"></i> Viết lại</button>
+                    <button class="btn btn-primary" onclick="gradeExtraPractice('${typeId}')"><i class="fa-solid fa-circle-check"></i> Nộp bài & Chấm điểm VSTEP (30%)</button>
                 </div>
             </div>
+        </div>
 
-            <div class="extra-result-card hidden" id="extraResultCard">
-                <!-- Evaluation Result will be injected here -->
-            </div>
+        <!-- Evaluation Results Area -->
+        <div class="content-block hidden" id="extraResultCard" style="margin-top: 30px;">
+            <!-- Filled on submission -->
         </div>
     `;
 
@@ -611,28 +611,17 @@ function renderExtraPracticePanel(typeId) {
     }
 }
 
-function toggleExtraHints() {
-    const body = document.getElementById('extraHintsBody');
-    const icon = document.getElementById('extraHintsIcon');
-    if (!body || !icon) return;
-    body.classList.toggle('hidden');
-    icon.classList.toggle('fa-chevron-up');
-    icon.classList.toggle('fa-chevron-down');
-}
-
 function updateExtraWordCount() {
     const writingArea = document.getElementById('extraWritingArea');
     const display = document.getElementById('extraLiveWordCount');
     if (!writingArea || !display) return;
     const text = writingArea.value.trim();
     const count = text === '' ? 0 : text.split(/\s+/).length;
-    display.textContent = `${count} từ`;
+    display.innerHTML = `Số từ: <strong>${count}</strong>`;
     if (count >= 120) {
-        display.style.color = '#10b981';
-        display.style.fontWeight = '700';
+        display.classList.add('success');
     } else {
-        display.style.color = 'var(--text-muted)';
-        display.style.fontWeight = '500';
+        display.classList.remove('success');
     }
 }
 
@@ -1178,7 +1167,7 @@ function diagnoseVstepErrors(rawText, promptData) {
     return errors;
 }
 
-// Function to construct inline annotated essay HTML
+// Construct inline annotated essay HTML
 function buildAnnotatedEssayHtml(rawText, errors) {
     if (!rawText) return '';
     let annotated = rawText;
@@ -1194,12 +1183,6 @@ function buildAnnotatedEssayHtml(rawText, errors) {
 
     const paras = annotated.split(/\n+/).filter(p => p.trim() !== '');
     return paras.map(p => `<p class="annotated-para">${p.trim()}</p>`).join('');
-}
-
-// Format Paragraphs
-function formatLetterParagraphs(text) {
-    if (!text) return '';
-    return text.trim().replace(/\n\n/g, '<br><br>').replace(/\n/g, '<br>');
 }
 
 // Grade and Evaluate Extra Practice Submission
@@ -1329,12 +1312,12 @@ function gradeExtraPractice(typeId) {
                 <td><span class="err-badge-type">${err.type}</span></td>
                 <td><span class="err-text-wrong">${err.wrong}</span></td>
                 <td><span class="err-text-correct"><i class="fa-solid fa-arrow-right"></i> ${err.correct}</span></td>
-                <td style="font-size: 13px; color: var(--text-main); line-height: 1.5;">${err.reason}</td>
+                <td style="font-size: 13.5px; color: var(--text-main); line-height: 1.5;">${err.reason}</td>
             </tr>
         `).join('');
 
         errorTableHtml = `
-            <div class="extra-error-table-wrapper">
+            <div class="extra-error-table-wrapper" style="margin-top: 25px;">
                 <div class="error-table-title">
                     <i class="fa-solid fa-triangle-exclamation" style="color: #ef4444;"></i>
                     DANH SÁCH ${errors.length} LỖI CẦN SỬA CHI TIẾT (NGỮ PHÁP, MẠO TỪ, TỪ LOẠI, DÙNG TỪ, CHÍNH TẢ):
@@ -1359,17 +1342,16 @@ function gradeExtraPractice(typeId) {
         `;
     } else {
         errorTableHtml = `
-            <div class="extra-feedback-box" style="background: rgba(16, 185, 129, 0.08); border-color: rgba(16, 185, 129, 0.3); margin-top: 20px;">
-                <div class="feedback-title" style="color: #059669;">
-                    <i class="fa-solid fa-circle-check"></i> Không phát hiện lỗi ngữ pháp hay từ vựng đáng kể nào!
-                </div>
-                <p style="margin: 0; font-size: 14px; color: var(--text-main);">Bài làm của bạn rất chuẩn chỉnh, mạch lạc và tự nhiên.</p>
+            <div class="highlight-box" style="margin-top: 25px;">
+                <p><i class="fa-solid fa-circle-check" style="color: #10b981;"></i> <strong>Không phát hiện lỗi ngữ pháp hay từ vựng đáng kể nào!</strong> Bài làm của bạn rất chuẩn chỉnh và mạch lạc.</p>
             </div>
         `;
     }
 
     // Build Results HTML
     resultCard.innerHTML = `
+        <h3><i class="fa-solid fa-square-poll-vertical"></i> KẾT QUẢ ĐÁNH GIÁ & CHẤM ĐIỂM CHI TIẾT</h3>
+
         <div class="extra-score-banner">
             <div class="score-main-group">
                 <div class="score-circle-badge">${convertedScore.toFixed(2)} <span style="font-size: 13px; display: block; font-weight: 500; opacity: 0.9;">/ 3.00</span></div>
@@ -1441,16 +1423,15 @@ function gradeExtraPractice(typeId) {
         ${errorTableHtml}
 
         <!-- Unlocked Sample Model Letter -->
-        <div class="extra-model-wrapper">
-            <div class="extra-model-title">
-                <i class="fa-solid fa-award"></i> BÀI VIẾT MẪU CHUẨN B1 THAM KHẢO (MODEL LETTER)
+        <div class="content-block" style="margin-top: 35px;">
+            <h3><i class="fa-solid fa-award"></i> BÀI VIẾT MẪU CHUẨN B1 THAM KHẢO (MODEL LETTER)</h3>
+            <div class="sample-letter-box">
+                ${data.sampleModel.replace(/\n\n/g, '<br><br>').replace(/\n/g, '<br>')}
             </div>
-            <div class="extra-model-letter">
-                ${formatLetterParagraphs(data.sampleModel)}
-            </div>
-            <div class="extra-model-trans">
-                <strong>BẢN DỊCH CHI TIẾT:</strong><br><br>
-                ${formatLetterParagraphs(data.sampleModelVi)}
+
+            <h3 style="margin-top: 25px;">BẢN DỊCH CHI TIẾT</h3>
+            <div class="translation-box" style="background-color: var(--bg-main); border: 1px solid var(--border-color); padding: 20px; border-radius: 12px; margin-top: 15px; font-family: var(--font-body); line-height: 1.8; color: var(--text-muted); font-style: italic;">
+                ${data.sampleModelVi.replace(/\n\n/g, '<br><br>').replace(/\n/g, '<br>')}
             </div>
         </div>
     `;
