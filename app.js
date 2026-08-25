@@ -809,143 +809,143 @@ Chúc cậu mọi điều tốt lành,`
 
     complaint: {
         title: "DẠNG 04: LETTER OF COMPLAINT (THƯ PHÀN NÀN)",
-        prompt: `You are a member of a local sports center. You have recently used the changing room and were not satisfied with its condition. Write an email to the manager of the sports center. In your email, you should:
-• Describe the problems you found in the changing room
-• Explain how the situation made you feel
-• Suggest what should be done to improve the facility
+        prompt: `You recently stayed at a hotel during your holiday. Unfortunately, you were not satisfied with your room. Write a letter to the hotel manager to complain about your stay. In your letter, you should:
+• describe the problems with the room
+• explain how you felt about the experience
+• suggest some improvements
 You should write at least 120 words. Do not include your name or address.`,
         analysis: {
-            recipient: "Quản lý trung tâm thể thao (The Sports Center Manager)",
-            purpose: "Phàn nàn về điều kiện phòng thay đồ và đề xuất cải thiện cơ sở vật chất",
-            style: "Trang trọng / Bán trang trọng (Formal / Semi-formal Email)",
-            requirements: "Mô tả vấn đề phòng thay đồ, Bày tỏ cảm xúc, Đề xuất cải thiện cơ sở vật chất"
+            recipient: "Quản lý khách sạn (The Hotel Manager)",
+            purpose: "Phàn nàn về chất lượng phòng khách sạn và đề xuất phương án cải thiện",
+            style: "Trang trọng (Formal Letter)",
+            requirements: "Mô tả vấn đề của phòng, Bày tỏ cảm xúc, Đề xuất cải thiện"
         },
         hints: [
             {
-                title: "Dirty changing room (Phòng thay đồ bẩn)",
+                title: "Broken air conditioner (Máy điều hòa bị hỏng)",
                 type: "complaint_triplet",
                 items: [
                     {
-                        problemEn: "The changing room was dirty.",
-                        problemVi: "Phòng thay đồ rất bẩn.",
-                        descEn: "There was rubbish on the floor.",
-                        descVi: "Có rác trên sàn nhà.",
-                        solEn: "clean the changing room more often",
-                        solVi: "Vệ sinh phòng thay đồ thường xuyên hơn."
+                        problemEn: "The air conditioner was broken.",
+                        problemVi: "Máy điều hòa bị hỏng.",
+                        descEn: "It made a very loud noise throughout the night, so I could not sleep.",
+                        descVi: "Nó phát ra tiếng ồn rất lớn suốt đêm nên tôi không thể ngủ được.",
+                        solEn: "inspect and repair the air conditioner immediately",
+                        solVi: "Kiểm tra và sửa chữa máy điều hòa ngay lập tức."
                     },
                     {
-                        problemEn: "The changing room was not cleaned regularly.",
-                        problemVi: "Phòng thay đồ không được vệ sinh thường xuyên.",
-                        descEn: "There was a bad smell in the room.",
-                        descVi: "Có mùi hôi trong phòng.",
-                        solEn: "improve the cleaning service",
-                        solVi: "Cải thiện dịch vụ vệ sinh."
+                        problemEn: "The air conditioner did not work properly.",
+                        problemVi: "Máy điều hòa không hoạt động bình thường.",
+                        descEn: "The room was extremely hot and stuffy.",
+                        descVi: "Căn phòng vô cùng nóng nực và bí bách.",
+                        solEn: "replace the old air conditioning units",
+                        solVi: "Thay thế các máy điều hòa cũ."
                     }
                 ]
             },
             {
-                title: "Broken lockers (Tủ khóa bị hỏng)",
+                title: "Dirty bathroom (Phòng tắm không sạch sẽ)",
                 type: "complaint_triplet",
                 items: [
                     {
-                        problemEn: "Some lockers were broken.",
-                        problemVi: "Một số tủ khóa bị hỏng.",
-                        descEn: "I could not lock my locker.",
-                        descVi: "Tôi không thể khóa tủ đồ của mình.",
-                        solEn: "repair/replace the broken lockers",
-                        solVi: "Sửa các tủ khóa bị hỏng."
+                        problemEn: "The bathroom was dirty.",
+                        problemVi: "Phòng tắm rất bẩn.",
+                        descEn: "The floor was wet and there was a bad smell in the room.",
+                        descVi: "Sàn nhà bị ướt và có mùi hôi khó chịu trong phòng.",
+                        solEn: "clean and disinfect the bathroom thoroughly",
+                        solVi: "Vệ sinh và khử trùng phòng tắm kỹ lưỡng."
                     },
                     {
-                        problemEn: "There were not enough lockers.",
-                        problemVi: "Không có đủ tủ khóa.",
-                        descEn: "I had to wait for an available locker.",
-                        descVi: "Tôi phải chờ có tủ trống.",
-                        solEn: "provide more lockers",
-                        solVi: "Lắp đặt thêm tủ khóa."
+                        problemEn: "There was no hot water in the shower.",
+                        problemVi: "Vòi hoa sen không có nước nóng.",
+                        descEn: "I had to take a cold shower after a long journey.",
+                        descVi: "Tôi phải tắm bằng nước lạnh sau một chuyến đi dài.",
+                        solEn: "fix the hot water system properly",
+                        solVi: "Sửa chữa hệ thống nước nóng chu đáo."
                     }
                 ]
             },
             {
-                title: "Broken showers (Vòi sen bị hỏng)",
+                title: "Dirty bed sheets and towels (Ga trải giường & khăn tắm bẩn)",
                 type: "complaint_triplet",
                 items: [
                     {
-                        problemEn: "Some showers did not work.",
-                        problemVi: "Một số vòi sen không hoạt động.",
-                        descEn: "I could not take a shower after exercising.",
-                        descVi: "Tôi không thể tắm sau khi tập luyện.",
-                        solEn: "fix the showers",
-                        solVi: "Sửa các vòi sen."
+                        problemEn: "The bed sheets were stained.",
+                        problemVi: "Ga trải giường bị ố bẩn.",
+                        descEn: "They had yellow stains and looked very old.",
+                        descVi: "Chúng có nhiều vết ố vàng và trông rất cũ kỹ.",
+                        solEn: "change the bed sheets before guests check in",
+                        solVi: "Thay mới ga trải giường trước khi khách nhận phòng."
                     },
                     {
-                        problemEn: "There was no hot water.",
-                        problemVi: "Không có nước nóng.",
-                        descEn: "I had to take a cold shower.",
-                        descVi: "Tôi phải tắm bằng nước lạnh.",
-                        solEn: "provide enough hot water",
-                        solVi: "Cung cấp đủ nước nóng."
+                        problemEn: "The towels were not washed clean.",
+                        problemVi: "Khăn tắm giặt không sạch sẽ.",
+                        descEn: "There were hairs on the towels, so I could not use them.",
+                        descVi: "Có tóc dính trên khăn tắm nên tôi không thể dùng được.",
+                        solEn: "provide fresh and hygienic towels daily",
+                        solVi: "Cung cấp khăn tắm mới và đảm bảo vệ sinh mỗi ngày."
                     }
                 ]
             },
             {
-                title: "Broken lights (Đèn bị hỏng)",
+                title: "Noisy environment (Môi trường ồn ào)",
                 type: "complaint_triplet",
                 items: [
                     {
-                        problemEn: "Some lights did not work.",
-                        problemVi: "Một số bóng đèn không hoạt động.",
-                        descEn: "The changing room was too dark.",
-                        descVi: "Phòng thay đồ quá tối.",
-                        solEn: "replace the broken lights",
-                        solVi: "Thay các bóng đèn bị hỏng."
+                        problemEn: "The room was very noisy.",
+                        problemVi: "Căn phòng rất ồn ào.",
+                        descEn: "There was loud construction noise next to my room early in the morning.",
+                        descVi: "Có tiếng thi công công trình ồn ào ngay cạnh phòng tôi vào sáng sớm.",
+                        solEn: "avoid doing noisy maintenance during guest rest hours",
+                        solVi: "Tránh làm bảo trì ồn ào vào giờ nghỉ ngơi của khách."
                     },
                     {
-                        problemEn: "The lighting was poor.",
-                        problemVi: "Hệ thống chiếu sáng kém.",
-                        descEn: "It was difficult to see my belongings.",
-                        descVi: "Tôi rất khó nhìn thấy đồ đạc của mình.",
-                        solEn: "install brighter lights",
-                        solVi: "Lắp đặt hệ thống đèn sáng hơn."
+                        problemEn: "The soundproofing was very poor.",
+                        problemVi: "Khả năng cách âm của phòng rất kém.",
+                        descEn: "I could clearly hear loud talking and music from the next room.",
+                        descVi: "Tôi có thể nghe rõ tiếng nói chuyện lớn và tiếng nhạc từ phòng bên cạnh.",
+                        solEn: "improve the soundproofing between guest rooms",
+                        solVi: "Cải thiện khả năng cách âm giữa các phòng khách sạn."
                     }
                 ]
             },
             {
-                title: "Clothes hooks (Móc treo đồ)",
+                title: "Unstable Wi-Fi & TV (Sự cố kết nối Wi-Fi & Tivi)",
                 type: "complaint_triplet",
                 items: [
                     {
-                        problemEn: "There were not enough clothes hooks.",
-                        problemVi: "Không có đủ móc treo đồ.",
-                        descEn: "I had to put my clothes on the floor.",
-                        descVi: "Tôi phải để quần áo trên sàn.",
-                        solEn: "install more clothes hooks",
-                        solVi: "Lắp đặt thêm móc treo đồ."
+                        problemEn: "The Wi-Fi connection did not work.",
+                        problemVi: "Kết nối Wi-Fi không hoạt động.",
+                        descEn: "I could not connect to the internet to check my urgent work emails.",
+                        descVi: "Tôi không thể kết nối mạng để kiểm tra các email công việc khẩn cấp.",
+                        solEn: "upgrade the hotel Wi-Fi network and signal strength",
+                        solVi: "Nâng cấp mạng Wi-Fi và độ mạnh đường truyền của khách sạn."
                     },
                     {
-                        problemEn: "Some clothes hooks were broken.",
-                        problemVi: "Một số móc treo đồ bị hỏng.",
-                        descEn: "I could not hang my clothes properly.",
-                        descVi: "Tôi không thể treo quần áo một cách gọn gàng.",
-                        solEn: "repair or replace the broken clothes hooks",
-                        solVi: "Sửa chữa hoặc thay thế các móc treo đồ bị hỏng."
+                        problemEn: "The television had no signal.",
+                        problemVi: "Tivi trong phòng không có tín hiệu.",
+                        descEn: "The screen remained blank whenever I turned it on.",
+                        descVi: "Màn hình tivi bị tối đen mỗi khi tôi bật lên.",
+                        solEn: "check and repair the television cable system",
+                        solVi: "Kiểm tra và sửa chữa hệ thống cáp tivi trong phòng."
                     }
                 ]
             }
         ],
         sampleModel: `Dear Sir/Madam,
 
-I am writing to complain about the poor condition of the changing room at your sports center during my visit last Tuesday. I have been a member of your center for six months, and I was very disappointed with my recent experience.
+I am writing to complain about the room condition during my recent stay at your hotel from 10th to 12th August. Unfortunately, I was not satisfied with the quality of the accommodation and service.
 
-Firstly, the main problem was that the changing room was extremely dirty. There was rubbish scattered on the floor and a bad smell in the room. Secondly, several lockers were broken, so I could not lock my locker to keep my personal belongings safe. Finally, some of the showers did not work and there was no hot water, which forced me to take a cold shower after exercising. I felt quite unhappy and uncomfortable because these problems made my workout experience very unpleasant. Therefore, I would appreciate it if you could ensure that the changing room is cleaned more regularly. In addition, please repair the broken lockers and fix the shower system as soon as possible.
+Firstly, the main problem was that the air conditioner in my room was broken and made a very loud noise throughout the night, which made it impossible for me to sleep. Secondly, the bathroom was not properly cleaned and the shower had no hot water. Finally, the bed sheets and towels were stained and had an unpleasant smell. I was extremely disappointed with these issues because I chose your hotel based on its high reputation. This unpleasant experience completely ruined my holiday. Therefore, I would appreciate it if you could inspect and repair the broken air conditioners immediately, as well as ensure that the housekeeping team cleans the rooms and changes the bed sheets more thoroughly. Furthermore, I hope you will consider offering a partial refund for the inconvenience caused.
 
-I hope that you will look into these issues soon. I look forward to receiving your reply.
+I hope you will look into these matters soon. I look forward to receiving your reply.
 
 Yours faithfully,`,
-        sampleModelVi: `Kính gửi Ban Quản lý,
+        sampleModelVi: `Kính gửi Ông/Bà,
 
-Tôi viết thư này để phàn nàn về tình trạng tồi tàn của phòng thay đồ tại trung tâm thể thao của quý vị trong lần đến tập vào thứ Ba tuần trước. Tôi đã là hội viên của trung tâm được sáu tháng và tôi rất thất vọng với trải nghiệm gần đây của mình.
+Tôi viết thư này để phàn nàn về tình trạng phòng ốc trong kỳ nghỉ gần đây của tôi tại khách sạn của quý vị từ ngày 10 đến ngày 12 tháng Tám. Thật không may, tôi đã không hài lòng với chất lượng chỗ ở và dịch vụ.
 
-Đầu tiên, vấn đề chính là phòng thay đồ rất bẩn. Có rác vương vãi trên sàn nhà và có mùi hôi trong phòng. Thứ hai, một số tủ khóa đã bị hỏng khiến tôi không thể khóa tủ đồ của mình để cất giữ đồ đạc cá nhân an toàn. Cuối cùng, một số vòi hoa sen không hoạt động và không có nước nóng, buộc tôi phải tắm bằng nước lạnh sau khi tập luyện. Tôi cảm thấy khá không hài lòng và khó chịu vì những vấn đề này đã khiến trải nghiệm tập luyện của tôi trở nên tồi tệ. Do đó, tôi sẽ rất cảm kích nếu quý vị đảm bảo phòng thay đồ được dọn dẹp thường xuyên hơn. Ngoài ra, xin vui lòng sửa chữa các tủ khóa bị hỏng và khắc phục hệ thống vòi sen càng sớm càng tốt.
+Đầu tiên, vấn đề chính là máy điều hòa trong phòng tôi bị hỏng và phát ra tiếng ồn rất lớn suốt đêm, khiến tôi không thể nào chợp mắt được. Thứ hai, phòng tắm không được dọn dẹp sạch sẽ và vòi hoa sen hoàn toàn không có nước nóng. Cuối cùng, ga trải giường và khăn tắm bị ố bẩn và có mùi khó chịu. Tôi vô cùng thất vọng với những vấn đề này vì tôi đã chọn khách sạn của quý vị dựa trên danh tiếng cao của khách sạn. Trải nghiệm khó chịu này đã làm hỏng hoàn toàn kỳ nghỉ của tôi. Do đó, tôi sẽ rất cảm kích nếu quý vị có thể kiểm tra và sửa chữa máy điều hòa ngay lập tức, cũng như đảm bảo đội ngũ dọn phòng vệ sinh phòng ốc và thay ga trải giường kỹ lưỡng hơn. Hơn nữa, tôi hy vọng quý vị sẽ xem xét hoàn lại một phần tiền cho sự bất tiện mà tôi đã gặp phải.
 
 Tôi hy vọng quý vị sẽ sớm xem xét các vấn đề này. Tôi rất mong sớm nhận được phản hồi từ quý vị.
 
@@ -1351,7 +1351,7 @@ function renderExtraPracticePanel(typeId) {
             return `
                 <div class="outline-step" style="margin-bottom: 18px;">
                     <h4 style="margin-bottom: 14px; color: var(--accent-red); font-size: 17px; display: flex; align-items: center; gap: 8px;">
-                        <i class="fa-solid fa-circle-exclamation" style="color: #dc2626; font-size: 15px;"></i> ${hint.title}
+                        <i class="fa-solid fa-triangle-exclamation" style="color: #dc2626; font-size: 15px;"></i> ${hint.title}
                     </h4>
                     ${itemsHtml}
                 </div>
@@ -2102,14 +2102,14 @@ function gradeExtraPractice(typeId) {
             hasReq3 ? '✓ Đề xuất cải thiện dịch vụ' : '✗ Đề xuất cải thiện dịch vụ'
         ];
     } else if (typeId === 'complaint') {
-        hasReq1 = /(problem|problems|changing\s*room|dirty|rubbish|smell|locker|lockers|shower|showers|light|lights|hook|hooks|floor)/i.test(lower);
-        hasReq2 = /(feel|felt|disappoint|unhappy|annoyed|upset|ruin|terrible|bad\s*experience|frustrated|unpleasant|uncomfortable)/i.test(lower);
-        hasReq3 = /(suggest|improvement|improve|repair|replace|clean|fix|install|provide|service|better)/i.test(lower);
+        hasReq1 = /(problem|problems|room|condition|air\s*conditioner|ac|dirty|bathroom|shower|noise|noisy|broken|stained|towel|bed|sheet|water|wifi|tv)/i.test(lower);
+        hasReq2 = /(feel|felt|disappoint|unhappy|annoyed|upset|ruin|ruined|terrible|bad\s*experience|frustrated|unpleasant|uncomfortable)/i.test(lower);
+        hasReq3 = /(suggest|improvement|improve|repair|replace|clean|fix|refund|discount|compensation|service|better)/i.test(lower);
         hasReq4 = true;
         reqLabels = [
-            hasReq1 ? '✓ Mô tả vấn đề phòng thay đồ' : '✗ Mô tả vấn đề phòng thay đồ',
+            hasReq1 ? '✓ Mô tả vấn đề của phòng' : '✗ Mô tả vấn đề của phòng',
             hasReq2 ? '✓ Bày tỏ cảm xúc' : '✗ Bày tỏ cảm xúc',
-            hasReq3 ? '✓ Đề xuất cải thiện cơ sở vật chất' : '✗ Đề xuất cải thiện cơ sở vật chất'
+            hasReq3 ? '✓ Đề xuất cải thiện' : '✗ Đề xuất cải thiện'
         ];
     } else if (typeId === 'request' || typeId === 'description') {
         hasReq1 = /(address|location|where\s+(is\s+)?the\s+center|near\s+my\s+(house|home)|street|district|easy\s+to\s+(get|find)|located|tran\s+phu)/i.test(lower);
