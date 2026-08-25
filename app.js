@@ -671,6 +671,140 @@ Trước hết, cậu có thể cho tớ biết địa chỉ của trung tâm kh
 Tớ hy vọng cậu có thể giúp tớ việc này. Hãy trả lời thư sớm nhé.
 
 Chúc cậu mọi điều tốt lành,`
+    },
+
+    description: {
+        title: "DẠNG 03: LETTER OF GIVING INFORMATION (THƯ CUNG CẤP THÔNG TIN)",
+        prompt: `You have received a letter from your friend, Nam. Read part of his letter below:
+... I'm planning to study English at Rainbow Language Center next month. Since you have just completed a course there, could you tell me more about it? I'd like to know about the address of the center, the tuition fee, the teachers, and the training program before I decide to enroll...
+Write a letter responding to Nam. In your letter, you should provide information about:
+• the address of the center
+• the tuition fee
+• the teachers
+• the training program
+You should write at least 120 words. Do not include your name or address.`,
+        analysis: {
+            recipient: "Nam (Bạn bè)",
+            purpose: "Cung cấp thông tin chi tiết về khóa học tiếng Anh tại Rainbow Language Center",
+            style: "Thân mật (Informal Letter)",
+            requirements: "the address of the center, the tuition fee, the teachers, the training program"
+        },
+        hints: [
+            {
+                title: "1. The address of the center (Địa chỉ của trung tâm)",
+                type: "standard",
+                items: [
+                    {
+                        en: "The center is located in the city center on Tran Phu Street",
+                        vi: "Trung tâm nằm ở trung tâm thành phố trên đường Trần Phú",
+                        reasonEn: "because it is very convenient and easy to find.",
+                        reasonVi: "vì rất thuận tiện và dễ tìm."
+                    },
+                    {
+                        en: "The location is very close to bus stations and supermarkets",
+                        vi: "Vị trí rất gần các trạm xe buýt và siêu thị",
+                        reasonEn: "so you can get there easily by bus or motorbike.",
+                        reasonVi: "nên cậu có thể đến đó dễ dàng bằng xe buýt hoặc xe máy."
+                    },
+                    {
+                        en: "It has a large parking area and modern facilities",
+                        vi: "Trung tâm có bãi giữ xe rộng rãi và cơ sở vật chất hiện đại",
+                        reasonEn: "which makes your studying experience very comfortable.",
+                        reasonVi: "điều này làm cho trải nghiệm học tập của cậu rất thoải mái."
+                    }
+                ]
+            },
+            {
+                title: "2. The tuition fee (Học phí)",
+                type: "standard",
+                items: [
+                    {
+                        en: "The tuition fee is about two million VND for a two-month course",
+                        vi: "Học phí khoảng 2 triệu đồng cho khóa học hai tháng",
+                        reasonEn: "which is quite reasonable and suitable for students.",
+                        reasonVi: "mức giá này khá hợp lý và phù hợp với sinh viên."
+                    },
+                    {
+                        en: "The center offers a 10% discount for early registration",
+                        vi: "Trung tâm giảm giá 10% nếu cậu đăng ký sớm",
+                        reasonEn: "so you can save some money when enrolling.",
+                        reasonVi: "nên cậu có thể tiết kiệm một khoản tiền khi đăng ký."
+                    },
+                    {
+                        en: "Course materials and textbooks are included in the tuition fee",
+                        vi: "Tài liệu học tập và giáo trình đã được bao gồm trong học phí",
+                        reasonEn: "so you do not need to pay any extra fees.",
+                        reasonVi: "nên cậu không cần phải trả thêm bất kỳ khoản phí phụ nào."
+                    }
+                ]
+            },
+            {
+                title: "3. The teachers (Giáo viên)",
+                type: "standard",
+                items: [
+                    {
+                        en: "The teachers are very experienced, friendly, and enthusiastic",
+                        vi: "Các giáo viên rất giàu kinh nghiệm, thân thiện và nhiệt tình",
+                        reasonEn: "because they always explain difficult grammar points clearly and patiently.",
+                        reasonVi: "vì họ luôn giải thích các điểm ngữ pháp khó một cách rõ ràng và kiên nhẫn."
+                    },
+                    {
+                        en: "Both native English speakers and Vietnamese teachers teach the classes",
+                        vi: "Cả giáo viên bản xứ và giáo viên Việt Nam đều tham gia giảng dạy",
+                        reasonEn: "which helps you improve your pronunciation and listening skills effectively.",
+                        reasonVi: "điều này giúp cậu cải thiện phát âm và kỹ năng nghe hiệu quả."
+                    },
+                    {
+                        en: "They always create an engaging and supportive learning atmosphere",
+                        vi: "Họ luôn tạo ra một không khí học tập hào hứng và sẵn lòng hỗ trợ",
+                        reasonEn: "so you will feel confident when speaking English in class.",
+                        reasonVi: "nên cậu sẽ cảm thấy tự tin khi nói tiếng Anh trong lớp."
+                    }
+                ]
+            },
+            {
+                title: "4. The training program (Chương trình đào tạo)",
+                type: "standard",
+                items: [
+                    {
+                        en: "The program focuses on all four skills: Listening, Speaking, Reading, and Writing",
+                        vi: "Chương trình tập trung vào cả 4 kỹ năng: Nghe, Nói, Đọc và Viết",
+                        reasonEn: "with a lot of practical communicative activities and group discussions.",
+                        reasonVi: "với nhiều hoạt động giao tiếp thực tế và thảo luận nhóm."
+                    },
+                    {
+                        en: "The class schedule is flexible with both evening and weekend classes",
+                        vi: "Lịch học rất linh hoạt với các lớp học buổi tối và cuối tuần",
+                        reasonEn: "so you can easily arrange your study time without affecting your daily routine.",
+                        reasonVi: "nên cậu có thể dễ dàng sắp xếp thời gian học mà không ảnh hưởng đến sinh hoạt hàng ngày."
+                    },
+                    {
+                        en: "There are regular progress tests and personalized feedback",
+                        vi: "Có các bài kiểm tra tiến độ định kỳ và nhận xét chi tiết",
+                        reasonEn: "which help you track your improvement after each module.",
+                        reasonVi: "giúp cậu theo dõi sự tiến bộ của mình sau mỗi học phần."
+                    }
+                ]
+            }
+        ],
+        sampleModel: `Dear Nam,
+
+How are you? I hope you are doing well. In your letter, you asked me about the English course at Rainbow Language Center, so here is some information for you.
+
+Firstly, the center is located on Tran Phu Street in the city center, which is very convenient and easy to find. You can easily get there by bus or motorbike. Secondly, regarding the tuition fee, it is about two million VND for a two-month course. I think the price is quite reasonable and suitable for students. In addition, the center offers a ten percent discount if you register early. Next, the teachers there are very experienced, friendly, and enthusiastic. They always explain grammar points clearly and help students practise pronunciation. Finally, the training program focuses on all four skills, especially speaking and listening. There are many interesting activities and group discussions in class. The schedule is also flexible with evening classes.
+
+I hope you will find this information useful. Let me know if you need more details. Write back soon.
+
+Best wishes,`,
+        sampleModelVi: `Nam thân mến,
+
+Cậu khỏe không? Tớ hy vọng cậu vẫn khỏe. Trong thư của cậu, cậu đã hỏi tớ về khóa học tiếng Anh tại Trung tâm Ngoại ngữ Rainbow, vì vậy dưới đây là một số thông tin dành cho cậu.
+
+Đầu tiên, trung tâm nằm trên đường Trần Phú ở trung tâm thành phố, rất thuận tiện và dễ tìm. Cậu có thể dễ dàng đến đó bằng xe buýt hoặc xe máy. Thứ hai, về học phí, khóa học hai tháng có giá khoảng hai triệu đồng. Tớ nghĩ mức giá này khá hợp lý và phù hợp với sinh viên. Ngoài ra, trung tâm còn giảm giá 10% nếu cậu đăng ký sớm. Tiếp theo, các giáo viên ở đó rất giàu kinh nghiệm, thân thiện và nhiệt tình. Họ luôn giải thích các điểm ngữ pháp rõ ràng và giúp học viên luyện phát âm. Cuối cùng, chương trình đào tạo tập trung vào cả bốn kỹ năng, đặc biệt là kỹ năng nói và nghe. Có rất nhiều hoạt động thú vị và thảo luận nhóm trong lớp. Lịch học cũng linh hoạt với các lớp học buổi tối.
+
+Tớ hy vọng cậu sẽ thấy những thông tin này hữu ích. Hãy cho tớ biết nếu cậu cần thêm chi tiết nhé. Hãy viết thư lại sớm nhé.
+
+Chúc cậu mọi điều tốt lành,`
     }
 };
 
@@ -684,7 +818,7 @@ function renderExtraPracticePanel(typeId) {
             <div class="content-block" style="text-align: center; padding: 40px 20px;">
                 <i class="fa-solid fa-clock" style="font-size: 42px; color: var(--primary-light); margin-bottom: 16px;"></i>
                 <h3 style="font-size: 18px; margin-bottom: 8px;">Đang cập nhật đề luyện tập thêm cho dạng thư này</h3>
-                <p style="color: var(--text-muted);">Vui lòng chọn <strong>Dạng 01: Letter of Advice</strong> hoặc <strong>Dạng 02: Letter of Request</strong> để làm bài luyện tập.</p>
+                <p style="color: var(--text-muted);">Vui lòng chọn <strong>Dạng 01</strong>, <strong>Dạng 02</strong> hoặc <strong>Dạng 03</strong> để làm bài luyện tập.</p>
             </div>
         `;
         return;
@@ -748,12 +882,12 @@ function renderExtraPracticePanel(typeId) {
                 <i class="fa-solid fa-file-circle-question"></i> ĐỀ BÀI (TOPIC PROMPT) - ${data.title}
             </div>
             <div class="sample-prompt-text">
-                <p>${promptIntro.replace(/\n+/g, ' ')}</p>
-                <ul>
+                <p>${promptIntro.replace(/\n+/g, '<br>')}</p>
+                <ul style="margin-top: 8px;">
                     ${promptBullets}
                 </ul>
                 <p style="margin-top: 10px; font-style: italic; color: var(--text-muted);">
-                    <i class="fa-solid fa-triangle-exclamation" style="color: #f59e0b;"></i> You should write at least 120 words. Do not include your name. Your response will be evaluated in terms of Task Fulfillment, Organization, Vocabulary, and Grammar.
+                    <i class="fa-solid fa-triangle-exclamation" style="color: #f59e0b;"></i> You should write at least 120 words. Do not include your name or address. Your response will be evaluated in terms of Task Fulfillment, Organization, Vocabulary, and Grammar.
                 </p>
             </div>
             <div class="sample-analysis-grid">
@@ -1372,11 +1506,11 @@ function gradeExtraPractice(typeId) {
     let hasReq1 = false, hasReq2 = false, hasReq3 = false, hasReq4 = false;
     let reqLabels = [];
 
-    if (typeId === 'request') {
-        hasReq1 = /(address|location|where\s+(is\s+)?the\s+center|near\s+my\s+(house|home)|street|district|easy\s+to\s+get|located)/i.test(lower);
-        hasReq2 = /(fee|tuition|cost|price|money|how\s+much|budget|discount|pay)/i.test(lower);
-        hasReq3 = /(teacher|teachers|instructor|friendly|experienced|teach|explain)/i.test(lower);
-        hasReq4 = /(program|training|course|curriculum|skill|skills|schedule|length|study|practise|practice|topic|topics)/i.test(lower);
+    if (typeId === 'request' || typeId === 'description') {
+        hasReq1 = /(address|location|where\s+(is\s+)?the\s+center|near\s+my\s+(house|home)|street|district|easy\s+to\s+(get|find)|located|tran\s+phu)/i.test(lower);
+        hasReq2 = /(fee|tuition|cost|price|money|how\s+much|budget|discount|pay|million|vnd)/i.test(lower);
+        hasReq3 = /(teacher|teachers|instructor|friendly|experienced|enthusiastic|native|teach|explain|helpful)/i.test(lower);
+        hasReq4 = /(program|training|course|curriculum|skill|skills|schedule|length|study|practise|practice|topic|topics|activities)/i.test(lower);
         reqLabels = [
             hasReq1 ? '✓ Địa chỉ' : '✗ Địa chỉ',
             hasReq2 ? '✓ Học phí' : '✗ Học phí',
@@ -1412,8 +1546,8 @@ function gradeExtraPractice(typeId) {
 
     // --- 2. ORGANIZATION (Thang 10) ---
     const hasGreeting = /^dear\s+[a-z]+/i.test(rawText.trim());
-    const hasOpening = /(thanks?\s+for|hope\s+you|writing\s+to|how\s+are\s+you)/i.test(lower);
-    const hasClosingSentence = /(hope\s+my\s+advice|write\s+back|let\s+me\s+know|look\s+forward|hope\s+you\s+can\s+help)/i.test(lower);
+    const hasOpening = /(thanks?\s+for|hope\s+you|writing\s+to|how\s+are\s+you|in\s+your\s+letter)/i.test(lower);
+    const hasClosingSentence = /(hope\s+my\s+advice|write\s+back|let\s+me\s+know|look\s+forward|hope\s+you\s+(can\s+help|will\s+find))/i.test(lower);
     const hasSignOff = /(best\s+wishes|yours|regards|love)/i.test(lower);
 
     const linkingWords = ["firstly", "secondly", "next", "finally", "moreover", "besides", "furthermore", "in addition", "therefore", "for example", "first of all", "also", "because"];
