@@ -806,113 +806,153 @@ Tớ hy vọng cậu sẽ thấy những thông tin này hữu ích. Hãy cho t�
 
 Chúc cậu mọi điều tốt lành,`
     },
-complaint: {
+
+    complaint: {
         title: "DẠNG 04: LETTER OF COMPLAINT (THƯ PHÀN NÀN)",
-        prompt: `You recently stayed at a hotel during your holiday. Unfortunately, you were not satisfied with your room. Write a letter to the hotel manager to complain about your stay. In your letter, you should:
-• describe the problems with the room
-• explain how you felt about the experience
-• suggest some improvements
+        prompt: `You are a member of a local sports center. You have recently used the changing room and were not satisfied with its condition. Write an email to the manager of the sports center. In your email, you should:
+• Describe the problems you found in the changing room
+• Explain how the situation made you feel
+• Suggest what should be done to improve the facility
 You should write at least 120 words. Do not include your name or address.`,
         analysis: {
-            recipient: "Quản lý khách sạn (The Hotel Manager)",
-            purpose: "Phàn nàn về chất lượng phòng và đề xuất phương án cải thiện",
-            style: "Trang trọng (Formal Letter)",
-            requirements: "Mô tả vấn đề của phòng, Bày tỏ cảm xúc, Đề xuất cải thiện"
+            recipient: "Quản lý trung tâm thể thao (The Sports Center Manager)",
+            purpose: "Phàn nàn về điều kiện phòng thay đồ và đề xuất cải thiện cơ sở vật chất",
+            style: "Trang trọng / Bán trang trọng (Formal / Semi-formal Email)",
+            requirements: "Mô tả vấn đề phòng thay đồ, Bày tỏ cảm xúc, Đề xuất cải thiện cơ sở vật chất"
         },
         hints: [
             {
-                title: "1. Describe the problems with the room (Mô tả các vấn đề của phòng)",
-                type: "standard",
+                title: "Dirty changing room (Phòng thay đồ bẩn)",
+                type: "complaint_triplet",
                 items: [
                     {
-                        en: "The air conditioner was broken and made a very loud noise all night",
-                        vi: "Máy điều hòa bị hỏng và phát ra tiếng ồn rất lớn suốt đêm",
-                        reasonEn: "which made it impossible for me to sleep well.",
-                        reasonVi: "khiến tôi không thể nào ngủ ngon được."
+                        problemEn: "The changing room was dirty.",
+                        problemVi: "Phòng thay đồ rất bẩn.",
+                        descEn: "There was rubbish on the floor.",
+                        descVi: "Có rác trên sàn nhà.",
+                        solEn: "clean the changing room more often",
+                        solVi: "Vệ sinh phòng thay đồ thường xuyên hơn."
                     },
                     {
-                        en: "The bathroom was not properly cleaned and the shower had no hot water",
-                        vi: "Phòng tắm không được dọn dẹp sạch sẽ và vòi sen không có nước nóng",
-                        reasonEn: "which was extremely inconvenient and uncomfortable.",
-                        reasonVi: "điều này cực kỳ bất tiện và gây khó chịu."
-                    },
-                    {
-                        en: "The bed sheets and towels were stained and looked old",
-                        vi: "Ga trải giường và khăn tắm bị ố bẩn và trông đã cũ",
-                        reasonEn: "so I had to ask the housekeeping staff to replace them.",
-                        reasonVi: "nên tôi đã phải yêu cầu nhân viên dọn phòng thay mới."
+                        problemEn: "The changing room was not cleaned regularly.",
+                        problemVi: "Phòng thay đồ không được vệ sinh thường xuyên.",
+                        descEn: "There was a bad smell in the room.",
+                        descVi: "Có mùi hôi trong phòng.",
+                        solEn: "improve the cleaning service",
+                        solVi: "Cải thiện dịch vụ vệ sinh."
                     }
                 ]
             },
             {
-                title: "2. Explain how you felt about the experience (Bày tỏ cảm xúc về trải nghiệm)",
-                type: "standard",
+                title: "Broken lockers (Tủ khóa bị hỏng)",
+                type: "complaint_triplet",
                 items: [
                     {
-                        en: "I was extremely disappointed with the poor quality of the room",
-                        vi: "Tôi vô cùng thất vọng với chất lượng kém của căn phòng",
-                        reasonEn: "because I chose your hotel based on its high ratings and reputation.",
-                        reasonVi: "vì tôi đã chọn khách sạn của quý vị dựa trên đánh giá cao và danh tiếng."
+                        problemEn: "Some lockers were broken.",
+                        problemVi: "Một số tủ khóa bị hỏng.",
+                        descEn: "I could not lock my locker.",
+                        descVi: "Tôi không thể khóa tủ đồ của mình.",
+                        solEn: "repair/replace the broken lockers",
+                        solVi: "Sửa các tủ khóa bị hỏng."
                     },
                     {
-                        en: "This unpleasant experience completely ruined my holiday with my family",
-                        vi: "Trải nghiệm không mấy dễ chịu này đã làm hỏng hoàn toàn kỳ nghỉ của tôi với gia đình",
-                        reasonEn: "as we could not relax and enjoy our stay.",
-                        reasonVi: "vì chúng tôi không thể thư giãn và tận hưởng kỳ nghỉ."
-                    },
-                    {
-                        en: "I felt quite frustrated with the slow response from the reception desk",
-                        vi: "Tôi cảm thấy khá bực bội với sự hỗ trợ chậm chạp từ quầy lễ tân",
-                        reasonEn: "when I reported these issues to the staff.",
-                        reasonVi: "khi tôi phản ánh những vấn đề này với nhân viên."
+                        problemEn: "There were not enough lockers.",
+                        problemVi: "Không có đủ tủ khóa.",
+                        descEn: "I had to wait for an available locker.",
+                        descVi: "Tôi phải chờ có tủ trống.",
+                        solEn: "provide more lockers",
+                        solVi: "Lắp đặt thêm tủ khóa."
                     }
                 ]
             },
             {
-                title: "3. Suggest some improvements (Đề xuất giải pháp cải thiện)",
-                type: "standard",
+                title: "Broken showers (Vòi sen bị hỏng)",
+                type: "complaint_triplet",
                 items: [
                     {
-                        en: "I would appreciate it if you could inspect and repair the broken air conditioners",
-                        vi: "Tôi sẽ rất cảm kích nếu quý vị có thể kiểm tra và sửa chữa các máy điều hòa bị hỏng",
-                        reasonEn: "to ensure future guests do not experience the same problem.",
-                        reasonVi: "để đảm bảo các khách hàng sau không gặp phải vấn đề tương tự."
+                        problemEn: "Some showers did not work.",
+                        problemVi: "Một số vòi sen không hoạt động.",
+                        descEn: "I could not take a shower after exercising.",
+                        descVi: "Tôi không thể tắm sau khi tập luyện.",
+                        solEn: "fix the showers",
+                        solVi: "Sửa các vòi sen."
                     },
                     {
-                        en: "The housekeeping team should clean the rooms and bathrooms more thoroughly",
-                        vi: "Đội ngũ dọn phòng nên vệ sinh phòng ốc và phòng tắm kỹ lưỡng hơn",
-                        reasonEn: "to maintain high hygiene standards throughout the hotel.",
-                        reasonVi: "để duy trì tiêu chuẩn vệ sinh cao trong toàn bộ khách sạn."
+                        problemEn: "There was no hot water.",
+                        problemVi: "Không có nước nóng.",
+                        descEn: "I had to take a cold shower.",
+                        descVi: "Tôi phải tắm bằng nước lạnh.",
+                        solEn: "provide enough hot water",
+                        solVi: "Cung cấp đủ nước nóng."
+                    }
+                ]
+            },
+            {
+                title: "Broken lights (Đèn bị hỏng)",
+                type: "complaint_triplet",
+                items: [
+                    {
+                        problemEn: "Some lights did not work.",
+                        problemVi: "Một số bóng đèn không hoạt động.",
+                        descEn: "The changing room was too dark.",
+                        descVi: "Phòng thay đồ quá tối.",
+                        solEn: "replace the broken lights",
+                        solVi: "Thay các bóng đèn bị hỏng."
                     },
                     {
-                        en: "I hope you will consider offering a partial refund or compensation for the inconvenience",
-                        vi: "Tôi hy vọng quý vị sẽ xem xét hoàn lại một phần tiền hoặc bồi thường cho sự bất tiện này",
-                        reasonEn: "which would show your commitment to customer satisfaction.",
-                        reasonVi: "điều này sẽ thể hiện sự cam kết của quý vị đối với sự hài lòng của khách hàng."
+                        problemEn: "The lighting was poor.",
+                        problemVi: "Hệ thống chiếu sáng kém.",
+                        descEn: "It was difficult to see my belongings.",
+                        descVi: "Tôi rất khó nhìn thấy đồ đạc của mình.",
+                        solEn: "install brighter lights",
+                        solVi: "Lắp đặt hệ thống đèn sáng hơn."
+                    }
+                ]
+            },
+            {
+                title: "Clothes hooks (Móc treo đồ)",
+                type: "complaint_triplet",
+                items: [
+                    {
+                        problemEn: "There were not enough clothes hooks.",
+                        problemVi: "Không có đủ móc treo đồ.",
+                        descEn: "I had to put my clothes on the floor.",
+                        descVi: "Tôi phải để quần áo trên sàn.",
+                        solEn: "install more clothes hooks",
+                        solVi: "Lắp đặt thêm móc treo đồ."
+                    },
+                    {
+                        problemEn: "Some clothes hooks were broken.",
+                        problemVi: "Một số móc treo đồ bị hỏng.",
+                        descEn: "I could not hang my clothes properly.",
+                        descVi: "Tôi không thể treo quần áo một cách gọn gàng.",
+                        solEn: "repair or replace the broken clothes hooks",
+                        solVi: "Sửa chữa hoặc thay thế các móc treo đồ bị hỏng."
                     }
                 ]
             }
         ],
         sampleModel: `Dear Sir/Madam,
 
-I am writing to complain about the room condition during my recent stay at your hotel from 10th to 12th August. Unfortunately, I was not satisfied with the quality of the accommodation and service.
+I am writing to complain about the poor condition of the changing room at your sports center during my visit last Tuesday. I have been a member of your center for six months, and I was very disappointed with my recent experience.
 
-Firstly, the main problem was that the air conditioner in my room was broken and made a very loud noise throughout the night, which made it impossible for me to sleep. Secondly, the bathroom was not properly cleaned and the shower did not have any hot water. Finally, the bed sheets and towels were stained and looked very old. I was extremely disappointed with these issues because I chose your hotel based on its high reputation. This unpleasant experience completely ruined my holiday. Therefore, I would appreciate it if you could inspect and repair the air conditioners immediately, as well as ensure that the housekeeping team cleans the rooms more thoroughly. Furthermore, I hope you will consider offering a partial refund for the inconvenience caused.
+Firstly, the main problem was that the changing room was extremely dirty. There was rubbish scattered on the floor and a bad smell in the room. Secondly, several lockers were broken, so I could not lock my locker to keep my personal belongings safe. Finally, some of the showers did not work and there was no hot water, which forced me to take a cold shower after exercising. I felt quite unhappy and uncomfortable because these problems made my workout experience very unpleasant. Therefore, I would appreciate it if you could ensure that the changing room is cleaned more regularly. In addition, please repair the broken lockers and fix the shower system as soon as possible.
 
-I hope you will look into these matters soon. I look forward to receiving your reply.
+I hope that you will look into these issues soon. I look forward to receiving your reply.
 
 Yours faithfully,`,
-        sampleModelVi: `Kính gửi Ông/Bà,
+        sampleModelVi: `Kính gửi Ban Quản lý,
 
-Tôi viết thư này để phàn nàn về tình trạng phòng ốc trong kỳ nghỉ gần đây của tôi tại khách sạn của quý vị từ ngày 10 đến ngày 12 tháng Tám. Thật không may, tôi đã không hài lòng với chất lượng chỗ ở và dịch vụ.
+Tôi viết thư này để phàn nàn về tình trạng tồi tàn của phòng thay đồ tại trung tâm thể thao của quý vị trong lần đến tập vào thứ Ba tuần trước. Tôi đã là hội viên của trung tâm được sáu tháng và tôi rất thất vọng với trải nghiệm gần đây của mình.
 
-Đầu tiên, vấn đề chính là máy điều hòa trong phòng tôi bị hỏng và phát ra tiếng ồn rất lớn suốt đêm, khiến tôi không thể nào chợp mắt được. Thứ hai, phòng tắm không được dọn dẹp sạch sẽ và vòi hoa sen hoàn toàn không có nước nóng. Cuối cùng, ga trải giường và khăn tắm bị ố bẩn và trông rất cũ. Tôi vô cùng thất vọng với những vấn đề này vì tôi đã chọn khách sạn của quý vị dựa trên danh tiếng cao của khách sạn. Trải nghiệm khó chịu này đã làm hỏng hoàn toàn kỳ nghỉ của tôi. Do đó, tôi sẽ rất cảm kích nếu quý vị có thể kiểm tra và sửa chữa máy điều hòa ngay lập tức, cũng như đảm bảo đội ngũ dọn phòng vệ sinh phòng ốc kỹ lưỡng hơn. Hơn nữa, tôi hy vọng quý vị sẽ xem xét hoàn lại một phần tiền cho sự bất tiện mà tôi đã gặp phải.
+Đầu tiên, vấn đề chính là phòng thay đồ rất bẩn. Có rác vương vãi trên sàn nhà và có mùi hôi trong phòng. Thứ hai, một số tủ khóa đã bị hỏng khiến tôi không thể khóa tủ đồ của mình để cất giữ đồ đạc cá nhân an toàn. Cuối cùng, một số vòi hoa sen không hoạt động và không có nước nóng, buộc tôi phải tắm bằng nước lạnh sau khi tập luyện. Tôi cảm thấy khá không hài lòng và khó chịu vì những vấn đề này đã khiến trải nghiệm tập luyện của tôi trở nên tồi tệ. Do đó, tôi sẽ rất cảm kích nếu quý vị đảm bảo phòng thay đồ được dọn dẹp thường xuyên hơn. Ngoài ra, xin vui lòng sửa chữa các tủ khóa bị hỏng và khắc phục hệ thống vòi sen càng sớm càng tốt.
 
 Tôi hy vọng quý vị sẽ sớm xem xét các vấn đề này. Tôi rất mong sớm nhận được phản hồi từ quý vị.
 
 Trân trọng,`
     },
-feedback: {
+
+    feedback: {
         title: "DẠNG 05: LETTER OF FEEDBACK (THƯ PHẢN HỒI / ĐÓNG GÓP Ý KIẾN)",
         prompt: `You recently had dinner at a new restaurant. A few days later, the restaurant manager sent you an email asking for your feedback.
 Write an email to give your opinion. In your email, you should:
@@ -1019,7 +1059,8 @@ Tôi hy vọng quý vị sẽ thấy những đóng góp của tôi mang tính x
 
 Trân trọng,`
     },
-apology: {
+
+    apology: {
         title: "DẠNG 06: LETTER OF APOLOGY (THƯ XIN LỖI)",
         prompt: `You have received an email from your professor.
 ... I noticed that you haven't submitted your assignment yet. The deadline was last Friday, but I still haven't received your work. Could you explain why your assignment was late? Also, when will you submit it? I hope to hear from you soon. ...
@@ -1127,7 +1168,8 @@ Em rất mong Thầy sẽ thông cảm cho hoàn cảnh của em và chấp nh�
 
 Kính thư,`
     },
-application: {
+
+    application: {
         title: "DẠNG 07: LETTER OF APPLICATION (THƯ ỨNG TUYỂN / XIN VIỆC)",
         prompt: `You saw a job advertisement for a receptionist at a small hotel in your city. You are interested in the position and would like to apply for the job. Write an email to apply for the position. In your email, you should:
 • Introduce yourself and your current situation
@@ -1276,8 +1318,45 @@ function renderExtraPracticePanel(typeId) {
         return;
     }
 
-    let hintsHtml = data.hints.map(hint => {
-        if (hint.type === "custom_outline_choice") {
+    let hintsHtml = data.hints.map((hint, idx) => {
+        if (hint.type === "complaint_triplet") {
+            let itemsHtml = hint.items.map((item, itemIdx) => `
+                <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 14px 16px; margin-bottom: 12px;">
+                    <div style="margin-bottom: 8px;">
+                        <span style="font-weight: 700; color: #dc2626; display: block; margin-bottom: 2px;">
+                            ${itemIdx + 1}. Vấn đề phàn nàn:
+                        </span>
+                        <strong style="color: var(--text-main); font-size: 15px; padding-left: 12px; display: block;">${item.problemEn}</strong>
+                        <span style="color: var(--text-muted); font-size: 13.5px; padding-left: 12px; display: block; font-style: italic;">(${item.problemVi})</span>
+                    </div>
+
+                    <div style="margin-bottom: 8px; padding-left: 12px; border-left: 3px solid #3b82f6; margin-left: 4px;">
+                        <span style="font-weight: 700; color: #2563eb; display: block; margin-bottom: 2px;">
+                            → Mô tả chi tiết:
+                        </span>
+                        <span style="color: var(--text-main); font-weight: 600; display: block;">${item.descEn}</span>
+                        <span style="color: var(--text-muted); font-size: 13.5px; display: block; font-style: italic;">(${item.descVi})</span>
+                    </div>
+
+                    <div style="padding-left: 12px; border-left: 3px solid #10b981; margin-left: 4px;">
+                        <span style="font-weight: 700; color: #059669; display: block; margin-bottom: 2px;">
+                            → Đề xuất giải pháp:
+                        </span>
+                        <span style="color: #047857; font-weight: 600; display: block;">${item.solEn}</span>
+                        <span style="color: var(--text-muted); font-size: 13.5px; display: block; font-style: italic;">(${item.solVi})</span>
+                    </div>
+                </div>
+            `).join('');
+
+            return `
+                <div class="outline-step" style="margin-bottom: 18px;">
+                    <h4 style="margin-bottom: 14px; color: var(--accent-red); font-size: 17px; display: flex; align-items: center; gap: 8px;">
+                        <i class="fa-solid fa-circle-exclamation" style="color: #dc2626; font-size: 15px;"></i> ${hint.title}
+                    </h4>
+                    ${itemsHtml}
+                </div>
+            `;
+        } else if (hint.type === "custom_outline_choice") {
             let sentHtml = hint.sentences.map(st => `
                 <div style="margin-bottom: 10px; padding-left: 12px;">
                     <p style="margin-bottom: 2px;">• <strong>${st.en}</strong></p>
@@ -1383,7 +1462,7 @@ function renderExtraPracticePanel(typeId) {
                     <span>Nhập bài viết tại đây (Yêu cầu ≥ 120 từ):</span>
                     <div class="word-count" id="extraLiveWordCount">Số từ: <strong>0</strong></div>
                 </div>
-                <textarea id="extraWritingArea" placeholder="Dear friend,&#10;&#10;How are you? I hope you are doing well..." rows="12"></textarea>
+                <textarea id="extraWritingArea" placeholder="Dear Sir/Madam,&#10;&#10;I am writing to complain about..." rows="12"></textarea>
                 <div class="editor-actions">
                     <button class="btn btn-secondary" onclick="resetExtraPracticeArea()"><i class="fa-solid fa-rotate-left"></i> Viết lại</button>
                     <button class="btn btn-primary" onclick="gradeExtraPractice('${typeId}')"><i class="fa-solid fa-circle-check"></i> Nộp bài & Chấm điểm VSTEP (30%)</button>
@@ -1689,6 +1768,39 @@ function diagnoseVstepErrors(rawText, promptData) {
     }
 
     // --- F. PREPOSITIONS & COLLOCATIONS ---
+    if (/\b(complain\s+with)\b/gi.test(rawText)) {
+        errors.push({
+            type: "Giới từ đi kèm động từ",
+            category: "grammar",
+            wrong: "complain with",
+            correct: "complain about",
+            reason: "Phàn nàn về điều gì dùng 'complain about', không dùng 'complain with'."
+        });
+    }
+
+    if (/\b(was|were)\s+not\s+satisfy\b/gi.test(rawText)) {
+        errors.push({
+            type: "Từ loại / Thể bị động",
+            category: "grammar",
+            wrong: "was not satisfy",
+            correct: "was not satisfied",
+            reason: "Sau to be diễn tả cảm xúc/tình trạng không hài lòng phải dùng tính từ/quá khứ phân từ 'satisfied'."
+        });
+    }
+
+    if (/\blook\s+forward\s+to\s+(hear|receive)\b/gi.test(rawText)) {
+        const m = rawText.match(/\blook\s+forward\s+to\s+(hear|receive)\b/i);
+        if (m) {
+            errors.push({
+                type: "Dạng động từ sau giới từ",
+                category: "grammar",
+                wrong: m[0],
+                correct: m[0].replace(m[1], m[1] === 'hear' ? 'hearing' : 'receiving'),
+                reason: "Sau cụm 'look forward to' (to là giới từ) bắt buộc phải dùng V-ing ('look forward to hearing/receiving...')."
+            });
+        }
+    }
+
     if (/\bsuitable\s+with\b/gi.test(rawText)) {
         errors.push({
             type: "Giới từ đi kèm tính từ",
@@ -1820,8 +1932,8 @@ function diagnoseVstepErrors(rawText, promptData) {
     });
 
     // --- I. SUBJECT-VERB AGREEMENT & COMMON SPELLINGS ---
-    if (/\b(places|dishes|clothes|teachers|skills|topics)\s+is\b/gi.test(rawText)) {
-        const m = rawText.match(/\b(places|dishes|clothes|teachers|skills|topics)\s+is\b/i);
+    if (/\b(places|dishes|clothes|teachers|skills|topics|lockers|showers|lights|hooks)\s+is\b/gi.test(rawText)) {
+        const m = rawText.match(/\b(places|dishes|clothes|teachers|skills|topics|lockers|showers|lights|hooks)\s+is\b/i);
         if (m) {
             errors.push({
                 type: "Hòa hợp Chủ - Vị",
@@ -1916,39 +2028,6 @@ function diagnoseVstepErrors(rawText, promptData) {
         });
     }
 
-    if (/\b(complain\s+with)\b/gi.test(rawText)) {
-        errors.push({
-            type: "Giới từ đi kèm động từ",
-            category: "grammar",
-            wrong: "complain with",
-            correct: "complain about",
-            reason: "Phàn nàn về điều gì dùng 'complain about', không dùng 'complain with'."
-        });
-    }
-
-    if (/\b(was|were)\s+not\s+satisfy\b/gi.test(rawText)) {
-        errors.push({
-            type: "Từ loại / Thể bị động",
-            category: "grammar",
-            wrong: "was not satisfy",
-            correct: "was not satisfied",
-            reason: "Sau to be diễn tả cảm xúc/tình trạng không hài lòng phải dùng tính từ/quá khứ phân từ 'satisfied'."
-        });
-    }
-
-    if (/\blook\s+forward\s+to\s+(hear|receive)\b/gi.test(rawText)) {
-        const m = rawText.match(/\blook\s+forward\s+to\s+(hear|receive)\b/i);
-        if (m) {
-            errors.push({
-                type: "Dạng động từ sau giới từ",
-                category: "grammar",
-                wrong: m[0],
-                correct: m[0].replace(m[1], m[1] === 'hear' ? 'hearing' : 'receiving'),
-                reason: "Sau cụm 'look forward to' (to là giới từ) bắt buộc phải dùng V-ing ('look forward to hearing/receiving...')."
-            });
-        }
-    }
-
     return errors;
 }
 
@@ -2006,7 +2085,7 @@ function gradeExtraPractice(typeId) {
         hasReq1 = /(apologiz|apologise|sorry|apology|forgive|regret|excuse)/i.test(lower);
         hasReq2 = /(sick|ill|flu|fever|health|doctor|hospital|medical|break\s*down|broke\s*down|laptop|computer|error|accident|emergency|reason|because)/i.test(lower);
         hasReq3 = /(submit|send|email|portal|tomorrow|by|attach|certificate|hand\s+in|upload|tuesday|wednesday|pm)/i.test(lower);
-        hasReq4 = true; // 3 core prompts in apology
+        hasReq4 = true;
         reqLabels = [
             hasReq1 ? '✓ Lời xin lỗi chân thành' : '✗ Lời xin lỗi chân thành',
             hasReq2 ? '✓ Giải thích lý do chính đáng' : '✗ Giải thích lý do chính đáng',
@@ -2016,21 +2095,21 @@ function gradeExtraPractice(typeId) {
         hasReq1 = /(satisf|dissatisf|overall|enjoy|opinion|pleas|feedback|impression|feel)/i.test(lower);
         hasReq2 = /(food|dish|dishes|fresh|delicious|atmosphere|music|decor|staff|wait|waiting|service|serve|dinner|restaurant|meal)/i.test(lower);
         hasReq3 = /(suggest|improve|service|hire|staff|waiter|faster|speed\s*up|menu|vegetarian|discount|loyalty|option|recommend)/i.test(lower);
-        hasReq4 = true; // 3 core prompts in feedback
+        hasReq4 = true;
         reqLabels = [
             hasReq1 ? '✓ Mức độ hài lòng' : '✗ Mức độ hài lòng',
             hasReq2 ? '✓ Mô tả trải nghiệm' : '✗ Mô tả trải nghiệm',
             hasReq3 ? '✓ Đề xuất cải thiện dịch vụ' : '✗ Đề xuất cải thiện dịch vụ'
         ];
     } else if (typeId === 'complaint') {
-        hasReq1 = /(problem|problems|air\s*conditioner|ac|dirty|bathroom|shower|noise|noisy|broken|stained|towel|bed|sheet|issue|water)/i.test(lower);
-        hasReq2 = /(feel|felt|disappoint|unhappy|annoyed|upset|ruin|ruined|terrible|bad\s*experience|frustrated)/i.test(lower);
-        hasReq3 = /(suggest|improvement|improve|repair|replace|clean|refund|discount|train|service|better|compensation)/i.test(lower);
-        hasReq4 = true; // 3 core prompts in complaint
+        hasReq1 = /(problem|problems|changing\s*room|dirty|rubbish|smell|locker|lockers|shower|showers|light|lights|hook|hooks|floor)/i.test(lower);
+        hasReq2 = /(feel|felt|disappoint|unhappy|annoyed|upset|ruin|terrible|bad\s*experience|frustrated|unpleasant|uncomfortable)/i.test(lower);
+        hasReq3 = /(suggest|improvement|improve|repair|replace|clean|fix|install|provide|service|better)/i.test(lower);
+        hasReq4 = true;
         reqLabels = [
-            hasReq1 ? '✓ Mô tả vấn đề phòng' : '✗ Mô tả vấn đề phòng',
+            hasReq1 ? '✓ Mô tả vấn đề phòng thay đồ' : '✗ Mô tả vấn đề phòng thay đồ',
             hasReq2 ? '✓ Bày tỏ cảm xúc' : '✗ Bày tỏ cảm xúc',
-            hasReq3 ? '✓ Đề xuất cải thiện' : '✗ Đề xuất cải thiện'
+            hasReq3 ? '✓ Đề xuất cải thiện cơ sở vật chất' : '✗ Đề xuất cải thiện cơ sở vật chất'
         ];
     } else if (typeId === 'request' || typeId === 'description') {
         hasReq1 = /(address|location|where\s+(is\s+)?the\s+center|near\s+my\s+(house|home)|street|district|easy\s+to\s+(get|find)|located|tran\s+phu)/i.test(lower);
@@ -2072,8 +2151,8 @@ function gradeExtraPractice(typeId) {
 
     // --- 2. ORGANIZATION (Thang 10) ---
     const hasGreeting = /^dear\s+[a-z]+/i.test(rawText.trim());
-    const hasOpening = /(thanks?\s+for|hope\s+you|writing\s+to|how\s+are\s+you|in\s+your\s+letter)/i.test(lower);
-    const hasClosingSentence = /(hope\s+my\s+advice|write\s+back|let\s+me\s+know|look\s+forward|hope\s+you\s+(can\s+help|will\s+find))/i.test(lower);
+    const hasOpening = /(thanks?\s+for|hope\s+you|writing\s+to|how\s+are\s+you|in\s+your\s+letter|i\s+am\s+writing)/i.test(lower);
+    const hasClosingSentence = /(hope\s+my\s+advice|write\s+back|let\s+me\s+know|look\s+forward|hope\s+you\s+(can\s+help|will\s+find|will\s+look)|thank\s+you\s+for)/i.test(lower);
     const hasSignOff = /(best\s+wishes|yours|regards|love)/i.test(lower);
 
     const linkingWords = ["firstly", "secondly", "next", "finally", "moreover", "besides", "furthermore", "in addition", "therefore", "for example", "first of all", "also", "because"];
