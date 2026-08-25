@@ -575,6 +575,24 @@ function renderExtraPracticePanel(typeId) {
                     <i class="fa-solid fa-triangle-exclamation" style="color: #f59e0b;"></i> You should write at least 120 words. Do not include your name. Your response will be evaluated in terms of Task Fulfillment, Organization, Vocabulary, and Grammar.
                 </p>
             </div>
+                <div class="sample-analysis-grid">
+                    <div class="sample-analysis-item">
+                        <strong>Người nhận</strong>
+                        <span>Emily (Bạn bè)</span>
+                    </div>
+                    <div class="sample-analysis-item">
+                        <strong>Mục đích</strong>
+                        <span>Gợi ý cho chuyến du lịch Cần Thơ vào tháng 12</span>
+                    </div>
+                    <div class="sample-analysis-item">
+                        <strong>Văn phong</strong>
+                        <span>Thân mật (Informal Letter)</span>
+                    </div>
+                    <div class="sample-analysis-item">
+                        <strong>Yêu cầu cốt lõi</strong>
+                        <span>Nơi ở, món ăn, điểm tham quan, trang phục</span>
+                    </div>
+                </div>
         </div>
 
         <!-- Suggestions Collapsible Accordion (Bấm vào mới hiện) -->
