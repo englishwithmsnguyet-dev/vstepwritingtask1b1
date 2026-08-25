@@ -1376,100 +1376,136 @@ You should write at least 120 words. Do not include your name or address. Your r
             style: "Trang trọng / Chuyên nghiệp (Formal Job Application Email)",
             requirements: "Giới thiệu bản thân, Nêu lý do quan tâm, Kinh nghiệm với khách hàng, Giải thích độ phù hợp"
         },
-        hints: [
+        applicationOutlineSections: [
             {
-                title: "1. Introduce yourself and your current situation (Giới thiệu bản thân & hoàn cảnh)",
-                type: "standard",
-                items: [
+                sectionNumber: "1",
+                sectionTitle: "Introduce yourself and your current situation (Giới thiệu bản thân và tình hình hiện tại)",
+                themeColor: "#2563eb",
+                majors: [
+                    { en: "Tourism and Hospitality Management", vi: "Quản trị Du lịch và Khách sạn" },
+                    { en: "English Language / Business English", vi: "Ngôn ngữ Anh / Tiếng Anh Thương mại" },
+                    { en: "Marketing", vi: "Tiếp thị / Marketing" },
+                    { en: "Business Administration", vi: "Quản trị Kinh doanh" }
+                ],
+                cases: [
                     {
-                        en: "I am writing to apply for the receptionist position advertised on your hotel website",
-                        vi: "Tôi viết thư này để ứng tuyển vào vị trí nhân viên lễ tân được đăng tuyển trên trang web của khách sạn",
-                        reasonEn: "and I believe my skills and qualifications make me a strong candidate.",
-                        reasonVi: "và tôi tin rằng kỹ năng cùng trình độ của tôi giúp tôi trở thành một ứng viên sáng giá."
+                        name: "Trường hợp 1: Đã tốt nghiệp (Graduated)",
+                        mainSent: {
+                            en: "I recently graduated from [tên trường] with a bachelor’s degree in [chuyên ngành].",
+                            vi: "Tôi vừa tốt nghiệp [tên trường] với bằng cử nhân [chuyên ngành]."
+                        },
+                        expandSents: [
+                            {
+                                en: "I am currently looking for a job where I can use my knowledge and skills.",
+                                vi: "Hiện tại tôi đang tìm một công việc mà tôi có thể sử dụng kiến thức và kỹ năng của mình."
+                            },
+                            {
+                                en: "I am interested in gaining practical experience in this field.",
+                                vi: "Tôi muốn tích lũy kinh nghiệm thực tế trong lĩnh vực này."
+                            }
+                        ]
                     },
                     {
-                        en: "I am currently a final-year student majoring in Tourism and Hospitality Management",
-                        vi: "Hiện tôi là sinh viên năm cuối chuyên ngành Quản trị Du lịch và Khách sạn",
-                        reasonEn: "at Can Tho University.",
-                        reasonVi: "tại Trường Đại học Cần Thơ."
-                    },
-                    {
-                        en: "I am eager to gain practical working experience in a professional hospitality environment",
-                        vi: "Tôi rất khao khát tích lũy kinh nghiệm làm việc thực tế trong môi trường khách sạn chuyên nghiệp",
-                        reasonEn: "to apply my academic knowledge into real-world practice.",
-                        reasonVi: "để vận dụng kiến thức đã học vào thực tế."
+                        name: "Trường hợp 2: Chưa tốt nghiệp (Currently studying / Student)",
+                        mainSent: {
+                            en: "I am currently a university student studying [chuyên ngành] at [tên trường].",
+                            vi: "Hiện tại tôi là sinh viên đại học đang học [chuyên ngành] tại [tên trường]."
+                        },
+                        expandSents: [
+                            {
+                                en: "I am looking for a part-time job to gain practical experience.",
+                                vi: "Tôi đang tìm một công việc bán thời gian để tích lũy kinh nghiệm thực tế."
+                            },
+                            {
+                                en: "I would like to develop my skills while continuing my studies.",
+                                vi: "Tôi muốn phát triển các kỹ năng của mình trong khi tiếp tục việc học."
+                            }
+                        ]
                     }
                 ]
             },
             {
-                title: "2. Say why you are interested in the position (Nêu lý do quan tâm đến vị trí)",
-                type: "standard",
-                items: [
-                    {
-                        en: "I have always been deeply passionate about customer service and hospitality",
-                        vi: "Tôi luôn có niềm đam mê sâu sắc với ngành dịch vụ chăm sóc khách hàng và khách sạn",
-                        reasonEn: "which drives me to pursue this career path.",
-                        reasonVi: "điều này thôi thúc tôi theo đuổi con đường sự nghiệp này."
-                    },
-                    {
-                        en: "Your hotel has an excellent reputation for exceptional service and friendly staff",
-                        vi: "Khách sạn của quý vị có danh tiếng tuyệt vời về dịch vụ vượt trội và đội ngũ nhân viên thân thiện",
-                        reasonEn: "which makes it an ideal place for me to develop my skills.",
-                        reasonVi: "khiến nơi đây trở thành địa điểm lý tưởng để tôi phát triển kỹ năng của mình."
-                    },
-                    {
-                        en: "I am excited about the opportunity to contribute to your hotel's continued success",
-                        vi: "Tôi rất hào hứng với cơ hội được đóng góp vào sự thành công liên tục của khách sạn",
-                        reasonEn: "while delivering high satisfaction to your guests.",
-                        reasonVi: "đồng thời mang lại sự hài lòng cao nhất cho các thực khách."
-                    }
-                ]
+                sectionNumber: "2",
+                sectionTitle: "Say why you are interested in the position (Nêu lý do bạn hứng thú với vị trí công việc)",
+                themeColor: "#059669",
+                mainSent: {
+                    en: "I am very interested in this position because it matches my interests and career goals.",
+                    vi: "Tôi rất hứng thú với vị trí này vì nó phù hợp với sở thích và mục tiêu nghề nghiệp của tôi."
+                },
+                expandIntro: "In addition, I enjoy [hoạt động liên quan đến công việc]:",
+                activities: [
+                    { en: "communicating with people", vi: "giao tiếp với mọi người" },
+                    { en: "helping people with their needs", vi: "giúp đỡ mọi người khi họ cần" },
+                    { en: "working with customers", vi: "làm việc với khách hàng" },
+                    { en: "helping customers choose suitable products", vi: "giúp khách hàng chọn sản phẩm phù hợp" },
+                    { en: "working with other people", vi: "làm việc với những người khác" },
+                    { en: "solving problems", vi: "giải quyết vấn đề" },
+                    { en: "organizing things", vi: "sắp xếp mọi thứ" },
+                    { en: "working with numbers", vi: "làm việc với các con số" },
+                    { en: "working with children", vi: "làm việc với trẻ em" },
+                    { en: "teaching and helping others learn", vi: "giảng dạy và giúp người khác học tập" },
+                    { en: "using computers and technology", vi: "sử dụng máy tính và công nghệ" },
+                    { en: "creating new ideas", vi: "tạo ra những ý tưởng mới" },
+                    { en: "working in a team", vi: "làm việc theo nhóm" },
+                    { en: "meeting and talking to new people", vi: "gặp gỡ và trò chuyện với những người mới" }
+                ],
+                concludingSent: {
+                    en: "Therefore, I believe this job will give me a good opportunity to apply what I have learned and gain practical experience.",
+                    vi: "Vì vậy, tôi tin rằng công việc này sẽ cho tôi một cơ hội tốt để áp dụng những gì đã học và tích lũy kinh nghiệm thực tế."
+                }
             },
             {
-                title: "3. Mention your customer service experience (Kinh nghiệm làm việc với khách hàng)",
-                type: "standard",
-                items: [
-                    {
-                        en: "I worked as a part-time receptionist at a boutique hotel for six months",
-                        vi: "Tôi từng làm việc bán thời gian ở vị trí tiếp tân tại một khách sạn nhỏ trong 6 tháng",
-                        reasonEn: "where I was responsible for greeting guests, handling check-ins, and answering inquiries.",
-                        reasonVi: "nơi tôi chịu trách nhiệm đón tiếp khách, làm thủ tục nhận phòng và giải đáp thắc mắc."
-                    },
-                    {
-                        en: "This role helped me develop strong communication skills and solve unexpected guest issues calmly",
-                        vi: "Công việc này đã giúp tôi rèn luyện kỹ năng giao tiếp tốt và xử lý các vấn đề phát sinh của khách một cách bình tĩnh",
-                        reasonEn: "ensuring that every guest felt welcomed and valued.",
-                        reasonVi: "đảm bảo mọi du khách đều cảm thấy được chào đón và trân trọng."
-                    },
-                    {
-                        en: "I also have experience managing phone calls, email correspondence, and booking systems",
-                        vi: "Tôi cũng có kinh nghiệm xử lý các cuộc gọi điện thoại, trả lời email và sử dụng hệ thống đặt phòng",
-                        reasonEn: "with high accuracy and attention to detail.",
-                        reasonVi: "với độ chính xác cao và sự cẩn thận tỉ mỉ."
-                    }
-                ]
+                sectionNumber: "3",
+                sectionTitle: "Mention any experience you have working with customers (Đề cập kinh nghiệm làm việc với khách hàng)",
+                themeColor: "#d97706",
+                mainSent: {
+                    en: "I worked part-time as a [vị trí công việc] at [nơi làm việc].",
+                    vi: "Tôi từng làm bán thời gian với vị trí [công việc] tại [nơi làm việc]."
+                },
+                expandIntro: "In this job, I was responsible for [nhiệm vụ]:",
+                duties: [
+                    { en: "helping customers and answering their questions", vi: "hỗ trợ khách hàng và trả lời câu hỏi của họ" },
+                    { en: "helping customers choose suitable products", vi: "giúp khách hàng chọn sản phẩm phù hợp" },
+                    { en: "serving customers and arranging products", vi: "phục vụ khách hàng và sắp xếp sản phẩm" },
+                    { en: "checking products and keeping the store clean", vi: "kiểm tra sản phẩm và giữ cửa hàng sạch sẽ" }
+                ],
+                resultSent: {
+                    en: "This experience helped me develop skills such as communication and customer service skills.",
+                    vi: "Kinh nghiệm này giúp tôi phát triển các kỹ năng như giao tiếp và chăm sóc khách hàng. (Có thể thay thế bằng các kỹ năng mềm khác)."
+                }
             },
             {
-                title: "4. Explain why you are a suitable candidate (Giải thích tại sao bạn phù hợp)",
-                type: "standard",
-                items: [
+                sectionNumber: "4",
+                sectionTitle: "Say why you are a suitable candidate (Khẳng định bạn là ứng viên phù hợp)",
+                themeColor: "#8b5cf6",
+                mainSent: {
+                    en: "I believe I would be a suitable candidate for this position because I am [đặc điểm tính cách].",
+                    vi: "Tôi tin rằng mình sẽ là một ứng viên phù hợp cho vị trí này vì tôi là người [đặc điểm tính cách]."
+                },
+                adjectives: [
+                    { en: "friendly", vi: "thân thiện" },
+                    { en: "responsible", vi: "có trách nhiệm" },
+                    { en: "hard-working", vi: "chăm chỉ" },
+                    { en: "patient", vi: "kiên nhẫn" },
+                    { en: "careful", vi: "cẩn thận" },
+                    { en: "reliable", vi: "đáng tin cậy" },
+                    { en: "creative", vi: "sáng tạo" },
+                    { en: "active", vi: "năng động" },
+                    { en: "organized", vi: "có tổ chức" },
+                    { en: "flexible", vi: "linh hoạt" }
+                ],
+                expandSents: [
                     {
-                        en: "I can communicate fluently in English and have good basic computer skills",
-                        vi: "Tôi có thể giao tiếp tiếng Anh trôi chảy và có kỹ năng tin học văn phòng cơ bản tốt",
-                        reasonEn: "which allows me to interact easily with international guests.",
-                        reasonVi: "cho phép tôi tương tác dễ dàng với các du khách quốc tế."
+                        en: "Moreover, I am eager to learn and can adapt quickly to new environments.",
+                        vi: "Hơn nữa, tôi ham học hỏi và có thể nhanh chóng thích nghi với môi trường mới."
                     },
                     {
-                        en: "I am hard-working, punctual, and capable of working flexible shifts including weekends",
-                        vi: "Tôi chăm chỉ, đúng giờ và có khả năng làm việc linh hoạt theo ca bao gồm cả cuối tuần",
-                        reasonEn: "to support the hotel team whenever needed.",
-                        reasonVi: "để hỗ trợ đội ngũ khách sạn bất cứ khi nào cần thiết."
+                        en: "In addition, I can communicate fluently in English and have good basic computer skills.",
+                        vi: "Ngoài ra, tôi có thể giao tiếp tiếng Anh trôi chảy và có kỹ năng máy tính cơ bản tốt."
                     },
                     {
-                        en: "I have attached my resume (CV) to this email for your further consideration",
-                        vi: "Tôi đã đính kèm sơ yếu lý lịch (CV) vào email này để quý vị tiện xem xét thêm",
-                        reasonEn: "and I would welcome the opportunity to attend an interview at your convenience.",
-                        reasonVi: "và tôi rất mong có cơ hội tham gia buổi phỏng vấn vào thời gian thuận tiện của quý vị."
+                        en: "I have attached my resume (CV) to this email for your further consideration.",
+                        vi: "Tôi đã đính kèm sơ yếu lý lịch vào email này để quý vị tiện xem xét thêm."
                     }
                 ]
             }
@@ -1478,18 +1514,18 @@ You should write at least 120 words. Do not include your name or address. Your r
 
 I am writing to apply for the receptionist position at your hotel, which was recently advertised on your website. I believe that my academic background and skills make me a suitable candidate for this job.
 
-I am a final-year student majoring in Tourism and Hospitality Management at Can Tho University. I am extremely interested in this position because your hotel is well-known for its excellent customer service and welcoming environment. Regarding my experience, I worked as a part-time receptionist at a boutique hotel for six months. During this time, I was responsible for checking in guests, handling reservations, and answering phone inquiries. This role helped me improve my communication and problem-solving skills when dealing with various customer requests. Furthermore, I can communicate fluently in English, and I am proficient in using basic computer software. I am enthusiastic, reliable, and able to work flexible shifts, including weekends.
+I am currently a university student studying Tourism and Hospitality Management at Can Tho University. I am looking for a part-time job to gain practical experience and develop my skills while continuing my studies. I am very interested in this position because it matches my interests and career goals. In addition, I enjoy working with customers, communicating with people, and helping guests with their needs. Regarding my experience, I worked part-time as a receptionist at a small boutique hotel for six months. In this job, I was responsible for greeting guests, handling check-ins, and answering their questions. This experience helped me develop strong communication and customer service skills. I believe I would be a suitable candidate because I am friendly, responsible, hard-working, and reliable. Moreover, I am eager to learn and can adapt quickly to new environments.
 
-I have attached my resume to this email for your consideration. I would be very grateful for the opportunity to attend an interview. Thank you for your time and consideration.
+I have attached my resume to this email for your consideration. Thank you for your time and consideration.
 
 Yours faithfully,`,
         sampleModelVi: `Kính gửi Người phụ trách Tuyển dụng,
 
 Tôi viết thư này để ứng tuyển vào vị trí nhân viên lễ tân tại khách sạn của quý vị, vị trí vừa được đăng tuyển trên trang web của khách sạn gần đây. Tôi tin rằng nền tảng học vấn và kỹ năng của tôi giúp tôi trở thành một ứng viên phù hợp cho công việc này.
 
-Tôi là sinh viên năm cuối chuyên ngành Quản trị Du lịch và Khách sạn tại Đại học Cần Thơ. Tôi vô cùng quan tâm đến vị trí này vì khách sạn của quý vị rất nổi tiếng về dịch vụ khách hàng xuất sắc và môi trường thân thiện. Về kinh nghiệm, tôi từng làm nhân viên lễ tân bán thời gian tại một khách sạn nhỏ trong sáu tháng. Trong thời gian này, tôi chịu trách nhiệm làm thủ tục nhận phòng cho khách, xử lý việc đặt phòng và trả lời các thắc mắc qua điện thoại. Công việc này đã giúp tôi cải thiện kỹ năng giao tiếp và giải quyết vấn đề khi tiếp nhận các yêu cầu khác nhau từ khách hàng. Hơn nữa, tôi có thể giao tiếp tiếng Anh trôi chảy và thành thạo sử dụng các phần mềm máy tính cơ bản. Tôi là người nhiệt huyết, đáng tin cậy và có thể làm việc theo ca linh hoạt, bao gồm cả cuối tuần.
+Hiện tại tôi là sinh viên đại học đang học ngành Quản trị Du lịch và Khách sạn tại Đại học Cần Thơ. Tôi đang tìm một công việc bán thời gian để tích lũy kinh nghiệm thực tế và phát triển kỹ năng của mình trong khi tiếp tục việc học. Tôi rất hứng thú với vị trí này vì nó phù hợp với sở thích và mục tiêu nghề nghiệp của tôi. Ngoài ra, tôi thích làm việc với khách hàng, giao tiếp với mọi người và giúp đỡ khách lưu trú khi họ cần. Về kinh nghiệm, tôi từng làm bán thời gian ở vị trí tiếp tân tại một khách sạn nhỏ trong sáu tháng. Trong công việc này, tôi chịu trách nhiệm đón tiếp khách, làm thủ tục nhận phòng và trả lời các thắc mắc của họ. Kinh nghiệm này đã giúp tôi phát triển kỹ năng giao tiếp tốt và kỹ năng chăm sóc khách hàng. Tôi tin rằng mình sẽ là một ứng viên phù hợp vì tôi là người thân thiện, có trách nhiệm, chăm chỉ và đáng tin cậy. Hơn nữa, tôi ham học hỏi và có thể nhanh chóng thích nghi với môi trường mới.
 
-Tôi đã đính kèm sơ yếu lý lịch vào email này để quý vị xem xét. Tôi sẽ rất biết ơn nếu có cơ hội tham gia buổi phỏng vấn. Xin chân thành cảm ơn quý vị đã dành thời gian và sự quan tâm.
+Tôi đã đính kèm sơ yếu lý lịch vào email này để quý vị xem xét. Xin chân thành cảm ơn quý vị đã dành thời gian và sự quan tâm.
 
 Trân trọng,`
     }
@@ -1513,7 +1549,180 @@ function renderExtraPracticePanel(typeId) {
 
     let hintsHtml = '';
 
-    if (data.apologyOutlineSections) {
+    if (data.applicationOutlineSections) {
+        hintsHtml = data.applicationOutlineSections.map(sec => {
+            let bodyHtml = '';
+
+            if (sec.sectionNumber === "1") {
+                let majorsHtml = sec.majors.map(m => `
+                    <div style="margin-bottom: 4px; padding-left: 10px;">
+                        <strong style="color: #1e293b;">• ${m.en}</strong>
+                        <span style="color: var(--text-muted); font-size: 13.5px; font-style: italic;"> (${m.vi})</span>
+                    </div>
+                `).join('');
+
+                let casesHtml = sec.cases.map(cs => {
+                    let expandHtml = cs.expandSents.map(st => `
+                        <div style="margin-bottom: 6px; padding-left: 12px;">
+                            <p style="margin-bottom: 2px; color: var(--text-main); font-weight: 500;">• ${st.en}</p>
+                            <p style="margin-bottom: 0; color: var(--text-muted); font-size: 13.5px; font-style: italic; padding-left: 8px;">(${st.vi})</p>
+                        </div>
+                    `).join('');
+
+                    return `
+                        <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 8px; padding: 14px 16px; margin-bottom: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.03);">
+                            <h5 style="color: ${sec.themeColor}; font-size: 15px; margin-bottom: 10px; font-weight: 700;">
+                                ${cs.name}
+                            </h5>
+                            <div style="margin-bottom: 10px; padding-left: 4px;">
+                                <span style="font-weight: 700; color: var(--text-main); font-size: 13.5px; display: block; margin-bottom: 3px;">
+                                    <i class="fa-solid fa-star" style="color: #f59e0b; font-size: 12px;"></i> Câu chính:
+                                </span>
+                                <p style="margin-bottom: 2px; padding-left: 12px; font-weight: 600; color: #1e293b;">${cs.mainSent.en}</p>
+                                <p style="margin-bottom: 0; padding-left: 12px; color: var(--text-muted); font-size: 13.5px; font-style: italic;">(${cs.mainSent.vi})</p>
+                            </div>
+                            <div style="padding-left: 4px; border-top: 1px dashed #e2e8f0; padding-top: 8px;">
+                                <span style="font-weight: 700; color: var(--text-main); font-size: 13.5px; display: block; margin-bottom: 4px;">
+                                    <i class="fa-solid fa-circle-info" style="color: ${sec.themeColor}; font-size: 12px;"></i> Câu mở rộng:
+                                </span>
+                                ${expandHtml}
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+
+                bodyHtml = `
+                    <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 12px 16px; margin-bottom: 14px;">
+                        <span style="font-weight: 700; color: var(--primary-color); display: block; margin-bottom: 6px; font-size: 14px;">
+                            <i class="fa-solid fa-graduation-cap"></i> CHUYÊN NGÀNH PHÙ HỢP GỢI Ý:
+                        </span>
+                        ${majorsHtml}
+                    </div>
+                    ${casesHtml}
+                `;
+            } else if (sec.sectionNumber === "2") {
+                let actHtml = sec.activities.map(a => `
+                    <div style="display: inline-block; width: 48%; min-width: 280px; margin-bottom: 6px; padding-left: 6px; vertical-align: top;">
+                        <strong style="color: #047857; font-size: 13.5px;">• ${a.en}</strong>
+                        <div style="color: var(--text-muted); font-size: 12.5px; font-style: italic; padding-left: 10px;">(${a.vi})</div>
+                    </div>
+                `).join('');
+
+                bodyHtml = `
+                    <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 8px; padding: 14px 16px; margin-bottom: 12px;">
+                        <div style="margin-bottom: 12px;">
+                            <span style="font-weight: 700; color: var(--text-main); font-size: 13.5px; display: block; margin-bottom: 3px;">
+                                <i class="fa-solid fa-star" style="color: #f59e0b; font-size: 12px;"></i> Câu chính:
+                            </span>
+                            <p style="margin-bottom: 2px; padding-left: 12px; font-weight: 600; color: #1e293b;">${sec.mainSent.en}</p>
+                            <p style="margin-bottom: 0; padding-left: 12px; color: var(--text-muted); font-size: 13.5px; font-style: italic;">(${sec.mainSent.vi})</p>
+                        </div>
+
+                        <div style="margin-bottom: 12px; padding: 12px 14px; background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 8px;">
+                            <span style="font-weight: 700; color: #15803d; font-size: 13.5px; display: block; margin-bottom: 8px;">
+                                <i class="fa-solid fa-list-check"></i> ${sec.expandIntro}
+                            </span>
+                            <div style="display: flex; flex-wrap: wrap;">
+                                ${actHtml}
+                            </div>
+                        </div>
+
+                        <div style="border-top: 1px dashed #e2e8f0; padding-top: 10px;">
+                            <span style="font-weight: 700; color: var(--text-main); font-size: 13.5px; display: block; margin-bottom: 3px;">
+                                <i class="fa-solid fa-flag-checkered" style="color: #059669; font-size: 12px;"></i> Câu kết đoạn:
+                            </span>
+                            <p style="margin-bottom: 2px; padding-left: 12px; font-weight: 600; color: #1e293b;">${sec.concludingSent.en}</p>
+                            <p style="margin-bottom: 0; padding-left: 12px; color: var(--text-muted); font-size: 13.5px; font-style: italic;">(${sec.concludingSent.vi})</p>
+                        </div>
+                    </div>
+                `;
+            } else if (sec.sectionNumber === "3") {
+                let dutiesHtml = sec.duties.map(d => `
+                    <div style="margin-bottom: 6px; padding-left: 12px;">
+                        <strong style="color: #b45309; font-size: 14px;">• ${d.en}</strong>
+                        <div style="color: var(--text-muted); font-size: 13px; font-style: italic; padding-left: 10px;">(${d.vi})</div>
+                    </div>
+                `).join('');
+
+                bodyHtml = `
+                    <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 8px; padding: 14px 16px; margin-bottom: 12px;">
+                        <div style="margin-bottom: 12px;">
+                            <span style="font-weight: 700; color: var(--text-main); font-size: 13.5px; display: block; margin-bottom: 3px;">
+                                <i class="fa-solid fa-star" style="color: #f59e0b; font-size: 12px;"></i> Câu chính:
+                            </span>
+                            <p style="margin-bottom: 2px; padding-left: 12px; font-weight: 600; color: #1e293b;">${sec.mainSent.en}</p>
+                            <p style="margin-bottom: 0; padding-left: 12px; color: var(--text-muted); font-size: 13.5px; font-style: italic;">(${sec.mainSent.vi})</p>
+                        </div>
+
+                        <div style="margin-bottom: 12px; padding: 12px 14px; background: #fffbeb; border: 1px solid #fde68a; border-radius: 8px;">
+                            <span style="font-weight: 700; color: #b45309; font-size: 13.5px; display: block; margin-bottom: 8px;">
+                                <i class="fa-solid fa-briefcase"></i> ${sec.expandIntro}
+                            </span>
+                            ${dutiesHtml}
+                        </div>
+
+                        <div style="border-top: 1px dashed #e2e8f0; padding-top: 10px;">
+                            <span style="font-weight: 700; color: var(--text-main); font-size: 13.5px; display: block; margin-bottom: 3px;">
+                                <i class="fa-solid fa-certificate" style="color: #d97706; font-size: 12px;"></i> Câu kết quả / Kỹ năng đạt được:
+                            </span>
+                            <p style="margin-bottom: 2px; padding-left: 12px; font-weight: 600; color: #1e293b;">${sec.resultSent.en}</p>
+                            <p style="margin-bottom: 0; padding-left: 12px; color: var(--text-muted); font-size: 13.5px; font-style: italic;">(${sec.resultSent.vi})</p>
+                        </div>
+                    </div>
+                `;
+            } else if (sec.sectionNumber === "4") {
+                let adjHtml = sec.adjectives.map(a => `
+                    <span style="display: inline-block; background: #f3e8ff; border: 1px solid #d8b4fe; border-radius: 6px; padding: 4px 10px; margin: 3px; font-size: 13px;">
+                        <strong style="color: #6b21a8;">${a.en}</strong> <span style="color: var(--text-muted); font-style: italic;">(${a.vi})</span>
+                    </span>
+                `).join('');
+
+                let expandHtml = sec.expandSents.map(st => `
+                    <div style="margin-bottom: 6px; padding-left: 12px;">
+                        <p style="margin-bottom: 2px; color: var(--text-main); font-weight: 500;">• ${st.en}</p>
+                        <p style="margin-bottom: 0; color: var(--text-muted); font-size: 13.5px; font-style: italic; padding-left: 8px;">(${st.vi})</p>
+                    </div>
+                `).join('');
+
+                bodyHtml = `
+                    <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 8px; padding: 14px 16px; margin-bottom: 12px;">
+                        <div style="margin-bottom: 12px;">
+                            <span style="font-weight: 700; color: var(--text-main); font-size: 13.5px; display: block; margin-bottom: 3px;">
+                                <i class="fa-solid fa-star" style="color: #f59e0b; font-size: 12px;"></i> Câu chính:
+                            </span>
+                            <p style="margin-bottom: 2px; padding-left: 12px; font-weight: 600; color: #1e293b;">${sec.mainSent.en}</p>
+                            <p style="margin-bottom: 0; padding-left: 12px; color: var(--text-muted); font-size: 13.5px; font-style: italic;">(${sec.mainSent.vi})</p>
+                        </div>
+
+                        <div style="margin-bottom: 12px; padding: 10px 14px; background: #faf5ff; border: 1px solid #e9d5ff; border-radius: 8px;">
+                            <span style="font-weight: 700; color: #7e22ce; font-size: 13.5px; display: block; margin-bottom: 6px;">
+                                <i class="fa-solid fa-user-tag"></i> Tính từ tính cách gợi ý:
+                            </span>
+                            <div style="line-height: 1.8;">
+                                ${adjHtml}
+                            </div>
+                        </div>
+
+                        <div style="border-top: 1px dashed #e2e8f0; padding-top: 10px;">
+                            <span style="font-weight: 700; color: var(--text-main); font-size: 13.5px; display: block; margin-bottom: 4px;">
+                                <i class="fa-solid fa-circle-info" style="color: #8b5cf6; font-size: 12px;"></i> Câu mở rộng:
+                            </span>
+                            ${expandHtml}
+                        </div>
+                    </div>
+                `;
+            }
+
+            return `
+                <div class="outline-step" style="margin-bottom: 20px; border-left: 4px solid ${sec.themeColor};">
+                    <h4 style="margin-bottom: 14px; color: ${sec.themeColor}; font-size: 16.5px; font-weight: 700;">
+                        ${sec.sectionNumber}. ${sec.sectionTitle}
+                    </h4>
+                    ${bodyHtml}
+                </div>
+            `;
+        }).join('');
+    } else if (data.apologyOutlineSections) {
         hintsHtml = data.apologyOutlineSections.map(sec => {
             let bodyHtml = '';
 
@@ -1804,7 +2013,7 @@ function renderExtraPracticePanel(typeId) {
                     <span>Nhập bài viết tại đây (Yêu cầu ≥ 120 từ):</span>
                     <div class="word-count" id="extraLiveWordCount">Số từ: <strong>0</strong></div>
                 </div>
-                <textarea id="extraWritingArea" placeholder="Dear Professor Smith,&#10;&#10;I am writing this email to sincerely apologize for..." rows="12"></textarea>
+                <textarea id="extraWritingArea" placeholder="Dear Hiring Manager,&#10;&#10;I am writing to apply for the receptionist position..." rows="12"></textarea>
                 <div class="editor-actions">
                     <button class="btn btn-secondary" onclick="resetExtraPracticeArea()"><i class="fa-solid fa-rotate-left"></i> Viết lại</button>
                     <button class="btn btn-primary" onclick="gradeExtraPractice('${typeId}')"><i class="fa-solid fa-circle-check"></i> Nộp bài & Chấm điểm VSTEP (30%)</button>
@@ -2413,10 +2622,10 @@ function gradeExtraPractice(typeId) {
     let reqLabels = [];
 
     if (typeId === 'application') {
-        hasReq1 = /(apply|application|position|receptionist|student|major|graduate|advertis|looking|myself)/i.test(lower);
-        hasReq2 = /(interest|passion|reputation|hotel|inspire|career|environment|why|passion)/i.test(lower);
-        hasReq3 = /(experience|work|worked|part-time|customer|guest|receptionist|hotel|greet|call|booking|reservation)/i.test(lower);
-        hasReq4 = /(suitable|candidate|skill|skills|fluent|english|computer|punctual|hard-working|cv|resume|interview)/i.test(lower);
+        hasReq1 = /(apply|application|position|receptionist|student|major|graduate|advertis|looking|myself|degree)/i.test(lower);
+        hasReq2 = /(interest|passion|reputation|hotel|inspire|career|environment|why|passion|communicat|helping|working\s+with|goal)/i.test(lower);
+        hasReq3 = /(experience|work|worked|part-time|customer|guest|receptionist|hotel|greet|call|booking|reservation|responsib|serving)/i.test(lower);
+        hasReq4 = /(suitable|candidate|skill|skills|fluent|english|computer|punctual|hard-working|cv|resume|interview|friendly|responsible|adapt)/i.test(lower);
         reqLabels = [
             hasReq1 ? '✓ Giới thiệu bản thân' : '✗ Giới thiệu bản thân',
             hasReq2 ? '✓ Lý do quan tâm' : '✗ Lý do quan tâm',
@@ -2494,7 +2703,7 @@ function gradeExtraPractice(typeId) {
     // --- 2. ORGANIZATION (Thang 10) ---
     const hasGreeting = /^dear\s+[a-z]+/i.test(rawText.trim());
     const hasOpening = /(thanks?\s+for|hope\s+you|writing\s+to|how\s+are\s+you|in\s+your\s+letter|i\s+am\s+writing)/i.test(lower);
-    const hasClosingSentence = /(hope\s+my\s+advice|write\s+back|let\s+me\s+know|look\s+forward|hope\s+you\s+(can\s+help|will\s+find|will\s+look)|thank\s+you\s+for)/i.test(lower);
+    const hasClosingSentence = /(hope\s+my\s+advice|write\s+back|let\s+me\s+know|look\s+forward|hope\s+you\s+(can\s+help|will\s+find|will\s+look)|thank\s+you\s+for|thank\s+you\s+for\s+your\s+time)/i.test(lower);
     const hasSignOff = /(best\s+wishes|yours|regards|love)/i.test(lower);
 
     const linkingWords = ["firstly", "secondly", "next", "finally", "moreover", "besides", "furthermore", "in addition", "therefore", "for example", "first of all", "also", "because"];
