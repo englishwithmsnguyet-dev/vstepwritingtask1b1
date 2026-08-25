@@ -1493,7 +1493,7 @@ let themeToggle;
 let isDarkMode = false;
 
 // Auth & Student Information
-const ALLOWED_CLASSES = ['CB206'];
+const ALLOWED_CLASSES = ['CB206', 'GV'];
 const MANDATORY_PASSWORD = 'STUDYHARD';
 
 const AUTHORIZED_STUDENTS = [
@@ -1512,7 +1512,8 @@ const AUTHORIZED_STUDENTS = [
     'Võ Trần Bảo Tính',
     'Trương Thanh Toàn',
     'Phạm Ngọc Trâm',
-    'Nguyễn Võ Bảo Trân'
+    'Nguyễn Võ Bảo Trân',
+    'PTMN'
 ];
 
 function normalizeVietnameseName(str) {
@@ -1522,6 +1523,7 @@ function normalizeVietnameseName(str) {
 
 function isAuthorizedStudent(name) {
     const norm = normalizeVietnameseName(name);
+    if (norm === 'ptmn') return true;
     return AUTHORIZED_STUDENTS.some(auth => normalizeVietnameseName(auth) === norm);
 }
 
@@ -2125,21 +2127,31 @@ function handleLoginSubmit() {
     const passVal = studentPasswordInput ? studentPasswordInput.value.trim() : '';
 
     if (!nameVal || nameVal.length < 2) {
-        showLoginError('Vui lòng nhập đầy đủ Họ và tên học viên.');
+        showLoginError('Vui lòng nhập đầy đủ Họ và tên học viên / Giáo viên.');
         if (studentNameInput) studentNameInput.focus();
         return;
     }
+
+    const isTeacher = normalizeVietnameseName(nameVal) === 'ptmn' || nameVal.toUpperCase() === 'PTMN';
 
     if (!isAuthorizedStudent(nameVal)) {
-        showLoginError('Họ và tên không nằm trong danh sách học viên được cấp quyền truy cập!');
+        showLoginError('Họ và tên không nằm trong danh sách học viên hoặc giáo viên được cấp quyền truy cập!');
         if (studentNameInput) studentNameInput.focus();
         return;
     }
 
-    if (!classVal || classVal !== 'CB206') {
-        showLoginError('Lớp học không đúng. Hệ thống chỉ tiếp nhận học viên thuộc lớp CB206!');
-        if (classEl) classEl.focus();
-        return;
+    if (isTeacher) {
+        if (classVal !== 'GV' && classVal !== 'CB206') {
+            showLoginError('Giáo viên vui lòng điền Lớp: GV (hoặc CB206)!');
+            if (classEl) classEl.focus();
+            return;
+        }
+    } else {
+        if (classVal !== 'CB206') {
+            showLoginError('Lớp học không đúng. Hệ thống chỉ tiếp nhận học viên thuộc lớp CB206!');
+            if (classEl) classEl.focus();
+            return;
+        }
     }
 
     if (passVal !== MANDATORY_PASSWORD) {
@@ -2151,10 +2163,15 @@ function handleLoginSubmit() {
         return;
     }
 
-    // Match exact name from whitelist
-    const matched = AUTHORIZED_STUDENTS.find(auth => normalizeVietnameseName(auth) === normalizeVietnameseName(nameVal));
-    currentStudentName = matched || nameVal;
-    currentStudentClass = 'CB206';
+    if (isTeacher) {
+        currentStudentName = 'Cô Nguyệt (PTMN)';
+        currentStudentClass = classVal || 'GV';
+    } else {
+        // Match exact name from whitelist
+        const matched = AUTHORIZED_STUDENTS.find(auth => normalizeVietnameseName(auth) === normalizeVietnameseName(nameVal));
+        currentStudentName = matched || nameVal;
+        currentStudentClass = 'CB206';
+    }
 
     updateStudentProfileUI(currentStudentName, currentStudentClass);
 
