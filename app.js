@@ -550,12 +550,7 @@ You should write at least 120 words. Do not include your name. Your response wil
         hints: [
             {
                 title: "1. The address of the center (Địa chỉ của trung tâm)",
-                type: "structures_and_sentences",
-                structures: [
-                    "Can you tell me the address of the center?",
-                    "Could you let me know where the center is located?",
-                    "I would like to know the exact address of the center."
-                ],
+                type: "custom_outline_choice",
                 sentences: [
                     {
                         en: "I want to choose a center that is easy to get to.",
@@ -581,12 +576,7 @@ You should write at least 120 words. Do not include your name. Your response wil
             },
             {
                 title: "2. The tuition fee (Học phí)",
-                type: "structures_and_sentences",
-                structures: [
-                    "Can you tell me how much the tuition fee is?",
-                    "Could you give me more information about the course fee?",
-                    "I want to know about the cost of the course."
-                ],
+                type: "custom_outline_choice",
                 sentences: [
                     {
                         en: "I need to know the cost before I decide to join the course.",
@@ -597,8 +587,8 @@ You should write at least 120 words. Do not include your name. Your response wil
                         vi: "Mình muốn đảm bảo khóa học phù hợp với ngân sách của mình."
                     },
                     {
-                        en: "I also want to know if there are any discounts for students or group registration.",
-                        vi: "Mình cũng muốn biết liệu có giảm giá cho sinh viên hoặc đăng ký nhóm không."
+                        en: "I also want to know if there are any discounts for students/ group registration.",
+                        vi: "Mình cũng muốn biết liệu có giảm giá cho sinh viên/ đăng ký nhóm không."
                     },
                     {
                         en: "I need to prepare enough money for the whole course.",
@@ -612,12 +602,7 @@ You should write at least 120 words. Do not include your name. Your response wil
             },
             {
                 title: "3. The teachers (Giáo viên)",
-                type: "structures_and_sentences",
-                structures: [
-                    "Can you tell me more about the teachers at the center?",
-                    "Could you let me know what the teachers are like?",
-                    "I was wondering if the teachers are friendly and helpful."
-                ],
+                type: "custom_outline_choice",
                 sentences: [
                     {
                         en: "I would like to know if they are experienced and friendly.",
@@ -643,12 +628,7 @@ You should write at least 120 words. Do not include your name. Your response wil
             },
             {
                 title: "4. The training program (Chương trình đào tạo)",
-                type: "structures_and_sentences",
-                structures: [
-                    "Could you give me some details about the training program?",
-                    "Can you tell me what the curriculum includes?",
-                    "I would like to know more about the course schedule and materials."
-                ],
+                type: "custom_outline_choice",
                 sentences: [
                     {
                         en: "I want to know what skills the course focuses on.",
@@ -711,27 +691,31 @@ function renderExtraPracticePanel(typeId) {
     }
 
     let hintsHtml = data.hints.map(hint => {
-        if (hint.type === "structures_and_sentences") {
-            let structHtml = hint.structures.map(st => `
-                <p style="margin-bottom: 4px; color: var(--primary-color); padding-left: 14px;">↳ <span class="outline-phrase">${st}</span></p>
-            `).join('');
-
+        if (hint.type === "custom_outline_choice") {
             let sentHtml = hint.sentences.map(st => `
-                <div style="margin-bottom: 8px; padding-left: 14px;">
+                <div style="margin-bottom: 10px; padding-left: 12px;">
                     <p style="margin-bottom: 2px;">• <strong>${st.en}</strong></p>
-                    <p style="margin-bottom: 0; color: var(--text-muted); font-size: 13.5px; font-style: italic;">(${st.vi})</p>
+                    <p style="margin-bottom: 0; color: var(--text-muted); font-size: 13.5px;">(${st.vi})</p>
                 </div>
             `).join('');
 
             return `
                 <div class="outline-step" style="margin-bottom: 18px;">
-                    <h4 style="margin-bottom: 10px; color: var(--accent-red); font-size: 17px;">${hint.title}</h4>
-                    <div style="margin-bottom: 12px;">
-                        <p style="font-weight: 700; color: var(--text-main); margin-bottom: 6px;"><i class="fa-solid fa-code-fork" style="color: var(--primary-color);"></i> Cấu trúc hỏi thông tin (Tự chọn 1 cấu trúc ghép vô):</p>
-                        ${structHtml}
+                    <h4 style="margin-bottom: 12px; color: var(--accent-red); font-size: 17px;">${hint.title}</h4>
+                    
+                    <div style="margin-bottom: 14px; padding-left: 4px;">
+                        <p style="font-weight: 700; color: var(--text-main); margin-bottom: 4px;">
+                            Cấu trúc hỏi thông tin:
+                        </p>
+                        <p style="margin-bottom: 0; padding-left: 14px; color: var(--primary-color); font-style: italic; font-weight: 500;">
+                            ↳ Tự chọn 1 cấu trúc ghép vô
+                        </p>
                     </div>
-                    <div>
-                        <p style="font-weight: 700; color: var(--text-main); margin-bottom: 6px;"><i class="fa-solid fa-angles-right" style="color: var(--secondary-color);"></i> Câu mở rộng (Lựa chọn câu phù hợp):</p>
+
+                    <div style="padding-left: 4px;">
+                        <p style="font-weight: 700; color: var(--text-main); margin-bottom: 8px;">
+                            Câu mở rộng:
+                        </p>
                         ${sentHtml}
                     </div>
                 </div>
