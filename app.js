@@ -577,10 +577,17 @@ function renderExtraPracticePanel(typeId) {
             </div>
         </div>
 
-        <!-- Suggestions Block (Using standard outline style) -->
+        <!-- Suggestions Collapsible Accordion (Bấm vào mới hiện) -->
         <div class="content-block" style="margin-top: 25px;">
-            <h3><i class="fa-solid fa-lightbulb"></i> GỢI Ý Ý TƯỞNG (SUGGESTIONS)</h3>
-            ${hintsHtml}
+            <div class="outline-step" style="cursor: pointer; display: flex; justify-content: space-between; align-items: center; padding: 18px 22px; transition: all 0.2s ease;" onclick="toggleExtraHints()">
+                <h4 style="margin: 0; color: var(--accent-red); font-size: 17px; display: flex; align-items: center; gap: 10px;">
+                    <i class="fa-solid fa-lightbulb" style="color: #f59e0b;"></i> GỢI Ý Ý TƯỞNG (BẤM ĐỂ XEM/ẨN GỢI Ý)
+                </h4>
+                <i class="fa-solid fa-chevron-down" id="extraHintsChevron" style="color: var(--primary-color); font-size: 16px; transition: transform 0.25s ease;"></i>
+            </div>
+            <div id="extraHintsContent" class="hidden" style="margin-top: 14px;">
+                ${hintsHtml}
+            </div>
         </div>
 
         <!-- Student Writing Area (Using standard editor style) -->
@@ -609,6 +616,15 @@ function renderExtraPracticePanel(typeId) {
     if (writingArea) {
         writingArea.addEventListener('input', updateExtraWordCount);
     }
+}
+
+function toggleExtraHints() {
+    const content = document.getElementById('extraHintsContent');
+    const chevron = document.getElementById('extraHintsChevron');
+    if (!content || !chevron) return;
+    content.classList.toggle('hidden');
+    chevron.classList.toggle('fa-chevron-up');
+    chevron.classList.toggle('fa-chevron-down');
 }
 
 function updateExtraWordCount() {
