@@ -24,7 +24,7 @@ const letterTypes = [
     {
         "id": "description",
         "icon": "fa-circle-info",
-        "titleEn": "Letter of Giving Information",
+        "titleEn": "Letter of Description",
         "titleVi": "Thư Cung Cấp Thông Tin",
         "basicInfo": "\n            <div class=\"content-block\">\n                <h3>Mục đích (Purpose)</h3>\n                <p>Cung cấp thông tin chi tiết hoặc mô tả về một người, một sự kiện, địa điểm, hoặc một trải nghiệm cụ thể theo yêu cầu của người nhận.</p>\n            </div>\n            <div class=\"content-block\">\n                <h3>Phong cách thư (Style)</h3>\n                <p>Có thể là thư thân mật, bán trang trọng hoặc trang trọng tùy ngữ cảnh đề bài.</p>\n            </div>\n            <div class=\"content-block\">\n                <h3>Văn phong (Tone)</h3>\n                <p>Rõ ràng, chi tiết, khách quan và hữu ích.</p>\n            </div>\n        ",
         "identifyingSigns": "\n            <div class=\"content-block\">\n                <h3>Các từ khóa thường xuất hiện trong đề bài:</h3>\n                <ul>\n                    <li>tell me about / give me information about...</li>\n                    <li>describe your... / describe someone...</li>\n                    <li>could you provide some details on...</li>\n                    <li>let me know what... is like</li>\n                </ul>\n            </div>\n        ",
@@ -674,7 +674,7 @@ Chúc cậu mọi điều tốt lành,`
     },
 
     description: {
-        title: "DẠNG 03: LETTER OF GIVING INFORMATION (THƯ CUNG CẤP THÔNG TIN)",
+        title: "DẠNG 03: LETTER OF DESCRIPTION (THƯ CUNG CẤP THÔNG TIN)",
         prompt: `You have received a letter from your friend, Nam. Read part of his letter below:
 ... I'm planning to study English at Rainbow Language Center next month. Since you have just completed a course there, could you tell me more about it? I'd like to know about the address of the center, the tuition fee, the teachers, and the training program before I decide to enroll...
 Write a letter responding to Nam. In your letter, you should provide information about:
