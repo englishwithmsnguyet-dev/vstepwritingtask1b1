@@ -1226,6 +1226,7 @@ let currentStudentClass = '';
 
 let loginModalOverlay;
 let studentNameInput;
+let studentClassInput;
 let studentClassSelect;
 let studentPasswordInput;
 let btnLoginSubmit;
@@ -1800,6 +1801,7 @@ function initAuthSystem() {
 function openLoginModal() {
     if (!loginModalOverlay) return;
     if (studentNameInput) studentNameInput.value = currentStudentName || '';
+    if (studentClassInput) studentClassInput.value = currentStudentClass || '';
     if (studentClassSelect) studentClassSelect.value = currentStudentClass || '';
     if (studentPasswordInput) studentPasswordInput.value = '';
     if (loginErrorMsg) loginErrorMsg.classList.add('hidden');
@@ -1811,7 +1813,8 @@ function openLoginModal() {
 
 function handleLoginSubmit() {
     const nameVal = studentNameInput ? studentNameInput.value.trim() : '';
-    const classVal = studentClassSelect ? studentClassSelect.value.trim().toUpperCase().replace(/\s+/g, '') : '';
+    const classEl = studentClassInput || studentClassSelect;
+    const classVal = classEl ? classEl.value.trim().toUpperCase().replace(/\s+/g, '') : '';
     const passVal = studentPasswordInput ? studentPasswordInput.value.trim() : '';
 
     if (!nameVal || nameVal.length < 2) {
@@ -1828,7 +1831,7 @@ function handleLoginSubmit() {
 
     if (!classVal || classVal !== 'CB206') {
         showLoginError('Lớp học không đúng. Hệ thống chỉ tiếp nhận học viên thuộc lớp CB206!');
-        if (studentClassSelect) studentClassSelect.focus();
+        if (classEl) classEl.focus();
         return;
     }
 
@@ -1967,6 +1970,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Query Auth Elements
     loginModalOverlay = document.getElementById('loginModalOverlay');
     studentNameInput = document.getElementById('studentNameInput');
+    studentClassInput = document.getElementById('studentClassInput');
     studentClassSelect = document.getElementById('studentClassSelect');
     studentPasswordInput = document.getElementById('studentPasswordInput');
     btnLoginSubmit = document.getElementById('btnLoginSubmit');
@@ -2030,11 +2034,18 @@ document.addEventListener('DOMContentLoaded', () => {
             if (e.key === 'Enter') handleLoginSubmit();
         });
     }
-    if (btnResendReport) {
-        btnResendReport.addEventListener('click', () => reportResultToGoogleForm());
+    if (studentClassInput) {
+        studentClassInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') handleLoginSubmit();
+        });
+    }
+    if (studentPasswordInput) {
+        studentPasswordInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') handleLoginSubmit();
+        });
     }
 
-    // Reset progress button listener
+// Reset progress button listener
     const btnResetProgress = document.getElementById('btnResetProgress');
     if (btnResetProgress) btnResetProgress.addEventListener('click', resetLearningProgress);
 
