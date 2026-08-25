@@ -79,7 +79,6 @@ const letterTypes = [
 ];
 
 
-
 // ==========================================================================
 // VSTEP TASK 1 EXTRA PRACTICE & ULTRA-DETAILED DIAGNOSTIC GRADING SYSTEM
 // ==========================================================================
@@ -1178,8 +1177,569 @@ function sendExtraPracticeReport(typeId, wordCount, bandScore, convertedScore, e
     }
 }
 
+// DOM Elements
+let letterNav;
+let mainTitle;
+let welcomeScreen;
+let letterContent;
+let themeToggle;
+let isDarkMode = false;
 
+// Auth & Student Information
+const ALLOWED_CLASSES = ['CB206'];
+const MANDATORY_PASSWORD = 'STUDYHARD';
 
+const AUTHORIZED_STUDENTS = [
+    'Nguyễn Thị Vân Anh',
+    'Nguyễn Thị Hồng Duyên',
+    'Nguyễn Thị Thúy Hồng',
+    'Trương Ngọc Nhi',
+    'Nguyễn Phạm Như Quỳnh',
+    'Trần Lê Quỳnh',
+    'Thị Mỹ Tâm',
+    'Ông Lê Thành',
+    'Trần Nguyễn Thanh Thảo',
+    'Phan Nhật Thiện',
+    'Nguyễn Mỹ Tiên',
+    'Trần Thị Cẩm Tiên',
+    'Võ Trần Bảo Tính',
+    'Trương Thanh Toàn',
+    'Phạm Ngọc Trâm',
+    'Nguyễn Võ Bảo Trân'
+];
+
+function normalizeVietnameseName(str) {
+    if (!str) return '';
+    return str.trim().toLowerCase().replace(/\s+/g, ' ');
+}
+
+function isAuthorizedStudent(name) {
+    const norm = normalizeVietnameseName(name);
+    return AUTHORIZED_STUDENTS.some(auth => normalizeVietnameseName(auth) === norm);
+}
+
+const GOOGLE_FORM_ACTION_URL = "https://docs.google.com/forms/d/e/1FAIpQLSes7cy3Z9Wxr_QQRuJcohfqFycoc0_i5JNEt05FFBBGod2f5A/formResponse";
+const GOOGLE_FORM_ENTRY_ID = "entry.388968236";
+
+let currentStudentName = '';
+let currentStudentClass = '';
+
+let loginModalOverlay;
+let studentNameInput;
+let studentClassSelect;
+let studentPasswordInput;
+let btnLoginSubmit;
+let loginErrorMsg;
+let loginErrorText;
+
+let studentProfileCard;
+let studentNameDisplay;
+let studentClassDisplay;
+let btnEditStudent;
+
+let questStudentGreeting;
+let greetingStudentName;
+let greetingStudentClass;
+
+let reportStatusBox;
+let reportStatusIcon;
+let reportStatusText;
+let btnResendReport;
+
+// Recitation DOM Elements
+let recitationInput;
+let btnPrevQuestion;
+let btnShowAnswer;
+let btnCheckAnswer;
+let btnNextQuestion;
+let currentQuestionNum;
+let totalQuestionsNum;
+let progressBarFill;
+let questionCueText;
+let recitationFeedback;
+let feedbackStatus;
+let userDiffResult;
+let correctTextResult;
+let questionHintBox;
+let questionHintText;
+
+// Evaluation DOM Elements
+let recitationQuizBox;
+let recitationResultBox;
+let scorePercentageVal;
+let resultStatusVal;
+let resultMessageVal;
+let btnRestartRecitation;
+let evaluationIcon;
+
+// Recitation State
+let activeLetterTypeId = 'advice';
+let currentQuestionIndex = 0;
+let activeQuestions = [];
+let questionScores = [];
+let questionHintsUsed = [];
+
+// Generate hint: obfuscates alternating words using asterisks, matching the B2 letters system
+function getHintText(target) {
+    if (!target) return '';
+    const words = target.trim().split(/\s+/);
+    const obfuscated = words.map((w, i) => {
+        if (i % 2 !== 0 && w.length > 2) {
+            return w[0] + '*'.repeat(w.length - 1);
+        }
+        return w;
+    });
+    return obfuscated.join(' ');
+}
+
+// Word-by-word diff algorithm using LCS
+function diffWords(userText, targetText) {
+    const preProcess = (t) => t
+        .replace(/…/g, '...')
+        .replace(/\.\s*\.\s*\./g, '...')
+        .replace(/[’‘]/g, "'")
+        .replace(/[“”]/g, '"')
+        .replace(/\s*[-‐‑–—−]+\s*/g, ' - ');
+        
+    const clean = (w) => w.toLowerCase().trim();
+    
+    const uWords = preProcess(userText).trim().split(/\s+/).filter(w => w !== "");
+    const tWords = preProcess(targetText).trim().split(/\s+/).filter(w => w !== "");
+    
+    const n = uWords.length;
+    const m = tWords.length;
+    const dp = Array(n + 1).fill(null).map(() => Array(m + 1).fill(0));
+    
+    for (let i = 1; i <= n; i++) {
+        for (let j = 1; j <= m; j++) {
+            if (clean(uWords[i - 1]) === clean(tWords[j - 1])) {
+                dp[i][j] = dp[i - 1][j - 1] + 1;
+            } else {
+                dp[i][j] = Math.max(dp[i - 1][j], dp[i][j - 1]);
+            }
+        }
+    }
+    
+    let i = n, j = m;
+    const diff = [];
+    
+    while (i > 0 || j > 0) {
+        if (i > 0 && j > 0 && clean(uWords[i - 1]) === clean(tWords[j - 1])) {
+            diff.unshift({ word: uWords[i - 1], type: 'match' });
+            i--;
+            j--;
+        } else if (j > 0 && (i === 0 || dp[i][j - 1] >= dp[i - 1][j])) {
+            diff.unshift({ word: tWords[j - 1], type: 'missing' });
+            j--;
+        } else {
+            diff.unshift({ word: uWords[i - 1], type: 'extra' });
+            i--;
+        }
+    }
+    
+    let matchCount = diff.filter(d => d.type === 'match').length;
+    let maxWords = Math.max(tWords.length, uWords.length);
+    let accuracy = maxWords > 0 ? Math.round((matchCount / maxWords) * 100) : 0;
+    
+    return {
+        diff,
+        accuracy,
+        isPerfect: matchCount === tWords.length && uWords.length === tWords.length
+    };
+}
+
+// Global Learning Progress Management
+function getCompletedLetters() {
+    try {
+        const saved = localStorage.getItem('vstep_completed_letters');
+        return saved ? JSON.parse(saved) : [];
+    } catch (e) {
+        return [];
+    }
+}
+
+function markLetterCompleted(letterId) {
+    let completed = getCompletedLetters();
+    if (!completed.includes(letterId)) {
+        completed.push(letterId);
+        try {
+            localStorage.setItem('vstep_completed_letters', JSON.stringify(completed));
+        } catch (e) {
+            console.error('Error saving completed letters', e);
+        }
+    }
+    updateGlobalProgress();
+    renderNav();
+}
+
+function resetLearningProgress() {
+    if (confirm('Bạn có chắc chắn muốn làm mới toàn bộ tiến độ học tập không?')) {
+        try {
+            localStorage.removeItem('vstep_completed_letters');
+        } catch (e) {
+            console.error('Error clearing progress', e);
+        }
+        updateGlobalProgress();
+        renderNav();
+    }
+}
+
+function updateGlobalProgress() {
+    const completed = getCompletedLetters();
+    const total = letterTypes.length;
+    const count = completed.length;
+    const percentage = total > 0 ? Math.round((count / total) * 100) : 0;
+
+    // Sidebar Progress
+    const sidebarText = document.getElementById('sidebarProgressText');
+    const sidebarFill = document.getElementById('sidebarProgressFill');
+    if (sidebarText) sidebarText.textContent = `${count}/${total} ĐẠT`;
+    if (sidebarFill) sidebarFill.style.width = `${percentage}%`;
+
+    // Dashboard Card Progress
+    const dashPercent = document.getElementById('dashboardProgressPercent');
+    const dashFill = document.getElementById('dashboardProgressFill');
+    const dashStatus = document.getElementById('dashboardProgressStatus');
+    
+    if (dashPercent) dashPercent.textContent = `${percentage}%`;
+    if (dashFill) dashFill.style.width = `${percentage}%`;
+    if (dashStatus) {
+        if (count === 0) {
+            dashStatus.textContent = 'Chưa hoàn thành dạng thư nào. Hãy bắt đầu học tập!';
+        } else if (count < total) {
+            dashStatus.textContent = `Đã hoàn thành ${count}/${total} dạng thư. Tiếp tục phát huy!`;
+        } else {
+            dashStatus.textContent = '🎉 Xuất sắc! Bạn đã chinh phục toàn bộ 7 dạng thư VSTEP Task 01!';
+        }
+    }
+}
+
+// Reset recitation UI
+function resetRecitationUI() {
+    currentQuestionIndex = 0;
+    activeQuestions = recitationQuestions[activeLetterTypeId] || [];
+    questionScores = new Array(activeQuestions.length).fill(0);
+    questionHintsUsed = new Array(activeQuestions.length).fill(false);
+
+    if (totalQuestionsNum) totalQuestionsNum.textContent = activeQuestions.length;
+
+    // Reset UI Visibility
+    if (recitationQuizBox) recitationQuizBox.classList.remove('hidden');
+    if (recitationFeedback) recitationFeedback.classList.add('hidden');
+    if (recitationResultBox) recitationResultBox.classList.add('hidden');
+    if (reportStatusBox) reportStatusBox.classList.add('hidden');
+    
+    // Restore header and progress bar
+    const recitationHeader = document.querySelector('.recitation-header');
+    if (recitationHeader) recitationHeader.classList.remove('hidden');
+    
+    const progressWrapper = document.querySelector('.recitation-progress-wrapper');
+    if (progressWrapper) progressWrapper.style.display = 'flex';
+
+    showRecitationQuestion();
+}
+
+// Display active recitation question
+function showRecitationQuestion() {
+    if (activeQuestions.length === 0) return;
+
+    const q = activeQuestions[currentQuestionIndex];
+    if (currentQuestionNum) currentQuestionNum.textContent = currentQuestionIndex + 1;
+    
+    // Update progress bar
+    const progressPct = ((currentQuestionIndex + 1) / activeQuestions.length) * 100;
+    if (progressBarFill) progressBarFill.style.width = `${progressPct}%`;
+
+    if (questionCueText) questionCueText.textContent = q.cue;
+    if (recitationInput) {
+        recitationInput.value = '';
+        recitationInput.disabled = false;
+        recitationInput.focus();
+    }
+
+    // Reset feedback and hint box
+    if (recitationFeedback) recitationFeedback.classList.add('hidden');
+    if (questionHintBox) questionHintBox.classList.add('hidden');
+    if (questionHintText) questionHintText.textContent = '';
+
+    // If hint was already used on this question, restore it
+    if (questionHintsUsed[currentQuestionIndex]) {
+        if (questionHintText) questionHintText.textContent = getHintText(q.target);
+        if (questionHintBox) questionHintBox.classList.remove('hidden');
+    }
+
+    // Button states
+    if (btnPrevQuestion) btnPrevQuestion.disabled = (currentQuestionIndex === 0);
+    if (btnShowAnswer) btnShowAnswer.classList.remove('hidden');
+    if (btnCheckAnswer) btnCheckAnswer.classList.remove('hidden');
+    if (btnNextQuestion) btnNextQuestion.classList.add('hidden');
+}
+
+// Check user recitation answer
+function checkRecitationAnswer() {
+    if (activeQuestions.length === 0) return;
+    const q = activeQuestions[currentQuestionIndex];
+    const userAns = recitationInput ? recitationInput.value.trim() : '';
+
+    if (!userAns) {
+        alert('Vui lòng nhập câu trả lời của bạn trước khi kiểm tra!');
+        return;
+    }
+
+    const diffResult = diffWords(userAns, q.target);
+    const hintUsed = questionHintsUsed[currentQuestionIndex] || false;
+    
+    // Apply 50% penalty if hint was used
+    let finalScore = diffResult.accuracy;
+    if (hintUsed) {
+        finalScore = Math.round(diffResult.accuracy * 0.5);
+    }
+    questionScores[currentQuestionIndex] = finalScore;
+
+    // Build diff HTML for User Diff Result
+    if (userDiffResult) {
+        userDiffResult.innerHTML = '';
+        diffResult.diff.forEach(d => {
+            if (d.type === 'match') {
+                const span = document.createElement('span');
+                span.className = 'diff-word-match';
+                span.textContent = d.word + ' ';
+                userDiffResult.appendChild(span);
+            } else if (d.type === 'extra') {
+                const span = document.createElement('span');
+                span.className = 'diff-word-extra';
+                span.textContent = d.word + ' ';
+                userDiffResult.appendChild(span);
+            }
+        });
+        if (userDiffResult.innerHTML === '') {
+            userDiffResult.innerHTML = '<span style="color:var(--text-muted);font-style:italic;">(Bỏ trống)</span>';
+        }
+    }
+
+    // Build diff HTML for Correct Text Result
+    if (correctTextResult) {
+        correctTextResult.innerHTML = '';
+        diffResult.diff.forEach(d => {
+            if (d.type === 'match') {
+                const span = document.createElement('span');
+                span.className = 'diff-word-match';
+                span.textContent = d.word + ' ';
+                correctTextResult.appendChild(span);
+            } else if (d.type === 'missing') {
+                const span = document.createElement('span');
+                span.className = 'diff-word-mismatch';
+                span.textContent = d.word + ' ';
+                correctTextResult.appendChild(span);
+            }
+        });
+    }
+
+    // Show Feedback Status
+    if (feedbackStatus) {
+        if (diffResult.isPerfect) {
+            feedbackStatus.className = 'feedback-status status-success';
+            if (hintUsed) {
+                feedbackStatus.innerHTML = `<i class="fa-solid fa-circle-check"></i> <strong>Chính xác tuyệt đối!</strong> (Độ khớp: 100% - Điểm tính: 50% do dùng gợi ý)`;
+            } else {
+                feedbackStatus.innerHTML = `<i class="fa-solid fa-circle-check"></i> <strong>Chính xác tuyệt đối!</strong> (Độ chính xác: 100%)`;
+            }
+        } else {
+            feedbackStatus.className = 'feedback-status status-error';
+            if (hintUsed) {
+                feedbackStatus.innerHTML = `<i class="fa-solid fa-triangle-exclamation"></i> <strong>Chưa chính xác!</strong> (Độ khớp: ${diffResult.accuracy}% - Điểm tính: ${finalScore}% do dùng gợi ý). Xem chi tiết bên dưới.`;
+            } else {
+                feedbackStatus.innerHTML = `<i class="fa-solid fa-triangle-exclamation"></i> <strong>Chưa chính xác! Độ chính xác: ${diffResult.accuracy}%. Xem so sánh bên dưới.</strong>`;
+            }
+        }
+    }
+
+    if (recitationFeedback) recitationFeedback.classList.remove('hidden');
+    if (btnCheckAnswer) btnCheckAnswer.classList.add('hidden');
+    if (btnNextQuestion) btnNextQuestion.classList.remove('hidden');
+    if (recitationInput) recitationInput.disabled = true;
+}
+
+// Show hint inline
+function showRecitationAnswer() {
+    if (activeQuestions.length === 0) return;
+    const q = activeQuestions[currentQuestionIndex];
+    
+    // Mark as hint used for this question
+    questionHintsUsed[currentQuestionIndex] = true;
+    
+    // Generate masked hint text
+    const hintText = getHintText(q.target);
+    
+    if (questionHintText) {
+        questionHintText.textContent = hintText;
+    }
+    if (questionHintBox) {
+        questionHintBox.classList.remove('hidden');
+    }
+}
+
+// Next recitation question
+function nextRecitationQuestion() {
+    if (currentQuestionIndex < activeQuestions.length - 1) {
+        currentQuestionIndex++;
+        showRecitationQuestion();
+    } else {
+        showEvaluationResult();
+    }
+}
+
+// Show evaluation result screen
+function showEvaluationResult() {
+    // Hide quiz box and feedback panel
+    if (recitationQuizBox) recitationQuizBox.classList.add('hidden');
+    if (recitationFeedback) recitationFeedback.classList.add('hidden');
+    
+    // Hide header and progress bar wrapper during evaluation results
+    const recitationHeader = document.querySelector('.recitation-header');
+    if (recitationHeader) recitationHeader.classList.add('hidden');
+    
+    const progressWrapper = document.querySelector('.recitation-progress-wrapper');
+    if (progressWrapper) progressWrapper.style.display = 'none';
+    
+    // Calculate average score
+    const totalQuestions = activeQuestions.length;
+    const totalScore = questionScores.reduce((sum, s) => sum + s, 0);
+    const averageScore = totalQuestions > 0 ? Math.round(totalScore / totalQuestions) : 0;
+    
+    // Update score text
+    if (scorePercentageVal) scorePercentageVal.textContent = averageScore;
+    
+    // Get active letter type data for dynamic title
+    const typeData = letterTypes.find(t => t.id === activeLetterTypeId);
+    const letterTitleEn = typeData ? typeData.titleEn : 'Letter of Advice';
+    
+    const evalCard = document.querySelector('.evaluation-card');
+    let statusText = 'KHÔNG ĐẠT';
+    
+    if (averageScore >= 90) {
+        // Passed state
+        statusText = 'ĐẠT';
+        if (resultStatusVal) {
+            resultStatusVal.textContent = 'ĐẠT';
+        }
+        if (resultMessageVal) {
+            const questNames = {
+                advice: 'NHIỆM VỤ HỆ THỐNG ĐẦU TIÊN',
+                request: 'NHIỆM VỤ HỆ THỐNG THỨ HAI',
+                description: 'NHIỆM VỤ HỆ THỐNG THỨ BA',
+                complaint: 'NHIỆM VỤ HỆ THỐNG THỨ TƯ',
+                feedback: 'NHIỆM VỤ HỆ THỐNG THỨ NĂM',
+                apology: 'NHIỆM VỤ HỆ THỐNG THỨ SÁU',
+                application: 'NHIỆM VỤ HỆ THỐNG THỨ BẢY'
+            };
+            const questName = questNames[activeLetterTypeId] || 'NHIỆM VỤ HỆ THỐNG';
+            resultMessageVal.textContent = `Chúc mừng bạn đã chinh phục được ${letterTitleEn}. ${questName} đã được hoàn thành, hãy tiếp tục với nhiệm vụ tiếp theo.`;
+        }
+        if (evaluationIcon) {
+            evaluationIcon.innerHTML = '<i class="fa-solid fa-circle-check"></i>';
+        }
+        if (evalCard) {
+            evalCard.classList.remove('failed');
+            evalCard.classList.add('passed');
+        }
+        markLetterCompleted(activeLetterTypeId);
+    } else {
+        // Failed state
+        statusText = 'KHÔNG ĐẠT';
+        if (resultStatusVal) {
+            resultStatusVal.textContent = 'KHÔNG ĐẠT';
+        }
+        if (resultMessageVal) {
+            resultMessageVal.textContent = 'Xin vui lòng ôn lại bài thật kỹ và trả bài lại một lần nữa.';
+        }
+        if (evaluationIcon) {
+            evaluationIcon.innerHTML = '<i class="fa-solid fa-triangle-exclamation"></i>';
+        }
+        if (evalCard) {
+            evalCard.classList.remove('passed');
+            evalCard.classList.add('failed');
+        }
+    }
+    
+    // Show result box
+    if (recitationResultBox) recitationResultBox.classList.remove('hidden');
+
+    // Automatically report result to Google Form
+    reportResultToGoogleForm();
+}
+
+// Prev recitation question
+function prevRecitationQuestion() {
+    if (currentQuestionIndex > 0) {
+        currentQuestionIndex--;
+        showRecitationQuestion();
+    }
+}
+
+// Show Welcome Screen
+function showWelcomeScreen() {
+    activeLetterTypeId = null;
+    
+    // Update active nav
+    document.querySelectorAll('.nav-item').forEach(item => {
+        item.classList.remove('active');
+    });
+    const homeItem = document.querySelector('.home-nav-item');
+    if (homeItem) homeItem.classList.add('active');
+
+    // Show welcome, hide content
+    if (welcomeScreen) welcomeScreen.style.display = 'flex';
+    if (letterContent) letterContent.classList.add('hidden');
+
+    // Reset Title
+    if (mainTitle) {
+        mainTitle.innerHTML = `
+            <div class="main-title-en placeholder-blink">Chọn một dạng thư để bắt đầu NHIỆM VỤ HỆ THỐNG của bạn!</div>
+        `;
+    }
+}
+
+// Render Navigation
+function renderNav() {
+    if (!letterNav) return;
+    letterNav.innerHTML = ''; // Clear existing
+    
+    // Add Home button first
+    const homeItem = document.createElement('div');
+    homeItem.className = 'nav-item home-nav-item active';
+    homeItem.innerHTML = `
+        <i class="fa-solid fa-house"></i>
+        <div class="nav-text">
+            <div class="nav-title-en" style="font-weight: bold;">TRANG CHỦ</div>
+            <div class="nav-title-vi">Màn hình khởi đầu</div>
+        </div>
+    `;
+    homeItem.addEventListener('click', showWelcomeScreen);
+    letterNav.appendChild(homeItem);
+
+    const completed = getCompletedLetters();
+
+    letterTypes.forEach(type => {
+        const isCompleted = completed.includes(type.id);
+        const navItem = document.createElement('div');
+        navItem.className = 'nav-item';
+        navItem.dataset.id = type.id;
+        navItem.innerHTML = `
+            <i class="fa-solid ${type.icon}"></i>
+            <div class="nav-text">
+                <div class="nav-title-en">${type.titleEn}</div>
+                <div class="nav-title-vi">${type.titleVi}</div>
+            </div>
+            ${isCompleted ? '<span class="nav-completed-badge" title="Đã chinh phục"><i class="fa-solid fa-circle-check"></i></span>' : ''}
+        `;
+        
+        navItem.addEventListener('click', () => selectLetterType(type.id));
+        letterNav.appendChild(navItem);
+    });
+}
+
+// Select a Letter Type
 function selectLetterType(id) {
     activeLetterTypeId = id;
     
@@ -1239,8 +1799,8 @@ function initAuthSystem() {
 
 function openLoginModal() {
     if (!loginModalOverlay) return;
-    if (studentNameInput) studentNameInput.value = '';
-    if (studentClassInput) studentClassInput.value = '';
+    if (studentNameInput) studentNameInput.value = currentStudentName || '';
+    if (studentClassSelect) studentClassSelect.value = currentStudentClass || '';
     if (studentPasswordInput) studentPasswordInput.value = '';
     if (loginErrorMsg) loginErrorMsg.classList.add('hidden');
     loginModalOverlay.classList.remove('hidden');
@@ -1251,50 +1811,42 @@ function openLoginModal() {
 
 function handleLoginSubmit() {
     const nameVal = studentNameInput ? studentNameInput.value.trim() : '';
-    const rawClassVal = studentClassInput ? studentClassInput.value.trim().toUpperCase().replace(/\s+/g, '') : '';
-    const passwordVal = studentPasswordInput ? studentPasswordInput.value.trim().toUpperCase() : '';
+    const classVal = studentClassSelect ? studentClassSelect.value.trim().toUpperCase().replace(/\s+/g, '') : '';
+    const passVal = studentPasswordInput ? studentPasswordInput.value.trim() : '';
 
     if (!nameVal || nameVal.length < 2) {
-        showLoginError('Vui lòng điền đầy đủ Họ và tên.');
+        showLoginError('Vui lòng nhập đầy đủ Họ và tên học viên.');
         if (studentNameInput) studentNameInput.focus();
         return;
     }
 
-    const normalizedInputName = normalizeVietnameseString(nameVal);
-    const matchedStudent = ALLOWED_STUDENT_NAMES.find(allowed => 
-        normalizeVietnameseString(allowed) === normalizedInputName
-    );
-
-    if (!matchedStudent) {
-        showLoginError('Họ và tên không thuộc danh sách học viên của lớp!');
+    if (!isAuthorizedStudent(nameVal)) {
+        showLoginError('Họ và tên không nằm trong danh sách học viên được cấp quyền truy cập!');
         if (studentNameInput) studentNameInput.focus();
         return;
     }
 
-    if (!rawClassVal || !ALLOWED_CLASSES.includes(rawClassVal)) {
-        showLoginError('Lớp học không đúng. Vui lòng kiểm tra lại tên lớp!');
-        if (studentClassInput) studentClassInput.focus();
+    if (!classVal || classVal !== 'CB206') {
+        showLoginError('Lớp học không đúng. Hệ thống chỉ tiếp nhận học viên thuộc lớp CB206!');
+        if (studentClassSelect) studentClassSelect.focus();
         return;
     }
 
-    if (passwordVal !== REQUIRED_PASSWORD) {
-        showLoginError('Mật khẩu không chính xác!');
-        if (studentPasswordInput) studentPasswordInput.focus();
+    if (passVal !== MANDATORY_PASSWORD) {
+        showLoginError('Mật khẩu không chính xác! Vui lòng nhập đúng mật khẩu STUDYHARD.');
+        if (studentPasswordInput) {
+            studentPasswordInput.value = '';
+            studentPasswordInput.focus();
+        }
         return;
     }
 
-    currentStudentName = matchedStudent;
-    currentStudentClass = rawClassVal;
-
-    localStorage.setItem('vstep_student_name', currentStudentName);
-    localStorage.setItem('vstep_student_class', currentStudentClass);
-    localStorage.setItem('vstep_student_login_time', new Date().toISOString());
+    // Match exact name from whitelist
+    const matched = AUTHORIZED_STUDENTS.find(auth => normalizeVietnameseName(auth) === normalizeVietnameseName(nameVal));
+    currentStudentName = matched || nameVal;
+    currentStudentClass = 'CB206';
 
     updateStudentProfileUI(currentStudentName, currentStudentClass);
-
-    // Gửi báo cáo đăng nhập ngay lập tức về Google Form
-    const loginPayload = `[HỌC VIÊN ĐĂNG NHẬP]: ${currentStudentName} | [LỚP]: ${currentStudentClass} | [THỜI GIAN]: ${new Date().toLocaleString('vi-VN')}`;
-    reportResultToGoogleForm(loginPayload);
 
     if (loginErrorMsg) loginErrorMsg.classList.add('hidden');
     if (loginModalOverlay) loginModalOverlay.classList.add('hidden');
@@ -1326,7 +1878,7 @@ function reportResultToGoogleForm(customPayload) {
         const status = resultStatusVal ? resultStatusVal.textContent : '';
         const now = new Date().toLocaleString('vi-VN');
 
-        payload = `[KẾT QUẢ TRẢ BÀI]: ${name} | [LỚP]: ${cls} | [DẠNG BÀI]: ${letterTitle} | [ĐIỂM]: ${score}% (${status}) | [THỜI GIAN]: ${now}`;
+        payload = `[HỌC VIÊN]: ${name} | [LỚP]: ${cls} | [DẠNG BÀI]: ${letterTitle} | [ĐIỂM]: ${score}% (${status}) | [THỜI GIAN]: ${now}`;
     }
 
     console.log("Submitting result report to Google Form:", payload);
@@ -1339,64 +1891,10 @@ function reportResultToGoogleForm(customPayload) {
         reportStatusText.textContent = 'Đang gửi kết quả lên hệ thống của giáo viên...';
     }
 
-    // Method 1: Submit via Hidden Form & Iframe (Most reliable across all browsers)
-    try {
-        let form = document.getElementById('gform_hidden_form');
-        let input = document.getElementById('gform_hidden_input');
-
-        if (!form) {
-            let iframe = document.getElementById('gform_hidden_iframe');
-            if (!iframe) {
-                iframe = document.createElement('iframe');
-                iframe.id = 'gform_hidden_iframe';
-                iframe.name = 'gform_hidden_iframe';
-                iframe.style.display = 'none';
-                document.body.appendChild(iframe);
-            }
-
-            form = document.createElement('form');
-            form.id = 'gform_hidden_form';
-            form.action = GOOGLE_FORM_ACTION_URL;
-            form.method = 'POST';
-            form.target = 'gform_hidden_iframe';
-            form.style.display = 'none';
-
-            input = document.createElement('input');
-            input.type = 'hidden';
-            input.name = GOOGLE_FORM_ENTRY_ID;
-            input.id = 'gform_hidden_input';
-            form.appendChild(input);
-
-            const fvvInput = document.createElement('input');
-            fvvInput.type = 'hidden';
-            fvvInput.name = 'fvv';
-            fvvInput.value = '1';
-            form.appendChild(fvvInput);
-
-            const pageHistInput = document.createElement('input');
-            pageHistInput.type = 'hidden';
-            pageHistInput.name = 'pageHistory';
-            pageHistInput.value = '0';
-            form.appendChild(pageHistInput);
-
-            document.body.appendChild(form);
-        }
-
-        if (input && form) {
-            input.value = payload;
-            form.submit();
-            console.log("Submitted via hidden form successfully.");
-        }
-    } catch (e) {
-        console.log('Iframe submit error:', e);
-    }
-
-    // Method 2: Fetch POST (no-cors)
+    // Method 1: Fetch POST (no-cors)
     try {
         const formData = new URLSearchParams();
         formData.append(GOOGLE_FORM_ENTRY_ID, payload);
-        formData.append('fvv', '1');
-        formData.append('pageHistory', '0');
 
         fetch(GOOGLE_FORM_ACTION_URL, {
             method: 'POST',
@@ -1410,17 +1908,41 @@ function reportResultToGoogleForm(customPayload) {
         console.log('Fetch exception:', e);
     }
 
-    // Method 3: Navigator sendBeacon fallback
+    // Method 2: Hidden iframe fallback
     try {
-        if (navigator.sendBeacon) {
-            const beaconData = new FormData();
-            beaconData.append(GOOGLE_FORM_ENTRY_ID, payload);
-            beaconData.append('fvv', '1');
-            beaconData.append('pageHistory', '0');
-            navigator.sendBeacon(GOOGLE_FORM_ACTION_URL, beaconData);
+        let iframe = document.getElementById('gform_hidden_iframe');
+        if (!iframe) {
+            iframe = document.createElement('iframe');
+            iframe.id = 'gform_hidden_iframe';
+            iframe.name = 'gform_hidden_iframe';
+            iframe.style.display = 'none';
+            document.body.appendChild(iframe);
+        }
+
+        let form = document.getElementById('gform_hidden_form');
+        if (!form) {
+            form = document.createElement('form');
+            form.id = 'gform_hidden_form';
+            form.action = GOOGLE_FORM_ACTION_URL;
+            form.method = 'POST';
+            form.target = 'gform_hidden_iframe';
+            form.style.display = 'none';
+
+            const input = document.createElement('input');
+            input.type = 'hidden';
+            input.name = GOOGLE_FORM_ENTRY_ID;
+            input.id = 'gform_hidden_input';
+            form.appendChild(input);
+            document.body.appendChild(form);
+        }
+
+        const input = document.getElementById('gform_hidden_input');
+        if (input) {
+            input.value = payload;
+            form.submit();
         }
     } catch (e) {
-        console.log('Beacon exception:', e);
+        console.log('Iframe submit error:', e);
     }
 
     setTimeout(() => {
@@ -1445,7 +1967,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Query Auth Elements
     loginModalOverlay = document.getElementById('loginModalOverlay');
     studentNameInput = document.getElementById('studentNameInput');
-    studentClassInput = document.getElementById('studentClassInput');
+    studentClassSelect = document.getElementById('studentClassSelect');
     studentPasswordInput = document.getElementById('studentPasswordInput');
     btnLoginSubmit = document.getElementById('btnLoginSubmit');
     loginErrorMsg = document.getElementById('loginErrorMsg');
@@ -1505,16 +2027,6 @@ document.addEventListener('DOMContentLoaded', () => {
     if (btnEditStudent) btnEditStudent.addEventListener('click', openLoginModal);
     if (studentNameInput) {
         studentNameInput.addEventListener('keydown', (e) => {
-            if (e.key === 'Enter') handleLoginSubmit();
-        });
-    }
-    if (studentClassInput) {
-        studentClassInput.addEventListener('keydown', (e) => {
-            if (e.key === 'Enter') handleLoginSubmit();
-        });
-    }
-    if (studentPasswordInput) {
-        studentPasswordInput.addEventListener('keydown', (e) => {
             if (e.key === 'Enter') handleLoginSubmit();
         });
     }
