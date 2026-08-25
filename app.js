@@ -954,14 +954,15 @@ Trân trọng,`
 
     feedback: {
         title: "DẠNG 05: LETTER OF FEEDBACK (THƯ PHẢN HỒI / ĐÓNG GÓP Ý KIẾN)",
-        prompt: `You recently stayed at a hotel and received an email from the hotel manager asking for feedback about your stay. Write an email to give your opinion. In your email, you should:
-• Say whether you were satisfied or dissatisfied with the service
-• Describe your experience
-• Suggest ways the hotel can improve its service
+        prompt: `You recently had dinner at a new restaurant. A few days later, the restaurant manager sent you an email asking for your feedback.
+Write an email to give your opinion. In your email, you should:
+• say whether you were satisfied or dissatisfied with the restaurant
+• describe your experience
+• suggest ways the restaurant can improve its service
 You should write at least 120 words. Do not include your name or address.`,
         analysis: {
-            recipient: "Quản lý khách sạn (The Hotel Manager)",
-            purpose: "Đóng góp ý kiến phản hồi về trải nghiệm lưu trú tại khách sạn",
+            recipient: "Quản lý nhà hàng (The Restaurant Manager)",
+            purpose: "Đóng góp ý kiến phản hồi về trải nghiệm ăn uống tại nhà hàng",
             style: "Trang trọng / Lịch sự (Formal / Semi-formal Email)",
             requirements: "Nêu mức độ hài lòng, Mô tả trải nghiệm, Đề xuất cải thiện dịch vụ"
         },
@@ -974,66 +975,57 @@ You should write at least 120 words. Do not include your name or address.`,
                 borderCol: "#bbf7d0",
                 categories: [
                     {
-                        name: "The staff (Nhân viên)",
+                        name: "The food & dishes (Món ăn & Hương vị)",
                         reasons: [
-                            { en: "They were always friendly and helped me whenever I had a problem.", vi: "Họ luôn thân thiện và giúp đỡ tôi bất cứ khi nào tôi gặp vấn đề." },
-                            { en: "They answered my questions politely and gave me useful information.", vi: "Họ trả lời các câu hỏi của tôi một cách lịch sự và cung cấp thông tin hữu ích." },
-                            { en: "They were kind and made me feel welcome during my stay.", vi: "Họ rất tốt bụng và khiến tôi cảm thấy được chào đón trong suốt kỳ nghỉ." },
-                            { en: "They always smiled and provided good customer service.", vi: "Họ luôn tươi cười và mang lại dịch vụ khách hàng chu đáo." }
+                            { en: "The food was fresh, delicious, and seasoned to perfection.", vi: "Thức ăn rất tươi ngon, đậm đà và được nêm nếm hoàn hảo." },
+                            { en: "The dishes were beautifully presented and served hot.", vi: "Các món ăn được trình bày đẹp mắt và phục vụ khi còn nóng sốt." },
+                            { en: "There were many unique specialty dishes with authentic local flavors.", vi: "Có nhiều món ăn đặc sản độc đáo mang đậm hương vị truyền thống." },
+                            { en: "The portion sizes were generous and well worth the price.", vi: "Khẩu phần ăn đầy đặn và rất xứng đáng với giá tiền." }
                         ]
                     },
                     {
-                        name: "The room (Căn phòng)",
+                        name: "The staff & service (Nhân viên & Phục vụ)",
                         reasons: [
-                            { en: "It was clean, tidy, and comfortable throughout my stay.", vi: "Phòng sạch sẽ, gọn gàng và thoải mái trong suốt kỳ nghỉ của tôi." },
-                            { en: "It was cleaned every day, so everything looked fresh.", vi: "Phòng được dọn dẹp mỗi ngày nên mọi thứ trông rất sạch sẽ và mới mẻ." },
-                            { en: "The bed was comfortable, so I could sleep very well.", vi: "Giường ngủ rất êm ái nên tôi có thể ngủ rất ngon giấc." },
-                            { en: "It had enough space for me to relax after a long day.", vi: "Căn phòng có đủ không gian rộng rãi để tôi thư giãn sau một ngày dài." }
+                            { en: "The waiters were very polite, attentive, and helpful throughout the dinner.", vi: "Các nhân viên phục vụ rất lịch sự, chu đáo và nhiệt tình suốt bữa tối." },
+                            { en: "They welcomed us warmly with bright smiles right when we arrived.", vi: "Họ chào đón chúng tôi nồng nhiệt với nụ cười tươi ngay khi chúng tôi đến." },
+                            { en: "They gave great food recommendations and took our orders quickly.", vi: "Họ nhiệt tình gợi ý các món ăn ngon và nhận gọi món rất nhanh." },
+                            { en: "They responded to all our requests promptly with a professional attitude.", vi: "Họ đáp ứng mọi yêu cầu của chúng tôi nhanh chóng với thái độ chuyên nghiệp." }
                         ]
                     },
                     {
-                        name: "The facilities (Cơ sở vật chất)",
+                        name: "The atmosphere & decor (Không gian & Trang trí)",
                         reasons: [
-                            { en: "Everything worked well and was easy to use.", vi: "Mọi thiết bị đều hoạt động tốt và rất dễ sử dụng." },
-                            { en: "The facilities were clean and made my stay more comfortable.", vi: "Cơ sở vật chất sạch sẽ giúp kỳ nghỉ của tôi thoải mái hơn." },
-                            { en: "They were in good condition and met my daily needs.", vi: "Thiết bị trong tình trạng tốt và đáp ứng đầy đủ nhu cầu sinh hoạt hàng ngày." },
-                            { en: "I could use all the facilities without any problems.", vi: "Tôi có thể sử dụng tất cả tiện nghi mà không gặp bất kỳ trở ngại nào." }
+                            { en: "The restaurant had a cozy, elegant, and modern atmosphere.", vi: "Nhà hàng có không gian ấm cúng, thanh lịch và hiện đại." },
+                            { en: "The lighting was warm and the background music was pleasant and relaxing.", vi: "Ánh sáng ấm áp và nhạc nền du dương, mang lại cảm giác thư thái." },
+                            { en: "The dining area was clean, spacious, and beautifully decorated.", vi: "Khu vực ăn uống sạch sẽ, rộng rãi và được bài trí đẹp mắt." },
+                            { en: "It was an ideal setting for family dinners and friends' gatherings.", vi: "Đây là không gian lý tưởng cho các bữa tối gia đình và tụ họp bạn bè." }
                         ]
                     },
                     {
-                        name: "The breakfast (Bữa sáng)",
+                        name: "The menu (Thực đơn)",
                         reasons: [
-                            { en: "There were many delicious dishes to choose from every morning.", vi: "Có rất nhiều món ăn ngon để lựa chọn vào mỗi buổi sáng." },
-                            { en: "The food was fresh, tasty, and served on time.", vi: "Thức ăn tươi ngon, đậm đà và được phục vụ đúng giờ." },
-                            { en: "I enjoyed the breakfast because there were many different kinds of food.", vi: "Tôi rất thích bữa sáng vì có nhiều loại thức ăn đa dạng." },
-                            { en: "The meals were delicious and suitable for different guests.", vi: "Các bữa ăn ngon miệng và phù hợp với khẩu vị của nhiều đối tượng khách." }
+                            { en: "The menu offered a wide variety of delicious dishes and beverages.", vi: "Thực đơn mang đến nhiều món ăn thơm ngon và đồ uống phong phú." },
+                            { en: "There were clear descriptions and appealing pictures of each dish.", vi: "Có phần mô tả rõ ràng và hình ảnh minh họa hấp dẫn cho từng món." },
+                            { en: "The menu thoughtfully included vegetarian choices and healthy options.", vi: "Thực đơn có sẵn các món chay và lựa chọn thanh đạm tốt cho sức khỏe." },
+                            { en: "All the prices were reasonable and clearly listed on the menu.", vi: "Mức giá hợp lý và được niêm yết minh bạch trên thực đơn." }
                         ]
                     },
                     {
-                        name: "The Wi-Fi (Wi-Fi)",
+                        name: "The cleanliness & hygiene (Vệ sinh & An toàn thực phẩm)",
                         reasons: [
-                            { en: "It was fast and worked well during my whole stay.", vi: "Wi-Fi rất nhanh và hoạt động tốt trong suốt thời gian tôi lưu trú." },
-                            { en: "I could use the Internet easily without losing the connection.", vi: "Tôi có thể sử dụng Internet dễ dàng mà không hề bị mất kết nối." },
-                            { en: "The Wi-Fi was available in both my room and the hotel lobby.", vi: "Wi-Fi phủ sóng tốt ở cả trong phòng nghỉ lẫn sảnh khách sạn." },
-                            { en: "I had no difficulty using the Internet for work and entertainment.", vi: "Tôi không gặp bất kỳ khó khăn nào khi lướt mạng để làm việc và giải trí." }
+                            { en: "The dining tables, glassware, and cutlery were clean and spotless.", vi: "Bàn ăn, ly uống nước và dao muỗng nĩa đều sạch bóng và tươm tất." },
+                            { en: "The entire restaurant was kept neat, tidy, and hygienic.", vi: "Toàn bộ nhà hàng luôn được giữ gìn gọn gàng, sạch sẽ và đảm bảo vệ sinh." },
+                            { en: "The open kitchen area looked very clean and well-organized.", vi: "Khu vực bếp mở trông rất sạch sẽ và được sắp xếp ngăn nắp." },
+                            { en: "The restrooms were regularly cleaned and fully equipped with hand soap.", vi: "Nhà vệ sinh được dọn dẹp thường xuyên và có đầy đủ xà phòng rửa tay." }
                         ]
                     },
                     {
-                        name: "The location (Vị trí)",
+                        name: "The location & parking (Vị trí & Bãi đỗ xe)",
                         reasons: [
-                            { en: "It was close to many restaurants, shops, and famous places.", vi: "Khách sạn ở gần nhiều nhà hàng, cửa hàng và các địa điểm nổi tiếng." },
-                            { en: "It was easy to travel to different places from the hotel.", vi: "Rất dễ dàng di chuyển đến các địa điểm khác nhau từ khách sạn." },
-                            { en: "I could walk to many tourist attractions in a short time.", vi: "Tôi có thể đi bộ đến nhiều điểm du lịch chỉ trong thời gian ngắn." },
-                            { en: "The hotel was in a convenient area with many useful services nearby.", vi: "Khách sạn nằm ở khu vực thuận tiện với nhiều dịch vụ tiện ích xung quanh." }
-                        ]
-                    },
-                    {
-                        name: "The check-in process (Quá trình nhận phòng)",
-                        reasons: [
-                            { en: "It was quick and I did not have to wait very long.", vi: "Nhận phòng rất nhanh và tôi không phải chờ đợi lâu." },
-                            { en: "The staff completed the check-in process in just a few minutes.", vi: "Nhân viên hoàn tất thủ tục nhận phòng chỉ trong vài phút." },
-                            { en: "Everything was simple, so I received my room key quickly.", vi: "Mọi thủ tục đều đơn giản nên tôi nhận chìa khóa phòng rất nhanh." },
-                            { en: "The process was smooth and gave me a good first impression.", vi: "Quy trình diễn ra suôn sẻ và để lại cho tôi ấn tượng đầu tiên rất tốt." }
+                            { en: "The restaurant is conveniently located in the city center and easy to find.", vi: "Nhà hàng nằm ở vị trí thuận tiện tại trung tâm thành phố và rất dễ tìm." },
+                            { en: "There was a spacious and safe parking area for motorbikes and cars.", vi: "Có bãi đỗ xe rộng rãi và an toàn dành cho cả xe máy và ô tô." },
+                            { en: "The security staff were courteous and guided us to park easily.", vi: "Các nhân viên bảo vệ rất lịch thiệp và hướng dẫn chúng tôi đỗ xe thuận tiện." },
+                            { en: "It was in a great area close to shopping streets and cafes.", vi: "Nhà hàng nằm ở khu vực đắc địa, gần các phố mua sắm và quán cà phê." }
                         ]
                     }
                 ]
@@ -1046,101 +1038,87 @@ You should write at least 120 words. Do not include your name or address.`,
                 borderCol: "#fecaca",
                 categories: [
                     {
-                        name: "The staff (Nhân viên)",
+                        name: "The waiting time & serving speed (Thời gian chờ & Tốc độ phục vụ)",
                         reasons: [
-                            { en: "They were not very friendly when I asked for help.", vi: "Họ không mấy thân thiện khi tôi nhờ giúp đỡ." },
-                            { en: "They answered my questions in an impatient way.", vi: "Họ trả lời các câu hỏi của tôi với thái độ thiếu kiên nhẫn." },
-                            { en: "They did not solve my problem quickly.", vi: "Họ không giải quyết vấn đề của tôi một cách nhanh chóng." },
-                            { en: "They were not helpful during my stay.", vi: "Họ không hỗ trợ nhiệt tình trong suốt kỳ nghỉ của tôi." }
+                            { en: "We had to wait for almost forty minutes for our main courses to arrive.", vi: "Chúng tôi đã phải chờ gần 40 phút mới được phục vụ các món chính." },
+                            { en: "The food was served very slowly because the restaurant was overcrowded.", vi: "Món ăn được dọn lên rất chậm do nhà hàng quá đông khách." },
+                            { en: "Some dishes arrived lukewarm after a very long waiting time.", vi: "Một số món ăn bị nguội sau thời gian chờ đợi quá lâu." },
+                            { en: "The drinks were served much later than the food.", vi: "Đồ uống lại được mang ra muộn hơn rất nhiều so với đồ ăn." }
                         ],
                         solutions: [
-                            { en: "train the staff to provide better customer service", vi: "đào tạo nhân viên cung cấp dịch vụ khách hàng tốt hơn" },
-                            { en: "encourage the staff to be more polite and helpful", vi: "khuyến khích nhân viên lịch sự và nhiệt tình hơn" },
-                            { en: "ask the staff to respond to guests more quickly", vi: "yêu cầu nhân viên phản hồi hỗ trợ khách hàng nhanh chóng hơn" }
+                            { en: "hire more kitchen assistants and waiters during peak dining hours", vi: "tuyển thêm phụ bếp và nhân viên phục vụ vào các khung giờ ăn cao điểm" },
+                            { en: "speed up order preparation and shorten customer waiting time", vi: "đẩy nhanh tiến độ chuẩn bị món và rút ngắn thời gian chờ của khách" },
+                            { en: "serve drinks and complimentary appetizers first while guests wait", vi: "phục vụ đồ uống và món khai vị miễn phí trước trong khi khách chờ món chính" }
                         ]
                     },
                     {
-                        name: "The room (Căn phòng)",
+                        name: "The staff & service attitude (Thái độ phục vụ của nhân viên)",
                         reasons: [
-                            { en: "It was dirty, and there was dust on the furniture.", vi: "Phòng bị bẩn và có bụi bám trên đồ nội thất." },
-                            { en: "The bathroom was not clean when I arrived.", vi: "Phòng tắm không sạch sẽ khi tôi nhận phòng." },
-                            { en: "The bed sheets were not clean.", vi: "Ga trải giường không được giặt sạch." },
-                            { en: "The room had a bad smell.", vi: "Căn phòng có mùi hôi khó chịu." }
+                            { en: "The waiters seemed overloaded and were not attentive to our table.", vi: "Nhân viên phục vụ có vẻ bị quá tải và không chú ý chăm sóc bàn của chúng tôi." },
+                            { en: "They forgot one of our side dishes and we had to remind them twice.", vi: "Họ quên mất một món phụ của chúng tôi và chúng tôi phải nhắc lại hai lần." },
+                            { en: "Some staff members were not very friendly and lacked a welcoming attitude.", vi: "Một số nhân viên không mấy niềm nở và thiếu thái độ chào đón khách." },
+                            { en: "It took a long time to get the attention of staff when we requested the bill.", vi: "Mất nhiều thời gian để gọi được nhân viên khi chúng tôi yêu cầu thanh toán." }
                         ],
                         solutions: [
-                            { en: "clean the rooms more carefully before guests arrive", vi: "vệ sinh phòng cẩn thận hơn trước khi khách đến" },
-                            { en: "improve the cleaning service", vi: "cải thiện chất lượng dịch vụ dọn dẹp vệ sinh" },
-                            { en: "make sure every room is clean before guests check in", vi: "đảm bảo mọi phòng đều sạch sẽ trước khi khách nhận phòng" }
+                            { en: "train the service staff in professional communication and customer care", vi: "đào tạo nhân viên phục vụ về kỹ năng giao tiếp chuyên nghiệp và chăm sóc khách" },
+                            { en: "remind staff to be more attentive, patient, and polite with customers", vi: "nhắc nhở nhân viên chu đáo, kiên nhẫn và lịch sự hơn với thực khách" },
+                            { en: "use an electronic tablet ordering system to avoid missing customer orders", vi: "sử dụng hệ thống máy tính bảng gọi món điện tử để tránh bỏ sót món của khách" }
                         ]
                     },
                     {
-                        name: "The facilities (Cơ sở vật chất)",
+                        name: "The food quality & seasoning (Chất lượng & Nêm nếm món ăn)",
                         reasons: [
-                            { en: "Some facilities did not work properly.", vi: "Một số thiết bị không hoạt động bình thường." },
-                            { en: "The air conditioner did not work, so the room was too hot.", vi: "Máy điều hòa bị hỏng nên phòng quá nóng." },
-                            { en: "The television did not work during my stay.", vi: "Tivi không hoạt động trong suốt thời gian tôi lưu trú." },
-                            { en: "The shower did not have enough hot water.", vi: "Vòi hoa sen không có đủ nước nóng." }
+                            { en: "Some of the dishes were quite salty and contained too much cooking oil.", vi: "Một số món ăn bị nêm khá mặn và có quá nhiều dầu mỡ." },
+                            { en: "The beef steak was rather tough and overcooked.", vi: "Món bít tết bò hơi dai và bị nấu quá lửa." },
+                            { en: "The seafood dish did not taste as fresh as we had hoped.", vi: "Món hải sản không được tươi ngon như chúng tôi kỳ vọng." },
+                            { en: "The food portions were rather small given the relatively high prices.", vi: "Khẩu phần ăn hơi ít so với mức giá tương đối cao của nhà hàng." }
                         ],
                         solutions: [
-                            { en: "check all the facilities regularly", vi: "kiểm tra tất cả cơ sở vật chất định kỳ" },
-                            { en: "repair the broken facilities as soon as possible", vi: "sửa chữa các thiết bị hỏng hóc càng sớm càng tốt" },
-                            { en: "make sure everything works before guests arrive", vi: "đảm bảo mọi thứ đều hoạt động tốt trước khi khách đến" }
+                            { en: "adjust the seasoning recipes to ensure dishes are not overly salty or greasy", vi: "điều chỉnh công thức gia vị để đảm bảo món ăn không bị quá mặn hay ngấy mỡ" },
+                            { en: "ensure all meats and seafood ingredients are sourced fresh daily", vi: "đảm bảo mọi nguyên liệu thịt và hải sản luôn được nhập tươi mới mỗi ngày" },
+                            { en: "maintain consistent cooking quality and generous portion sizes", vi: "duy trì chất lượng chế biến ổn định và khẩu phần ăn đầy đặn, tương xứng" }
                         ]
                     },
                     {
-                        name: "The breakfast (Bữa sáng)",
+                        name: "The noise & dining atmosphere (Tiếng ồn & Không gian nhà hàng)",
                         reasons: [
-                            { en: "There were not many dishes to choose from.", vi: "Không có nhiều món ăn để lựa chọn." },
-                            { en: "The food was cold when I had breakfast.", vi: "Thức ăn bị nguội lạnh khi tôi dùng bữa sáng." },
-                            { en: "Some of the food did not taste fresh.", vi: "Một số món ăn không có vị tươi mới." },
-                            { en: "The breakfast was served too late.", vi: "Bữa sáng được phục vụ quá muộn." }
+                            { en: "The dining hall was extremely noisy and crowded during dinner time.", vi: "Sảnh ăn uống vô cùng ồn ào và đông đúc trong khung giờ ăn tối." },
+                            { en: "The background music was played too loudly, making conversation difficult.", vi: "Nhạc nền mở quá lớn khiến chúng tôi gặp khó khăn khi trò chuyện." },
+                            { en: "The tables were placed too close together, resulting in a lack of privacy.", vi: "Các bàn kê quá sát nhau khiến không gian thiếu sự riêng tư cần thiết." },
+                            { en: "The air conditioning was inadequate, making the dining room feel stuffy.", vi: "Hệ thống điều hòa hoạt động yếu khiến phòng ăn có cảm giác ngột ngạt." }
                         ],
                         solutions: [
-                            { en: "provide more kinds of food", vi: "cung cấp thêm nhiều món ăn phong phú" },
-                            { en: "serve the food while it is still hot", vi: "phục vụ thức ăn khi còn nóng sốt" },
-                            { en: "prepare fresher food every day", vi: "chuẩn bị nguyên liệu tươi ngon hơn mỗi ngày" }
+                            { en: "rearrange the dining tables with wider spacing for greater privacy", vi: "sắp xếp lại bàn ăn với khoảng cách rộng rãi hơn để tăng sự riêng tư" },
+                            { en: "lower the background music volume to create a comfortable dining atmosphere", vi: "vặn nhỏ âm lượng nhạc nền để tạo bầu không khí ăn uống dễ chịu" },
+                            { en: "upgrade the ventilation and air conditioning systems in the dining hall", vi: "nâng cấp hệ thống thông gió và điều hòa nhiệt độ trong sảnh ăn" }
                         ]
                     },
                     {
-                        name: "The Wi-Fi (Wi-Fi)",
+                        name: "The menu options & pricing (Thực đơn & Giá cả)",
                         reasons: [
-                            { en: "It was very slow most of the time.", vi: "Wi-Fi hầu hết thời gian đều rất chậm." },
-                            { en: "I often lost the Internet connection.", vi: "Tôi thường xuyên bị ngắt kết nối Internet." },
-                            { en: "It did not work well in my room.", vi: "Wi-Fi hoạt động không tốt trong phòng tôi." },
-                            { en: "I could not use the Internet easily.", vi: "Tôi không thể sử dụng mạng một cách thuận tiện." }
+                            { en: "There were very few vegetarian dishes and healthy dining choices.", vi: "Có rất ít món ăn chay và các lựa chọn ăn uống lành mạnh." },
+                            { en: "Several popular specialty dishes on the menu were out of stock.", vi: "Một số món ăn đặc sản nổi tiếng trên thực đơn đã bị hết hàng." },
+                            { en: "The prices of soft drinks and desserts were quite expensive.", vi: "Giá của các loại nước ngọt và món tráng miệng tương đối đắt." },
+                            { en: "The menu lacked clear allergen warnings and detailed ingredient lists.", vi: "Thực đơn thiếu cảnh báo dị ứng rõ ràng và danh sách thành phần chi tiết." }
                         ],
                         solutions: [
-                            { en: "improve the Wi-Fi connection", vi: "cải thiện đường truyền kết nối Wi-Fi" },
-                            { en: "install a stronger internet system", vi: "lắp đặt hệ thống mạng Internet mạnh hơn" },
-                            { en: "check the Wi-Fi regularly", vi: "kiểm tra hệ thống Wi-Fi thường xuyên" }
+                            { en: "expand the menu with a broader range of vegetarian and healthy dishes", vi: "mở rộng thực đơn với nhiều món chay và món ăn tốt cho sức khỏe hơn" },
+                            { en: "ensure sufficient ingredients to prepare all menu items throughout the evening", vi: "đảm bảo đủ nguyên liệu để phục vụ mọi món trong thực đơn suốt cả buổi tối" },
+                            { en: "introduce attractive set menus and discount vouchers for regular patrons", vi: "áp dụng các set thực đơn ưu đãi và voucher giảm giá cho khách quen" }
                         ]
                     },
                     {
-                        name: "The location (Vị trí)",
+                        name: "The cleanliness & restroom (Vệ sinh & Khu vực rửa tay)",
                         reasons: [
-                            { en: "It was far from the city centre.", vi: "Khách sạn ở xa trung tâm thành phố." },
-                            { en: "There were not many restaurants or shops nearby.", vi: "Xung quanh không có nhiều nhà hàng hay cửa hàng." },
-                            { en: "It was difficult to travel to famous places.", vi: "Khó di chuyển đến các địa điểm tham quan nổi tiếng." },
-                            { en: "Public transport was not convenient.", vi: "Giao thông công cộng không thuận tiện." }
+                            { en: "The dining table was not wiped thoroughly before we were seated.", vi: "Bàn ăn chưa được lau chùi kỹ lưỡng trước khi chúng tôi ngồi vào." },
+                            { en: "The floor near our table was slippery from food spills.", vi: "Sàn nhà gần bàn của chúng tôi bị trơn trượt do thức ăn vương vãi." },
+                            { en: "The restroom was not cleaned frequently and ran out of hand soap.", vi: "Nhà vệ sinh không được dọn thường xuyên và đã bị hết xà phòng rửa tay." },
+                            { en: "There was a strong smell of cooking oil lingering in the room.", vi: "Có mùi dầu mỡ nấu nướng nồng nặc ám lâu trong không khí phòng ăn." }
                         ],
                         solutions: [
-                            { en: "provide a free shuttle bus to the city centre", vi: "cung cấp xe đưa đón miễn phí vào trung tâm thành phố" },
-                            { en: "give guests more information about local transport", vi: "cung cấp cho khách thêm thông tin về phương tiện địa phương" },
-                            { en: "offer a map of nearby places", vi: "cung cấp bản đồ các địa điểm lân cận" }
-                        ]
-                    },
-                    {
-                        name: "The check-in process (Quá trình nhận phòng)",
-                        reasons: [
-                            { en: "It took too much time to check in.", vi: "Mất quá nhiều thời gian để làm thủ tục nhận phòng." },
-                            { en: "I had to wait for almost an hour.", vi: "Tôi đã phải đợi gần một tiếng đồng hồ." },
-                            { en: "There were not enough staff at the front desk.", vi: "Không có đủ nhân viên trực tại quầy lễ tân." },
-                            { en: "The process was slow and confusing.", vi: "Quy trình diễn ra chậm chạp và rườm rà." }
-                        ],
-                        solutions: [
-                            { en: "make the check-in process faster", vi: "đẩy nhanh quy trình làm thủ tục nhận phòng" },
-                            { en: "have more staff at the front desk", vi: "bố trí thêm nhân viên tại quầy lễ tân" },
-                            { en: "improve the check-in system", vi: "cải tiến hệ thống phần mềm nhận phòng" }
+                            { en: "sanitize and dry dining tables immediately after guests depart", vi: "lau khử trùng và làm khô bàn ăn ngay sau khi khách rời đi" },
+                            { en: "inspect and clean the restrooms regularly every hour during business hours", vi: "kiểm tra và dọn dẹp nhà vệ sinh định kỳ mỗi giờ trong thời gian mở cửa" },
+                            { en: "install high-powered kitchen exhaust fans to remove food odors", vi: "lắp đặt quạt hút mùi công suất lớn trong bếp để khử sạch mùi thức ăn" }
                         ]
                     }
                 ]
@@ -1148,20 +1126,20 @@ You should write at least 120 words. Do not include your name or address.`,
         ],
         sampleModel: `Dear Sir/Madam,
 
-Thank you for your email asking for feedback about my stay at your hotel from 5th to 7th August. I am writing to share my experience and give some suggestions to improve your service.
+Thank you for your email asking for my feedback. I am writing to share my opinion about my recent dinner at your restaurant last Friday evening.
 
-Overall, I was quite satisfied with my stay, although there were a few areas that need improvement. On the positive side, the staff were always friendly, polite, and helped me whenever I had a problem. The check-in process was also smooth, so I received my room key quickly. In addition, the breakfast was delicious with many different fresh dishes to choose from every morning. However, there were a few issues that disappointed me. Firstly, the Wi-Fi connection was very slow in my room, and I often lost the internet connection. Secondly, some facilities were not in good condition, as the air conditioner did not work well, making the room quite hot. Therefore, I would suggest upgrading the Wi-Fi network and checking all room facilities regularly before guests check in.
+Overall, I had a pleasant dining experience, although there were a few minor issues that could be improved. Regarding the positive points, the food was delicious, fresh, and beautifully presented, especially the grilled seafood and beef steak. In addition, the restaurant had an elegant atmosphere with lovely background music, making it an ideal place for family gatherings. However, I was slightly disappointed with the long waiting time. We had to wait for almost forty minutes before our main courses were served because the restaurant was extremely crowded. In addition, the waiters seemed overloaded and forgot one of our drink orders. Therefore, I would suggest hiring more kitchen staff and waiters during peak hours to speed up the service. Furthermore, it would be wonderful if you could add more vegetarian options to your menu.
 
-I hope you will find my feedback constructive. I look forward to staying at your hotel again on my next trip.
+I hope you will find my feedback constructive. I look forward to visiting your restaurant again in the future.
 
 Yours faithfully,`,
-        sampleModelVi: `Kính gửi Ban Quản lý Khách sạn,
+        sampleModelVi: `Kính gửi Ban Quản lý Nhà hàng,
 
-Cảm ơn quý vị đã gửi email xin ý kiến phản hồi về kỳ nghỉ của tôi tại khách sạn từ ngày 5 đến ngày 7 tháng Tám. Tôi viết thư này để chia sẻ trải nghiệm của mình và đưa ra một vài gợi ý nhằm nâng cao chất lượng dịch vụ.
+Cảm ơn quý vị đã gửi email xin ý kiến phản hồi của tôi. Tôi viết thư này để chia sẻ cảm nhận về bữa tối gần đây của tôi tại nhà hàng của quý vị vào tối thứ Sáu tuần trước.
 
-Nhìn chung, tôi khá hài lòng với kỳ nghỉ của mình, dù vẫn còn một vài điểm cần cải thiện. Về mặt tích cực, nhân viên luôn thân thiện, lịch sự và hỗ trợ tôi nhiệt tình mỗi khi tôi gặp vấn đề. Quá trình nhận phòng cũng diễn ra nhanh chóng, thuận lợi giúp tôi nhận chìa khóa phòng chỉ sau vài phút. Ngoài ra, bữa sáng rất ngon miệng với nhiều món ăn tươi ngon đa dạng để lựa chọn mỗi sáng. Tuy nhiên, cũng có một vài vấn đề khiến tôi chưa hài lòng. Đầu tiên, kết nối Wi-Fi trong phòng rất chậm và tôi thường xuyên bị mất kết nối mạng. Thứ hai, một số cơ sở vật chất chưa hoạt động tốt, chẳng hạn như máy điều hòa làm mát kém khiến căn phòng khá nóng. Do đó, tôi xin đề xuất khách sạn nên nâng cấp mạng Wi-Fi và kiểm tra định kỳ cơ sở vật chất trong phòng trước khi khách nhận phòng.
+Nhìn chung, tôi đã có một trải nghiệm ăn uống thú vị, mặc dù vẫn có một vài vấn đề nhỏ có thể cải thiện. Về những điểm tích cực, các món ăn rất thơm ngon, tươi mới và được trình bày đẹp mắt, đặc biệt là món hải sản nướng và bít tết bò. Ngoài ra, nhà hàng có không gian trang nhã cùng âm nhạc du dương, là địa điểm lý tưởng cho các buổi tụ họp gia đình. Tuy nhiên, tôi hơi thất vọng một chút về thời gian chờ đợi khá lâu. Chúng tôi đã phải đợi gần 40 phút mới được phục vụ món chính do nhà hàng quá đông khách. Thêm vào đó, nhân viên phục vụ có vẻ bị quá tải và đã quên mất một phần đồ uống của chúng tôi. Do đó, tôi xin đề xuất nhà hàng nên tuyển thêm nhân viên bếp và phục vụ vào giờ cao điểm để đẩy nhanh tốc độ phục vụ. Hơn nữa, sẽ rất tuyệt nếu quý vị bổ sung thêm các món chay vào thực đơn.
 
-Tôi hy vọng quý vị sẽ thấy những đóng góp của tôi mang tính xây dựng. Tôi rất mong sẽ có dịp lưu trú tại khách sạn trong chuyến đi tiếp theo.
+Tôi hy vọng quý vị sẽ thấy những đóng góp của tôi mang tính xây dựng. Tôi rất mong sẽ sớm ghé thăm lại nhà hàng của quý vị trong tương lai.
 
 Trân trọng,`
     },
@@ -2257,8 +2235,8 @@ function gradeExtraPractice(typeId) {
         ];
     } else if (typeId === 'feedback') {
         hasReq1 = /(satisf|dissatisf|overall|enjoy|opinion|pleas|feedback|impression|feel)/i.test(lower);
-        hasReq2 = /(staff|room|facilities|breakfast|wi-fi|wifi|location|check-in|service|food|hotel)/i.test(lower);
-        hasReq3 = /(suggest|improve|service|train|clean|repair|provide|upgrade|bus|map|faster|system|recommend)/i.test(lower);
+        hasReq2 = /(food|dish|dishes|fresh|delicious|atmosphere|music|decor|staff|wait|waiting|service|serve|dinner|restaurant|meal)/i.test(lower);
+        hasReq3 = /(suggest|improve|service|hire|staff|waiter|faster|speed\s*up|menu|vegetarian|discount|loyalty|option|recommend|seasoning|clean)/i.test(lower);
         hasReq4 = true;
         reqLabels = [
             hasReq1 ? '✓ Mức độ hài lòng' : '✗ Mức độ hài lòng',
