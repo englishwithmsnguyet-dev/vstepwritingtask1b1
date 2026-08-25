@@ -954,108 +954,214 @@ Trân trọng,`
 
     feedback: {
         title: "DẠNG 05: LETTER OF FEEDBACK (THƯ PHẢN HỒI / ĐÓNG GÓP Ý KIẾN)",
-        prompt: `You recently had dinner at a new restaurant. A few days later, the restaurant manager sent you an email asking for your feedback.
-Write an email to give your opinion. In your email, you should:
-• say whether you were satisfied or dissatisfied with the restaurant
-• describe your experience
-• suggest ways the restaurant can improve its service
+        prompt: `You recently stayed at a hotel and received an email from the hotel manager asking for feedback about your stay. Write an email to give your opinion. In your email, you should:
+• Say whether you were satisfied or dissatisfied with the service
+• Describe your experience
+• Suggest ways the hotel can improve its service
 You should write at least 120 words. Do not include your name or address.`,
         analysis: {
-            recipient: "Quản lý nhà hàng (The Restaurant Manager)",
-            purpose: "Đóng góp ý kiến phản hồi về trải nghiệm ăn uống tại nhà hàng",
+            recipient: "Quản lý khách sạn (The Hotel Manager)",
+            purpose: "Đóng góp ý kiến phản hồi về trải nghiệm lưu trú tại khách sạn",
             style: "Trang trọng / Lịch sự (Formal / Semi-formal Email)",
             requirements: "Nêu mức độ hài lòng, Mô tả trải nghiệm, Đề xuất cải thiện dịch vụ"
         },
-        hints: [
+        feedbackSections: [
             {
-                title: "1. Say whether you were satisfied or dissatisfied (Nêu mức độ hài lòng)",
-                type: "standard",
-                items: [
+                sectionTitle: "GỢI Ý ĐIỂM KHEN (POSITIVE POINTS) – LÝ DO",
+                icon: "fa-solid fa-thumbs-up",
+                themeColor: "#16a34a",
+                bgHeader: "#f0fdf4",
+                borderCol: "#bbf7d0",
+                categories: [
                     {
-                        en: "Overall, I had a pleasant dining experience, although there were a few minor issues",
-                        vi: "Nhìn chung, tôi đã có một trải nghiệm ăn uống thú vị, dù vẫn còn một vài điểm nhỏ cần cải thiện",
-                        reasonEn: "which I would like to share with you honestly.",
-                        reasonVi: "mà tôi muốn chia sẻ chân thành với quý vị."
+                        name: "The staff (Nhân viên)",
+                        reasons: [
+                            { en: "They were always friendly and helped me whenever I had a problem.", vi: "Họ luôn thân thiện và giúp đỡ tôi bất cứ khi nào tôi gặp vấn đề." },
+                            { en: "They answered my questions politely and gave me useful information.", vi: "Họ trả lời các câu hỏi của tôi một cách lịch sự và cung cấp thông tin hữu ích." },
+                            { en: "They were kind and made me feel welcome during my stay.", vi: "Họ rất tốt bụng và khiến tôi cảm thấy được chào đón trong suốt kỳ nghỉ." },
+                            { en: "They always smiled and provided good customer service.", vi: "Họ luôn tươi cười và mang lại dịch vụ khách hàng chu đáo." }
+                        ]
                     },
                     {
-                        en: "I was very satisfied with the delicious food and cozy atmosphere",
-                        vi: "Tôi rất hài lòng với món ăn ngon miệng và không gian ấm cúng",
-                        reasonEn: "which made our family dinner very enjoyable.",
-                        reasonVi: "điều này làm cho bữa tối của gia đình tôi rất vui vẻ."
+                        name: "The room (Căn phòng)",
+                        reasons: [
+                            { en: "It was clean, tidy, and comfortable throughout my stay.", vi: "Phòng sạch sẽ, gọn gàng và thoải mái trong suốt kỳ nghỉ của tôi." },
+                            { en: "It was cleaned every day, so everything looked fresh.", vi: "Phòng được dọn dẹp mỗi ngày nên mọi thứ trông rất sạch sẽ và mới mẻ." },
+                            { en: "The bed was comfortable, so I could sleep very well.", vi: "Giường ngủ rất êm ái nên tôi có thể ngủ rất ngon giấc." },
+                            { en: "It had enough space for me to relax after a long day.", vi: "Căn phòng có đủ không gian rộng rãi để tôi thư giãn sau một ngày dài." }
+                        ]
                     },
                     {
-                        en: "However, I was slightly dissatisfied with the waiting time for our main courses",
-                        vi: "Tuy nhiên, tôi hơi chưa hài lòng về thời gian chờ đợi các món chính",
-                        reasonEn: "because we had to wait for almost forty minutes.",
-                        reasonVi: "vì chúng tôi đã phải chờ gần bốn mươi phút."
+                        name: "The facilities (Cơ sở vật chất)",
+                        reasons: [
+                            { en: "Everything worked well and was easy to use.", vi: "Mọi thiết bị đều hoạt động tốt và rất dễ sử dụng." },
+                            { en: "The facilities were clean and made my stay more comfortable.", vi: "Cơ sở vật chất sạch sẽ giúp kỳ nghỉ của tôi thoải mái hơn." },
+                            { en: "They were in good condition and met my daily needs.", vi: "Thiết bị trong tình trạng tốt và đáp ứng đầy đủ nhu cầu sinh hoạt hàng ngày." },
+                            { en: "I could use all the facilities without any problems.", vi: "Tôi có thể sử dụng tất cả tiện nghi mà không gặp bất kỳ trở ngại nào." }
+                        ]
+                    },
+                    {
+                        name: "The breakfast (Bữa sáng)",
+                        reasons: [
+                            { en: "There were many delicious dishes to choose from every morning.", vi: "Có rất nhiều món ăn ngon để lựa chọn vào mỗi buổi sáng." },
+                            { en: "The food was fresh, tasty, and served on time.", vi: "Thức ăn tươi ngon, đậm đà và được phục vụ đúng giờ." },
+                            { en: "I enjoyed the breakfast because there were many different kinds of food.", vi: "Tôi rất thích bữa sáng vì có nhiều loại thức ăn đa dạng." },
+                            { en: "The meals were delicious and suitable for different guests.", vi: "Các bữa ăn ngon miệng và phù hợp với khẩu vị của nhiều đối tượng khách." }
+                        ]
+                    },
+                    {
+                        name: "The Wi-Fi (Wi-Fi)",
+                        reasons: [
+                            { en: "It was fast and worked well during my whole stay.", vi: "Wi-Fi rất nhanh và hoạt động tốt trong suốt thời gian tôi lưu trú." },
+                            { en: "I could use the Internet easily without losing the connection.", vi: "Tôi có thể sử dụng Internet dễ dàng mà không hề bị mất kết nối." },
+                            { en: "The Wi-Fi was available in both my room and the hotel lobby.", vi: "Wi-Fi phủ sóng tốt ở cả trong phòng nghỉ lẫn sảnh khách sạn." },
+                            { en: "I had no difficulty using the Internet for work and entertainment.", vi: "Tôi không gặp bất kỳ khó khăn nào khi lướt mạng để làm việc và giải trí." }
+                        ]
+                    },
+                    {
+                        name: "The location (Vị trí)",
+                        reasons: [
+                            { en: "It was close to many restaurants, shops, and famous places.", vi: "Khách sạn ở gần nhiều nhà hàng, cửa hàng và các địa điểm nổi tiếng." },
+                            { en: "It was easy to travel to different places from the hotel.", vi: "Rất dễ dàng di chuyển đến các địa điểm khác nhau từ khách sạn." },
+                            { en: "I could walk to many tourist attractions in a short time.", vi: "Tôi có thể đi bộ đến nhiều điểm du lịch chỉ trong thời gian ngắn." },
+                            { en: "The hotel was in a convenient area with many useful services nearby.", vi: "Khách sạn nằm ở khu vực thuận tiện với nhiều dịch vụ tiện ích xung quanh." }
+                        ]
+                    },
+                    {
+                        name: "The check-in process (Quá trình nhận phòng)",
+                        reasons: [
+                            { en: "It was quick and I did not have to wait very long.", vi: "Nhận phòng rất nhanh và tôi không phải chờ đợi lâu." },
+                            { en: "The staff completed the check-in process in just a few minutes.", vi: "Nhân viên hoàn tất thủ tục nhận phòng chỉ trong vài phút." },
+                            { en: "Everything was simple, so I received my room key quickly.", vi: "Mọi thủ tục đều đơn giản nên tôi nhận chìa khóa phòng rất nhanh." },
+                            { en: "The process was smooth and gave me a good first impression.", vi: "Quy trình diễn ra suôn sẻ và để lại cho tôi ấn tượng đầu tiên rất tốt." }
+                        ]
                     }
                 ]
             },
             {
-                title: "2. Describe your experience (Mô tả trải nghiệm thực tế)",
-                type: "standard",
-                items: [
+                sectionTitle: "GỢI Ý ĐIỂM CHÊ (NEGATIVE POINTS) – LÝ DO – GIẢI PHÁP",
+                icon: "fa-solid fa-thumbs-down",
+                themeColor: "#dc2626",
+                bgHeader: "#fef2f2",
+                borderCol: "#fecaca",
+                categories: [
                     {
-                        en: "The food was fresh, well-seasoned, and beautifully presented",
-                        vi: "Thức ăn tươi ngon, nêm nếm vừa miệng và trình bày đẹp mắt",
-                        reasonEn: "especially the grilled seafood and homemade desserts.",
-                        reasonVi: "đặc biệt là món hải sản nướng và các món tráng miệng nhà làm."
+                        name: "The staff (Nhân viên)",
+                        reasons: [
+                            { en: "They were not very friendly when I asked for help.", vi: "Họ không mấy thân thiện khi tôi nhờ giúp đỡ." },
+                            { en: "They answered my questions in an impatient way.", vi: "Họ trả lời các câu hỏi của tôi với thái độ thiếu kiên nhẫn." },
+                            { en: "They did not solve my problem quickly.", vi: "Họ không giải quyết vấn đề của tôi một cách nhanh chóng." },
+                            { en: "They were not helpful during my stay.", vi: "Họ không hỗ trợ nhiệt tình trong suốt kỳ nghỉ của tôi." }
+                        ],
+                        solutions: [
+                            { en: "train the staff to provide better customer service", vi: "đào tạo nhân viên cung cấp dịch vụ khách hàng tốt hơn" },
+                            { en: "encourage the staff to be more polite and helpful", vi: "khuyến khích nhân viên lịch sự và nhiệt tình hơn" },
+                            { en: "ask the staff to respond to guests more quickly", vi: "yêu cầu nhân viên phản hồi hỗ trợ khách hàng nhanh chóng hơn" }
+                        ]
                     },
                     {
-                        en: "The restaurant had modern decoration and soft background music",
-                        vi: "Nhà hàng có phong cách trang trí hiện đại và nhạc nền nhẹ nhàng",
-                        reasonEn: "which created a relaxing and comfortable ambiance for guests.",
-                        reasonVi: "tạo nên không gian thư thái và dễ chịu cho thực khách."
+                        name: "The room (Căn phòng)",
+                        reasons: [
+                            { en: "It was dirty, and there was dust on the furniture.", vi: "Phòng bị bẩn và có bụi bám trên đồ nội thất." },
+                            { en: "The bathroom was not clean when I arrived.", vi: "Phòng tắm không sạch sẽ khi tôi nhận phòng." },
+                            { en: "The bed sheets were not clean.", vi: "Ga trải giường không được giặt sạch." },
+                            { en: "The room had a bad smell.", vi: "Căn phòng có mùi hôi khó chịu." }
+                        ],
+                        solutions: [
+                            { en: "clean the rooms more carefully before guests arrive", vi: "vệ sinh phòng cẩn thận hơn trước khi khách đến" },
+                            { en: "improve the cleaning service", vi: "cải thiện chất lượng dịch vụ dọn dẹp vệ sinh" },
+                            { en: "make sure every room is clean before guests check in", vi: "đảm bảo mọi phòng đều sạch sẽ trước khi khách nhận phòng" }
+                        ]
                     },
                     {
-                        en: "The waiters were very polite and welcoming, but they seemed overloaded during peak hours",
-                        vi: "Các nhân viên phục vụ rất lịch sự và niềm nở, nhưng họ có vẻ bị quá tải vào giờ cao điểm",
-                        reasonEn: "so it took some time to get their attention when we needed assistance.",
-                        reasonVi: "nên mất khá nhiều thời gian để gọi nhân viên khi chúng tôi cần hỗ trợ."
-                    }
-                ]
-            },
-            {
-                title: "3. Suggest ways the restaurant can improve its service (Đề xuất giải pháp cải thiện)",
-                type: "standard",
-                items: [
-                    {
-                        en: "You should hire more service staff and kitchen assistants during weekends and peak hours",
-                        vi: "Quý vị nên tuyển thêm nhân viên phục vụ và phụ bếp vào cuối tuần và các khung giờ cao điểm",
-                        reasonEn: "to speed up order preparation and reduce customer waiting time.",
-                        reasonVi: "để đẩy nhanh việc chuẩn bị món và giảm thời gian chờ đợi của khách."
+                        name: "The facilities (Cơ sở vật chất)",
+                        reasons: [
+                            { en: "Some facilities did not work properly.", vi: "Một số thiết bị không hoạt động bình thường." },
+                            { en: "The air conditioner did not work, so the room was too hot.", vi: "Máy điều hòa bị hỏng nên phòng quá nóng." },
+                            { en: "The television did not work during my stay.", vi: "Tivi không hoạt động trong suốt thời gian tôi lưu trú." },
+                            { en: "The shower did not have enough hot water.", vi: "Vòi hoa sen không có đủ nước nóng." }
+                        ],
+                        solutions: [
+                            { en: "check all the facilities regularly", vi: "kiểm tra tất cả cơ sở vật chất định kỳ" },
+                            { en: "repair the broken facilities as soon as possible", vi: "sửa chữa các thiết bị hỏng hóc càng sớm càng tốt" },
+                            { en: "make sure everything works before guests arrive", vi: "đảm bảo mọi thứ đều hoạt động tốt trước khi khách đến" }
+                        ]
                     },
                     {
-                        en: "It would be wonderful if you could expand the menu with more vegetarian and healthy options",
-                        vi: "Sẽ rất tuyệt nếu quý vị mở rộng thực đơn với nhiều món chay và lựa chọn tốt cho sức khỏe",
-                        reasonEn: "to satisfy diverse customer preferences.",
-                        reasonVi: "nhằm đáp ứng nhu cầu đa dạng của khách hàng."
+                        name: "The breakfast (Bữa sáng)",
+                        reasons: [
+                            { en: "There were not many dishes to choose from.", vi: "Không có nhiều món ăn để lựa chọn." },
+                            { en: "The food was cold when I had breakfast.", vi: "Thức ăn bị nguội lạnh khi tôi dùng bữa sáng." },
+                            { en: "Some of the food did not taste fresh.", vi: "Một số món ăn không có vị tươi mới." },
+                            { en: "The breakfast was served too late.", vi: "Bữa sáng được phục vụ quá muộn." }
+                        ],
+                        solutions: [
+                            { en: "provide more kinds of food", vi: "cung cấp thêm nhiều món ăn phong phú" },
+                            { en: "serve the food while it is still hot", vi: "phục vụ thức ăn khi còn nóng sốt" },
+                            { en: "prepare fresher food every day", vi: "chuẩn bị nguyên liệu tươi ngon hơn mỗi ngày" }
+                        ]
                     },
                     {
-                        en: "You could introduce a customer loyalty program or discount vouchers for repeat visits",
-                        vi: "Quý vị có thể áp dụng chương trình tích điểm khách hàng hoặc voucher giảm giá khi quay lại",
-                        reasonEn: "to encourage customer loyalty and attract more patrons.",
-                        reasonVi: "để khuyến khích khách hàng quay lại và thu hút thêm thực khách."
+                        name: "The Wi-Fi (Wi-Fi)",
+                        reasons: [
+                            { en: "It was very slow most of the time.", vi: "Wi-Fi hầu hết thời gian đều rất chậm." },
+                            { en: "I often lost the Internet connection.", vi: "Tôi thường xuyên bị ngắt kết nối Internet." },
+                            { en: "It did not work well in my room.", vi: "Wi-Fi hoạt động không tốt trong phòng tôi." },
+                            { en: "I could not use the Internet easily.", vi: "Tôi không thể sử dụng mạng một cách thuận tiện." }
+                        ],
+                        solutions: [
+                            { en: "improve the Wi-Fi connection", vi: "cải thiện đường truyền kết nối Wi-Fi" },
+                            { en: "install a stronger internet system", vi: "lắp đặt hệ thống mạng Internet mạnh hơn" },
+                            { en: "check the Wi-Fi regularly", vi: "kiểm tra hệ thống Wi-Fi thường xuyên" }
+                        ]
+                    },
+                    {
+                        name: "The location (Vị trí)",
+                        reasons: [
+                            { en: "It was far from the city centre.", vi: "Khách sạn ở xa trung tâm thành phố." },
+                            { en: "There were not many restaurants or shops nearby.", vi: "Xung quanh không có nhiều nhà hàng hay cửa hàng." },
+                            { en: "It was difficult to travel to famous places.", vi: "Khó di chuyển đến các địa điểm tham quan nổi tiếng." },
+                            { en: "Public transport was not convenient.", vi: "Giao thông công cộng không thuận tiện." }
+                        ],
+                        solutions: [
+                            { en: "provide a free shuttle bus to the city centre", vi: "cung cấp xe đưa đón miễn phí vào trung tâm thành phố" },
+                            { en: "give guests more information about local transport", vi: "cung cấp cho khách thêm thông tin về phương tiện địa phương" },
+                            { en: "offer a map of nearby places", vi: "cung cấp bản đồ các địa điểm lân cận" }
+                        ]
+                    },
+                    {
+                        name: "The check-in process (Quá trình nhận phòng)",
+                        reasons: [
+                            { en: "It took too much time to check in.", vi: "Mất quá nhiều thời gian để làm thủ tục nhận phòng." },
+                            { en: "I had to wait for almost an hour.", vi: "Tôi đã phải đợi gần một tiếng đồng hồ." },
+                            { en: "There were not enough staff at the front desk.", vi: "Không có đủ nhân viên trực tại quầy lễ tân." },
+                            { en: "The process was slow and confusing.", vi: "Quy trình diễn ra chậm chạp và rườm rà." }
+                        ],
+                        solutions: [
+                            { en: "make the check-in process faster", vi: "đẩy nhanh quy trình làm thủ tục nhận phòng" },
+                            { en: "have more staff at the front desk", vi: "bố trí thêm nhân viên tại quầy lễ tân" },
+                            { en: "improve the check-in system", vi: "cải tiến hệ thống phần mềm nhận phòng" }
+                        ]
                     }
                 ]
             }
         ],
         sampleModel: `Dear Sir/Madam,
 
-Thank you for your email asking for my feedback. I am writing to share my opinion about my recent dinner at your restaurant last Friday evening.
+Thank you for your email asking for feedback about my stay at your hotel from 5th to 7th August. I am writing to share my experience and give some suggestions to improve your service.
 
-Overall, I had a pleasant dining experience, although there were a few minor issues that could be improved. Regarding the food, I was very satisfied because the dishes were fresh, delicious, and beautifully presented, especially the grilled seafood. In addition, the restaurant had an elegant atmosphere with lovely background music, making it an ideal place for family gatherings. However, I was slightly disappointed with the long waiting time. We had to wait for almost forty minutes before our main courses were served because the restaurant was extremely crowded. Therefore, I would suggest hiring more kitchen staff and waiters during weekends to speed up the service. Furthermore, it would be wonderful if you could add more vegetarian options to your menu.
+Overall, I was quite satisfied with my stay, although there were a few areas that need improvement. On the positive side, the staff were always friendly, polite, and helped me whenever I had a problem. The check-in process was also smooth, so I received my room key quickly. In addition, the breakfast was delicious with many different fresh dishes to choose from every morning. However, there were a few issues that disappointed me. Firstly, the Wi-Fi connection was very slow in my room, and I often lost the internet connection. Secondly, some facilities were not in good condition, as the air conditioner did not work well, making the room quite hot. Therefore, I would suggest upgrading the Wi-Fi network and checking all room facilities regularly before guests check in.
 
-I hope you will find my feedback constructive. I look forward to visiting your restaurant again in the future.
+I hope you will find my feedback constructive. I look forward to staying at your hotel again on my next trip.
 
 Yours faithfully,`,
-        sampleModelVi: `Kính gửi Ông/Bà,
+        sampleModelVi: `Kính gửi Ban Quản lý Khách sạn,
 
-Cảm ơn quý vị đã gửi email xin ý kiến phản hồi của tôi. Tôi viết thư này để chia sẻ cảm nhận về bữa tối gần đây của tôi tại nhà hàng của quý vị vào tối thứ Sáu tuần trước.
+Cảm ơn quý vị đã gửi email xin ý kiến phản hồi về kỳ nghỉ của tôi tại khách sạn từ ngày 5 đến ngày 7 tháng Tám. Tôi viết thư này để chia sẻ trải nghiệm của mình và đưa ra một vài gợi ý nhằm nâng cao chất lượng dịch vụ.
 
-Nhìn chung, tôi đã có một trải nghiệm ăn uống thú vị, mặc dù vẫn có một vài vấn đề nhỏ có thể cải thiện. Về món ăn, tôi rất hài lòng vì các món đều tươi ngon, đậm đà và được trình bày đẹp mắt, đặc biệt là món hải sản nướng. Ngoài ra, nhà hàng có không gian trang nhã cùng âm nhạc du dương, là địa điểm lý tưởng cho các buổi tụ họp gia đình. Tuy nhiên, tôi hơi thất vọng một chút về thời gian chờ đợi khá lâu. Chúng tôi đã phải đợi gần 40 phút mới được phục vụ món chính do nhà hàng quá đông khách. Do đó, tôi xin đề xuất nhà hàng nên tuyển thêm nhân viên bếp và phục vụ vào cuối tuần để tăng tốc độ phục vụ. Hơn nữa, sẽ rất tuyệt nếu quý vị bổ sung thêm các món chay vào thực đơn.
+Nhìn chung, tôi khá hài lòng với kỳ nghỉ của mình, dù vẫn còn một vài điểm cần cải thiện. Về mặt tích cực, nhân viên luôn thân thiện, lịch sự và hỗ trợ tôi nhiệt tình mỗi khi tôi gặp vấn đề. Quá trình nhận phòng cũng diễn ra nhanh chóng, thuận lợi giúp tôi nhận chìa khóa phòng chỉ sau vài phút. Ngoài ra, bữa sáng rất ngon miệng với nhiều món ăn tươi ngon đa dạng để lựa chọn mỗi sáng. Tuy nhiên, cũng có một vài vấn đề khiến tôi chưa hài lòng. Đầu tiên, kết nối Wi-Fi trong phòng rất chậm và tôi thường xuyên bị mất kết nối mạng. Thứ hai, một số cơ sở vật chất chưa hoạt động tốt, chẳng hạn như máy điều hòa làm mát kém khiến căn phòng khá nóng. Do đó, tôi xin đề xuất khách sạn nên nâng cấp mạng Wi-Fi và kiểm tra định kỳ cơ sở vật chất trong phòng trước khi khách nhận phòng.
 
-Tôi hy vọng quý vị sẽ thấy những đóng góp của tôi mang tính xây dựng. Tôi rất mong sẽ sớm ghé thăm lại nhà hàng của quý vị trong tương lai.
+Tôi hy vọng quý vị sẽ thấy những đóng góp của tôi mang tính xây dựng. Tôi rất mong sẽ có dịp lưu trú tại khách sạn trong chuyến đi tiếp theo.
 
 Trân trọng,`
     },
@@ -1318,90 +1424,148 @@ function renderExtraPracticePanel(typeId) {
         return;
     }
 
-    let hintsHtml = data.hints.map((hint, idx) => {
-        if (hint.type === "complaint_triplet") {
-            let itemsHtml = hint.items.map((item, itemIdx) => `
-                <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 14px 16px; margin-bottom: 12px;">
-                    <div style="margin-bottom: 8px;">
-                        <span style="font-weight: 700; color: #dc2626; display: block; margin-bottom: 2px;">
-                            ${itemIdx + 1}. Vấn đề phàn nàn:
-                        </span>
-                        <strong style="color: var(--text-main); font-size: 15px; padding-left: 12px; display: block;">${item.problemEn}</strong>
-                        <span style="color: var(--text-muted); font-size: 13.5px; padding-left: 12px; display: block; font-style: italic;">(${item.problemVi})</span>
-                    </div>
+    let hintsHtml = '';
 
-                    <div style="margin-bottom: 8px; padding-left: 12px; border-left: 3px solid #3b82f6; margin-left: 4px;">
-                        <span style="font-weight: 700; color: #2563eb; display: block; margin-bottom: 2px;">
-                            → Mô tả chi tiết:
-                        </span>
-                        <span style="color: var(--text-main); font-weight: 600; display: block;">${item.descEn}</span>
-                        <span style="color: var(--text-muted); font-size: 13.5px; display: block; font-style: italic;">(${item.descVi})</span>
+    if (data.feedbackSections) {
+        hintsHtml = data.feedbackSections.map(sec => {
+            let catCardsHtml = sec.categories.map(cat => {
+                let reasonsHtml = cat.reasons.map(r => `
+                    <div style="margin-bottom: 6px; padding-left: 12px;">
+                        <p style="margin-bottom: 2px; color: var(--text-main); font-weight: 500;">• ${r.en}</p>
+                        <p style="margin-bottom: 0; color: var(--text-muted); font-size: 13.5px; font-style: italic; padding-left: 10px;">(${r.vi})</p>
                     </div>
+                `).join('');
 
-                    <div style="padding-left: 12px; border-left: 3px solid #10b981; margin-left: 4px;">
-                        <span style="font-weight: 700; color: #059669; display: block; margin-bottom: 2px;">
-                            → Đề xuất giải pháp:
-                        </span>
-                        <span style="color: #047857; font-weight: 600; display: block;">${item.solEn}</span>
-                        <span style="color: var(--text-muted); font-size: 13.5px; display: block; font-style: italic;">(${item.solVi})</span>
+                let solHtml = '';
+                if (cat.solutions && cat.solutions.length > 0) {
+                    let solItems = cat.solutions.map(s => `
+                        <div style="margin-bottom: 4px; padding-left: 12px;">
+                            <span style="color: #059669; font-weight: 600;">➔ ${s.en}</span>
+                            <span style="color: var(--text-muted); font-size: 13px; font-style: italic;"> (${s.vi})</span>
+                        </div>
+                    `).join('');
+
+                    solHtml = `
+                        <div style="margin-top: 10px; padding-top: 8px; border-top: 1px dashed #e2e8f0;">
+                            <span style="font-weight: 700; color: #059669; font-size: 13.5px; display: block; margin-bottom: 4px;">
+                                <i class="fa-solid fa-lightbulb"></i> Giải pháp đề xuất:
+                            </span>
+                            ${solItems}
+                        </div>
+                    `;
+                }
+
+                return `
+                    <div style="background: #ffffff; border: 1px solid ${sec.borderCol}; border-radius: 8px; padding: 14px 16px; margin-bottom: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.03);">
+                        <h5 style="color: ${sec.themeColor}; font-size: 15.5px; margin-bottom: 8px; font-weight: 700;">
+                            ${cat.name}
+                        </h5>
+                        <div style="margin-bottom: 4px;">
+                            <span style="font-weight: 700; color: var(--text-main); font-size: 13.5px; display: block; margin-bottom: 4px;">
+                                <i class="fa-solid fa-angles-right" style="color: ${sec.themeColor};"></i> Lý do:
+                            </span>
+                            ${reasonsHtml}
+                        </div>
+                        ${solHtml}
                     </div>
-                </div>
-            `).join('');
+                `;
+            }).join('');
 
             return `
-                <div class="outline-step" style="margin-bottom: 18px;">
-                    <h4 style="margin-bottom: 14px; color: var(--accent-red); font-size: 17px; display: flex; align-items: center; gap: 8px;">
-                        <i class="fa-solid fa-triangle-exclamation" style="color: #dc2626; font-size: 15px;"></i> ${hint.title}
+                <div class="outline-step" style="margin-bottom: 22px; border-left: 4px solid ${sec.themeColor};">
+                    <h4 style="margin-bottom: 14px; color: ${sec.themeColor}; font-size: 17px; display: flex; align-items: center; gap: 8px;">
+                        <i class="${sec.icon}"></i> ${sec.sectionTitle}
                     </h4>
-                    ${itemsHtml}
+                    ${catCardsHtml}
                 </div>
             `;
-        } else if (hint.type === "custom_outline_choice") {
-            let sentHtml = hint.sentences.map(st => `
-                <div style="margin-bottom: 10px; padding-left: 12px;">
-                    <p style="margin-bottom: 2px;">• <strong>${st.en}</strong></p>
-                    <p style="margin-bottom: 0; color: var(--text-muted); font-size: 13.5px;">(${st.vi})</p>
-                </div>
-            `).join('');
+        }).join('');
+    } else if (data.hints) {
+        hintsHtml = data.hints.map((hint, idx) => {
+            if (hint.type === "complaint_triplet") {
+                let itemsHtml = hint.items.map((item, itemIdx) => `
+                    <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 14px 16px; margin-bottom: 12px;">
+                        <div style="margin-bottom: 8px;">
+                            <span style="font-weight: 700; color: #dc2626; display: block; margin-bottom: 2px;">
+                                ${itemIdx + 1}. Vấn đề phàn nàn:
+                            </span>
+                            <strong style="color: var(--text-main); font-size: 15px; padding-left: 12px; display: block;">${item.problemEn}</strong>
+                            <span style="color: var(--text-muted); font-size: 13.5px; padding-left: 12px; display: block; font-style: italic;">(${item.problemVi})</span>
+                        </div>
 
-            return `
-                <div class="outline-step" style="margin-bottom: 18px;">
-                    <h4 style="margin-bottom: 12px; color: var(--accent-red); font-size: 17px;">${hint.title}</h4>
-                    
-                    <div style="margin-bottom: 14px; padding-left: 4px;">
-                        <p style="font-weight: 700; color: var(--text-main); margin-bottom: 4px;">
-                            Cấu trúc hỏi thông tin:
-                        </p>
-                        <p style="margin-bottom: 0; padding-left: 14px; color: var(--primary-color); font-style: italic; font-weight: 500;">
-                            ↳ Tự chọn 1 cấu trúc ghép vô
-                        </p>
+                        <div style="margin-bottom: 8px; padding-left: 12px; border-left: 3px solid #3b82f6; margin-left: 4px;">
+                            <span style="font-weight: 700; color: #2563eb; display: block; margin-bottom: 2px;">
+                                → Mô tả chi tiết:
+                            </span>
+                            <span style="color: var(--text-main); font-weight: 600; display: block;">${item.descEn}</span>
+                            <span style="color: var(--text-muted); font-size: 13.5px; display: block; font-style: italic;">(${item.descVi})</span>
+                        </div>
+
+                        <div style="padding-left: 12px; border-left: 3px solid #10b981; margin-left: 4px;">
+                            <span style="font-weight: 700; color: #059669; display: block; margin-bottom: 2px;">
+                                → Đề xuất giải pháp:
+                            </span>
+                            <span style="color: #047857; font-weight: 600; display: block;">${item.solEn}</span>
+                            <span style="color: var(--text-muted); font-size: 13.5px; display: block; font-style: italic;">(${item.solVi})</span>
+                        </div>
                     </div>
+                `).join('');
 
-                    <div style="padding-left: 4px;">
-                        <p style="font-weight: 700; color: var(--text-main); margin-bottom: 8px;">
-                            Câu mở rộng:
-                        </p>
-                        ${sentHtml}
+                return `
+                    <div class="outline-step" style="margin-bottom: 18px;">
+                        <h4 style="margin-bottom: 14px; color: var(--accent-red); font-size: 17px; display: flex; align-items: center; gap: 8px;">
+                            <i class="fa-solid fa-circle-exclamation" style="color: #dc2626; font-size: 15px;"></i> ${hint.title}
+                        </h4>
+                        ${itemsHtml}
                     </div>
-                </div>
-            `;
-        } else {
-            let itemsHtml = hint.items.map(item => `
-                <div style="margin-bottom: 14px; padding-left: 6px;">
-                    <p style="margin-bottom: 2px;">• <strong>${item.en}</strong> (${item.vi})</p>
-                    <p style="margin-bottom: 2px; color: var(--primary-color); padding-left: 16px;">➔ <em>${item.reasonEn}</em></p>
-                    <p style="margin-bottom: 0; color: var(--text-muted); font-size: 14px; padding-left: 16px;">(${item.reasonVi})</p>
-                </div>
-            `).join('');
+                `;
+            } else if (hint.type === "custom_outline_choice") {
+                let sentHtml = hint.sentences.map(st => `
+                    <div style="margin-bottom: 10px; padding-left: 12px;">
+                        <p style="margin-bottom: 2px;">• <strong>${st.en}</strong></p>
+                        <p style="margin-bottom: 0; color: var(--text-muted); font-size: 13.5px;">(${st.vi})</p>
+                    </div>
+                `).join('');
 
-            return `
-                <div class="outline-step" style="margin-bottom: 16px;">
-                    <h4 style="margin-bottom: 12px; color: var(--accent-red); font-size: 17px;">${hint.title}</h4>
-                    ${itemsHtml}
-                </div>
-            `;
-        }
-    }).join('');
+                return `
+                    <div class="outline-step" style="margin-bottom: 18px;">
+                        <h4 style="margin-bottom: 12px; color: var(--accent-red); font-size: 17px;">${hint.title}</h4>
+                        
+                        <div style="margin-bottom: 14px; padding-left: 4px;">
+                            <p style="font-weight: 700; color: var(--text-main); margin-bottom: 4px;">
+                                Cấu trúc hỏi thông tin:
+                            </p>
+                            <p style="margin-bottom: 0; padding-left: 14px; color: var(--primary-color); font-style: italic; font-weight: 500;">
+                                ↳ Tự chọn 1 cấu trúc ghép vô
+                            </p>
+                        </div>
+
+                        <div style="padding-left: 4px;">
+                            <p style="font-weight: 700; color: var(--text-main); margin-bottom: 8px;">
+                                Câu mở rộng:
+                            </p>
+                            ${sentHtml}
+                        </div>
+                    </div>
+                `;
+            } else {
+                let itemsHtml = hint.items.map(item => `
+                    <div style="margin-bottom: 14px; padding-left: 6px;">
+                        <p style="margin-bottom: 2px;">• <strong>${item.en}</strong> (${item.vi})</p>
+                        <p style="margin-bottom: 2px; color: var(--primary-color); padding-left: 16px;">➔ <em>${item.reasonEn}</em></p>
+                        <p style="margin-bottom: 0; color: var(--text-muted); font-size: 14px; padding-left: 16px;">(${item.reasonVi})</p>
+                    </div>
+                `).join('');
+
+                return `
+                    <div class="outline-step" style="margin-bottom: 16px;">
+                        <h4 style="margin-bottom: 12px; color: var(--accent-red); font-size: 17px;">${hint.title}</h4>
+                        ${itemsHtml}
+                    </div>
+                `;
+            }
+        }).join('');
+    }
 
     const promptBullets = data.prompt.split('\n').filter(l => l.startsWith('•')).map(l => `<li>${l.replace('•', '').trim()}</li>`).join('');
     const promptIntro = data.prompt.substring(0, data.prompt.indexOf('•')).trim();
@@ -1462,7 +1626,7 @@ function renderExtraPracticePanel(typeId) {
                     <span>Nhập bài viết tại đây (Yêu cầu ≥ 120 từ):</span>
                     <div class="word-count" id="extraLiveWordCount">Số từ: <strong>0</strong></div>
                 </div>
-                <textarea id="extraWritingArea" placeholder="Dear Sir/Madam,&#10;&#10;I am writing to complain about..." rows="12"></textarea>
+                <textarea id="extraWritingArea" placeholder="Dear Sir/Madam,&#10;&#10;I am writing to share my feedback..." rows="12"></textarea>
                 <div class="editor-actions">
                     <button class="btn btn-secondary" onclick="resetExtraPracticeArea()"><i class="fa-solid fa-rotate-left"></i> Viết lại</button>
                     <button class="btn btn-primary" onclick="gradeExtraPractice('${typeId}')"><i class="fa-solid fa-circle-check"></i> Nộp bài & Chấm điểm VSTEP (30%)</button>
@@ -2093,8 +2257,8 @@ function gradeExtraPractice(typeId) {
         ];
     } else if (typeId === 'feedback') {
         hasReq1 = /(satisf|dissatisf|overall|enjoy|opinion|pleas|feedback|impression|feel)/i.test(lower);
-        hasReq2 = /(food|dish|dishes|fresh|delicious|atmosphere|music|decor|staff|wait|waiting|service|serve|dinner|restaurant|meal)/i.test(lower);
-        hasReq3 = /(suggest|improve|service|hire|staff|waiter|faster|speed\s*up|menu|vegetarian|discount|loyalty|option|recommend)/i.test(lower);
+        hasReq2 = /(staff|room|facilities|breakfast|wi-fi|wifi|location|check-in|service|food|hotel)/i.test(lower);
+        hasReq3 = /(suggest|improve|service|train|clean|repair|provide|upgrade|bus|map|faster|system|recommend)/i.test(lower);
         hasReq4 = true;
         reqLabels = [
             hasReq1 ? '✓ Mức độ hài lòng' : '✗ Mức độ hài lòng',
