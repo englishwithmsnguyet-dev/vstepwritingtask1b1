@@ -3039,12 +3039,14 @@ let resultMessageVal;
 let btnRestartRecitation;
 let evaluationIcon;
 
-// Recitation State
+// Recitation State & Tab Locking
 let activeLetterTypeId = 'advice';
 let currentQuestionIndex = 0;
 let activeQuestions = [];
 let questionScores = [];
 let questionHintsUsed = [];
+let isRecitationInProgress = false;
+let btnSubmitRecitationEarly = null;
 
 // Timer DOM Elements & State (20-minute Recitation Timer)
 let recitationTimerBadge;
@@ -3128,6 +3130,130 @@ function handleRecitationTimeUp() {
     }
 
     alert('⏰ ĐÃ HẾT THỜI GIAN 20 PHÚT LÀM BÀI!\nHệ thống tự động nộp bài và hiển thị kết quả đánh giá trả bài của bạn.');
+    showEvaluationResult();
+}
+
+// Toast Notification System
+let toastNoticeTimeout = null;
+function showToastNotice(message, iconClass = 'fa-solid fa-lock') {
+    let toast = document.getElementById('antiCopyToast');
+    if (!toast) {
+        toast = document.createElement('div');
+        toast.id = 'antiCopyToast';
+        toast.className = 'anti-copy-toast';
+        toast.innerHTML = `<i id="antiCopyToastIcon" class="${iconClass}"></i> <span id="antiCopyToastMsg"></span>`;
+        document.body.appendChild(toast);
+    }
+
+    const msgSpan = document.getElementById('antiCopyToastMsg');
+    const iconEl = toast.querySelector('i') || document.getElementById('antiCopyToastIcon');
+    if (msgSpan) {
+        msgSpan.textContent = message;
+    }
+    if (iconEl && iconClass) {
+        iconEl.className = iconClass;
+    }
+
+    toast.classList.add('show');
+
+    if (toastNoticeTimeout) clearTimeout(toastNoticeTimeout);
+    toastNoticeTimeout = setTimeout(() => {
+        toast.classList.remove('show');
+    }, 2800);
+}
+
+function showAntiCopyToast(message) {
+    showToastNotice(message || 'Không được phép Sao chép hoặc Dán (Copy/Paste)! Vui lòng tự gõ phím để rèn luyện.', 'fa-solid fa-ban');
+}
+
+// Lock / Unlock Navigation during Recitation
+function lockNavigationDuringRecitation() {
+    isRecitationInProgress = true;
+
+    // Lock all tab buttons except writingPractice
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+        if (btn.dataset.tab !== 'writingPractice') {
+            btn.classList.add('tab-locked');
+            btn.setAttribute('title', 'Đã bị khóa trong lúc trả bài');
+        } else {
+            btn.classList.remove('tab-locked');
+            btn.removeAttribute('title');
+        }
+    });
+
+    // Lock all sidebar navigation items
+    document.querySelectorAll('.nav-item').forEach(item => {
+        item.classList.add('nav-locked');
+        item.setAttribute('title', 'Đã bị khóa trong lúc trả bài');
+    });
+
+    if (btnEditStudent) {
+        btnEditStudent.classList.add('btn-locked');
+    }
+    const btnResetProgress = document.getElementById('btnResetProgress');
+    if (btnResetProgress) {
+        btnResetProgress.classList.add('btn-locked');
+    }
+
+    const banner = document.getElementById('recitationLockedBanner');
+    if (banner) {
+        banner.classList.remove('hidden');
+    }
+}
+
+function unlockNavigationAfterRecitation() {
+    isRecitationInProgress = false;
+
+    // Unlock all tab buttons
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.classList.remove('tab-locked');
+        btn.removeAttribute('title');
+    });
+
+    // Unlock all sidebar navigation items
+    document.querySelectorAll('.nav-item').forEach(item => {
+        item.classList.remove('nav-locked');
+        item.removeAttribute('title');
+    });
+
+    if (btnEditStudent) {
+        btnEditStudent.classList.remove('btn-locked');
+    }
+    const btnResetProgress = document.getElementById('btnResetProgress');
+    if (btnResetProgress) {
+        btnResetProgress.classList.remove('btn-locked');
+    }
+
+    const banner = document.getElementById('recitationLockedBanner');
+    if (banner) {
+        banner.classList.add('hidden');
+    }
+}
+
+function submitRecitationEarly() {
+    if (!isRecitationInProgress) return;
+
+    const confirmEarly = confirm(
+        '⚠️ BẠN CÓ CHẮC CHẮN MUỐN NỘP BÀI SỚM KHÔNG?\n\n' +
+        '• Các câu hỏi chưa làm sẽ được tính 0 điểm.\n' +
+        '• Hệ thống sẽ tự động tổng kết điểm và MỞ KHÓA lại các tab cho bạn.\n\n' +
+        'Bấm OK để nộp bài sớm ngay, hoặc Hủy để tiếp tục làm bài.'
+    );
+
+    if (!confirmEarly) return;
+
+    // Grade current question if user entered something
+    const userAns = recitationInput ? recitationInput.value.trim() : '';
+    if (userAns && (!recitationFeedback || recitationFeedback.classList.contains('hidden'))) {
+        const q = activeQuestions[currentQuestionIndex];
+        if (q) {
+            const diffResult = diffWords(userAns, q.target);
+            const hintUsed = questionHintsUsed[currentQuestionIndex];
+            const finalScore = hintUsed ? Math.round(diffResult.accuracy * 0.5) : diffResult.accuracy;
+            questionScores[currentQuestionIndex] = finalScore;
+        }
+    }
+
     showEvaluationResult();
 }
 
@@ -3232,6 +3358,10 @@ function markLetterCompleted(letterId) {
 }
 
 function resetLearningProgress() {
+    if (isRecitationInProgress) {
+        showToastNotice('🔒 Đang trong quá trình trả bài! Không thể làm mới tiến độ lúc này.', 'fa-solid fa-lock');
+        return;
+    }
     if (confirm('Bạn có chắc chắn muốn làm mới toàn bộ tiến độ học tập không?')) {
         try {
             localStorage.removeItem('vstep_completed_letters');
@@ -3286,7 +3416,10 @@ function resetRecitationUI() {
     resetRecitationTimer();
     const practicePanel = document.getElementById('writingPracticePanel');
     if (practicePanel && practicePanel.classList.contains('active')) {
+        lockNavigationDuringRecitation();
         startRecitationTimer();
+    } else {
+        unlockNavigationAfterRecitation();
     }
 
     // Reset UI Visibility
@@ -3470,6 +3603,7 @@ function showEvaluationResult() {
     
     // Stop 20-minute countdown timer and compute time spent
     stopRecitationTimer();
+    unlockNavigationAfterRecitation();
     const timeSpentSeconds = Math.max(0, RECITATION_TIME_LIMIT - recitationTimeRemaining);
     if (timeSpentVal) {
         timeSpentVal.textContent = formatTimerString(timeSpentSeconds);
@@ -3552,6 +3686,10 @@ function prevRecitationQuestion() {
 
 // Show Welcome Screen
 function showWelcomeScreen() {
+    if (isRecitationInProgress) {
+        showToastNotice('🔒 Đang trong quá trình trả bài! Bạn không thể rời khỏi bài cho đến khi hoàn thành hoặc nộp bài sớm.', 'fa-solid fa-lock');
+        return;
+    }
     activeLetterTypeId = null;
     
     // Update active nav
@@ -3614,6 +3752,10 @@ function renderNav() {
 
 // Select a Letter Type
 function selectLetterType(id) {
+    if (isRecitationInProgress) {
+        showToastNotice('🔒 Đang trong quá trình trả bài! Bạn không thể rời khỏi bài cho đến khi hoàn thành hoặc nộp bài sớm.', 'fa-solid fa-lock');
+        return;
+    }
     activeLetterTypeId = id;
     
     // Update active nav
@@ -3671,6 +3813,10 @@ function initAuthSystem() {
 }
 
 function openLoginModal() {
+    if (isRecitationInProgress) {
+        showToastNotice('🔒 Đang trong quá trình trả bài! Không thể chỉnh sửa thông tin lúc này.', 'fa-solid fa-lock');
+        return;
+    }
     if (!loginModalOverlay) return;
     if (studentNameInput) studentNameInput.value = currentStudentName || '';
     if (studentClassInput) studentClassInput.value = currentStudentClass || '';
@@ -3881,6 +4027,7 @@ document.addEventListener('DOMContentLoaded', () => {
     btnResendReport = document.getElementById('btnResendReport');
 
     // Query Recitation Elements
+    btnSubmitRecitationEarly = document.getElementById('btnSubmitRecitationEarly');
     recitationTimerBadge = document.getElementById('recitationTimerBadge');
     recitationCountdown = document.getElementById('recitationCountdown');
     evaluationTimeSpent = document.getElementById('evaluationTimeSpent');
@@ -3945,6 +4092,16 @@ document.addEventListener('DOMContentLoaded', () => {
     // Handle Tabs
     document.querySelectorAll('.tab-btn').forEach(btn => {
         btn.addEventListener('click', (e) => {
+            const tabId = e.currentTarget.dataset.tab;
+
+            // Block tab switching if recitation is currently in progress
+            if (isRecitationInProgress && tabId !== 'writingPractice') {
+                e.preventDefault();
+                e.stopPropagation();
+                showToastNotice('🔒 Đang trong quá trình trả bài! Bạn không thể chuyển sang tab khác cho đến khi hoàn thành hoặc nộp bài sớm.', 'fa-solid fa-lock');
+                return false;
+            }
+
             // Remove active class from all buttons and panels
             document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
             document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
@@ -3953,13 +4110,16 @@ document.addEventListener('DOMContentLoaded', () => {
             e.currentTarget.classList.add('active');
 
             // Show corresponding panel
-            const tabId = e.currentTarget.dataset.tab;
             const panel = document.getElementById(`${tabId}Panel`);
             if (panel) panel.classList.add('active');
 
-            // Handle 20-minute timer based on active tab
+            // Handle 20-minute timer and tab locking based on active tab
             if (tabId === 'writingPractice') {
-                startRecitationTimer();
+                const isResultShown = recitationResultBox && !recitationResultBox.classList.contains('hidden');
+                if (!isResultShown) {
+                    lockNavigationDuringRecitation();
+                    startRecitationTimer();
+                }
             } else {
                 stopRecitationTimer();
             }
@@ -3972,6 +4132,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (btnCheckAnswer) btnCheckAnswer.addEventListener('click', checkRecitationAnswer);
     if (btnNextQuestion) btnNextQuestion.addEventListener('click', nextRecitationQuestion);
     if (btnRestartRecitation) btnRestartRecitation.addEventListener('click', resetRecitationUI);
+    if (btnSubmitRecitationEarly) btnSubmitRecitationEarly.addEventListener('click', submitRecitationEarly);
 
     // Theme Toggle
     if (themeToggle) {
@@ -3993,30 +4154,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // --- Anti Copy/Paste Protection System ---
 function initAntiCopyProtection() {
-    let toastTimeout = null;
-
-    function showAntiCopyToast(message) {
-        let toast = document.getElementById('antiCopyToast');
-        if (!toast) {
-            toast = document.createElement('div');
-            toast.id = 'antiCopyToast';
-            toast.className = 'anti-copy-toast';
-            toast.innerHTML = `<i class="fa-solid fa-ban"></i> <span id="antiCopyToastMsg"></span>`;
-            document.body.appendChild(toast);
+    // Warn before leaving page during active recitation
+    window.addEventListener('beforeunload', (e) => {
+        if (isRecitationInProgress) {
+            e.preventDefault();
+            e.returnValue = 'Bạn đang trong quá trình trả bài! Nếu rời khỏi trang, tiến độ trả bài sẽ bị hủy.';
+            return e.returnValue;
         }
-
-        const msgSpan = document.getElementById('antiCopyToastMsg');
-        if (msgSpan) {
-            msgSpan.textContent = message || 'Không được phép Sao chép hoặc Dán (Copy/Paste)! Vui lòng tự gõ phím để rèn luyện.';
-        }
-
-        toast.classList.add('show');
-
-        if (toastTimeout) clearTimeout(toastTimeout);
-        toastTimeout = setTimeout(() => {
-            toast.classList.remove('show');
-        }, 2500);
-    }
+    });
 
     // Block Copy Event
     document.addEventListener('copy', (e) => {
