@@ -3066,9 +3066,16 @@ function diffWords(userText, targetText) {
         .replace(/\.\s*\.\s*\./g, '...')
         .replace(/[’‘]/g, "'")
         .replace(/[“”]/g, '"')
-        .replace(/\s*[-‐‑–—−]+\s*/g, ' - ');
+        .replace(/\s*[-‐‑–—−]+\s*/g, ' - ')
+        .replace(/\s*\+\s*/g, ' + ')
+        .replace(/(^|[^a-zA-Z0-9])([vV][0oO])([^a-zA-Z0-9]|$)/g, '$1Vo$3');
         
-    const clean = (w) => w.toLowerCase().trim();
+    const clean = (w) => {
+        let s = w.toLowerCase().trim();
+        s = s.replace(/(^|[^a-z0-9])v0([^a-z0-9]|$)/gi, '$1vo$2');
+        s = s.replace(/^v0$/, 'vo');
+        return s;
+    };
     
     const uWords = preProcess(userText).trim().split(/\s+/).filter(w => w !== "");
     const tWords = preProcess(targetText).trim().split(/\s+/).filter(w => w !== "");
