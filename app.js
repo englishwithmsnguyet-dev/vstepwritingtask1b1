@@ -3046,6 +3046,91 @@ let activeQuestions = [];
 let questionScores = [];
 let questionHintsUsed = [];
 
+// Timer DOM Elements & State (20-minute Recitation Timer)
+let recitationTimerBadge;
+let recitationCountdown;
+let timeSpentVal;
+let evaluationTimeSpent;
+let recitationTimerInterval = null;
+const RECITATION_TIME_LIMIT = 20 * 60; // 20 minutes = 1200 seconds
+let recitationTimeRemaining = RECITATION_TIME_LIMIT;
+let isRecitationTimerRunning = false;
+
+function formatTimerString(totalSeconds) {
+    const mins = Math.floor(totalSeconds / 60);
+    const secs = totalSeconds % 60;
+    const pad = (n) => (n < 10 ? '0' + n : n);
+    return `${pad(mins)}:${pad(secs)}`;
+}
+
+function updateRecitationTimerDisplay() {
+    if (recitationCountdown) {
+        recitationCountdown.textContent = formatTimerString(recitationTimeRemaining);
+    }
+
+    if (recitationTimerBadge) {
+        recitationTimerBadge.classList.remove('timer-normal', 'timer-warning', 'timer-urgent');
+        if (recitationTimeRemaining > 300) {
+            recitationTimerBadge.classList.add('timer-normal');
+        } else if (recitationTimeRemaining > 60) {
+            recitationTimerBadge.classList.add('timer-warning');
+        } else {
+            recitationTimerBadge.classList.add('timer-urgent');
+        }
+    }
+}
+
+function startRecitationTimer() {
+    if (isRecitationTimerRunning) return;
+    if (recitationTimeRemaining <= 0) {
+        recitationTimeRemaining = RECITATION_TIME_LIMIT;
+    }
+    isRecitationTimerRunning = true;
+    updateRecitationTimerDisplay();
+
+    if (recitationTimerInterval) clearInterval(recitationTimerInterval);
+    recitationTimerInterval = setInterval(() => {
+        if (recitationTimeRemaining > 0) {
+            recitationTimeRemaining--;
+            updateRecitationTimerDisplay();
+        } else {
+            handleRecitationTimeUp();
+        }
+    }, 1000);
+}
+
+function stopRecitationTimer() {
+    if (recitationTimerInterval) {
+        clearInterval(recitationTimerInterval);
+        recitationTimerInterval = null;
+    }
+    isRecitationTimerRunning = false;
+}
+
+function resetRecitationTimer() {
+    stopRecitationTimer();
+    recitationTimeRemaining = RECITATION_TIME_LIMIT;
+    updateRecitationTimerDisplay();
+}
+
+function handleRecitationTimeUp() {
+    stopRecitationTimer();
+    if (recitationInput) recitationInput.disabled = true;
+
+    // Check current question if student typed something but hasn't submitted yet
+    const userAns = recitationInput ? recitationInput.value.trim() : '';
+    if (userAns && (!recitationFeedback || recitationFeedback.classList.contains('hidden'))) {
+        const q = activeQuestions[currentQuestionIndex];
+        if (q) {
+            const diffResult = diffWords(userAns, q.target);
+            questionScores[currentQuestionIndex] = diffResult.accuracy;
+        }
+    }
+
+    alert('⏰ ĐÃ HẾT THỜI GIAN 20 PHÚT LÀM BÀI!\nHệ thống tự động nộp bài và hiển thị kết quả đánh giá trả bài của bạn.');
+    showEvaluationResult();
+}
+
 // Generate hint: obfuscates alternating words using asterisks, matching the B2 letters system
 function getHintText(target) {
     if (!target) return '';
@@ -3196,6 +3281,13 @@ function resetRecitationUI() {
     questionHintsUsed = new Array(activeQuestions.length).fill(false);
 
     if (totalQuestionsNum) totalQuestionsNum.textContent = activeQuestions.length;
+
+    // Reset Recitation 20-minute Timer
+    resetRecitationTimer();
+    const practicePanel = document.getElementById('writingPracticePanel');
+    if (practicePanel && practicePanel.classList.contains('active')) {
+        startRecitationTimer();
+    }
 
     // Reset UI Visibility
     if (recitationQuizBox) recitationQuizBox.classList.remove('hidden');
@@ -3376,6 +3468,13 @@ function showEvaluationResult() {
     const progressWrapper = document.querySelector('.recitation-progress-wrapper');
     if (progressWrapper) progressWrapper.style.display = 'none';
     
+    // Stop 20-minute countdown timer and compute time spent
+    stopRecitationTimer();
+    const timeSpentSeconds = Math.max(0, RECITATION_TIME_LIMIT - recitationTimeRemaining);
+    if (timeSpentVal) {
+        timeSpentVal.textContent = formatTimerString(timeSpentSeconds);
+    }
+
     // Calculate average score
     const totalQuestions = activeQuestions.length;
     const totalScore = questionScores.reduce((sum, s) => sum + s, 0);
@@ -3668,8 +3767,10 @@ function reportResultToGoogleForm(customPayload) {
         const score = scorePercentageVal ? scorePercentageVal.textContent : '0';
         const status = resultStatusVal ? resultStatusVal.textContent : '';
         const now = new Date().toLocaleString('vi-VN');
+        const timeSpentSeconds = Math.max(0, RECITATION_TIME_LIMIT - recitationTimeRemaining);
+        const timeSpentStr = formatTimerString(timeSpentSeconds);
 
-        payload = `[HỌC VIÊN]: ${name} | [LỚP]: ${cls} | [DẠNG BÀI]: ${letterTitle} | [ĐIỂM]: ${score}% (${status}) | [THỜI GIAN]: ${now}`;
+        payload = `[HỌC VIÊN]: ${name} | [LỚP]: ${cls} | [DẠNG BÀI]: ${letterTitle} | [ĐIỂM]: ${score}% (${status}) | [THỜI GIAN LÀM]: ${timeSpentStr}/20:00 | [THỜI ĐIỂM NỘP]: ${now}`;
     }
 
     console.log("Submitting result report to Google Form:", payload);
@@ -3780,6 +3881,10 @@ document.addEventListener('DOMContentLoaded', () => {
     btnResendReport = document.getElementById('btnResendReport');
 
     // Query Recitation Elements
+    recitationTimerBadge = document.getElementById('recitationTimerBadge');
+    recitationCountdown = document.getElementById('recitationCountdown');
+    evaluationTimeSpent = document.getElementById('evaluationTimeSpent');
+    timeSpentVal = document.getElementById('timeSpentVal');
     recitationInput = document.getElementById('recitationInput');
     btnPrevQuestion = document.getElementById('btnPrevQuestion');
     btnShowAnswer = document.getElementById('btnShowAnswer');
@@ -3851,6 +3956,13 @@ document.addEventListener('DOMContentLoaded', () => {
             const tabId = e.currentTarget.dataset.tab;
             const panel = document.getElementById(`${tabId}Panel`);
             if (panel) panel.classList.add('active');
+
+            // Handle 20-minute timer based on active tab
+            if (tabId === 'writingPractice') {
+                startRecitationTimer();
+            } else {
+                stopRecitationTimer();
+            }
         });
     });
 

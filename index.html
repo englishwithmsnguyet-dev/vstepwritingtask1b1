@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>VSTEP WRITING TASK 01 - B1 LEVEL</title>
-    <link rel="stylesheet" href="style.css?v=30.0">
+    <link rel="stylesheet" href="style.css?v=31.0">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400..700;1,400..700&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap" rel="stylesheet">
@@ -200,10 +200,17 @@
                         <div class="recitation-container">
                             <div class="recitation-header">
                                 <h3>HỆ THỐNG TRẢ BÀI DÀN Ý CHI TIẾT</h3>
-                                <div class="recitation-progress-wrapper">
-                                    <span class="progress-text">Câu hỏi <strong id="currentQuestionNum">1</strong>/<span id="totalQuestionsNum">10</span></span>
-                                    <div class="progress-bar-bg">
-                                        <div class="progress-bar-fill" id="progressBarFill" style="width: 10%;"></div>
+                                <div class="recitation-header-right">
+                                    <div class="recitation-timer-badge timer-normal" id="recitationTimerBadge" title="Thời gian làm bài: 20 phút">
+                                        <i class="fa-solid fa-stopwatch" id="timerIcon"></i>
+                                        <span class="timer-label">Thời gian:</span>
+                                        <span class="timer-countdown" id="recitationCountdown">20:00</span>
+                                    </div>
+                                    <div class="recitation-progress-wrapper">
+                                        <span class="progress-text">Câu hỏi <strong id="currentQuestionNum">1</strong>/<span id="totalQuestionsNum">10</span></span>
+                                        <div class="progress-bar-bg">
+                                            <div class="progress-bar-fill" id="progressBarFill" style="width: 10%;"></div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -265,6 +272,9 @@
                                         <span id="scorePercentageVal">0</span>%
                                     </div>
                                     <div class="evaluation-badge" id="resultStatusVal">ĐẠT</div>
+                                    <div class="evaluation-time-spent" id="evaluationTimeSpent">
+                                        <i class="fa-solid fa-stopwatch"></i> Thời gian hoàn thành: <strong id="timeSpentVal">00:00</strong> / 20:00
+                                    </div>
                                     <p class="evaluation-message" id="resultMessageVal">Chúc mừng bạn đã chinh phục được Letter of Advice.</p>
                                     
                                     <!-- Form Report Status Box -->
@@ -329,6 +339,6 @@
         <input type="hidden" name="pageHistory" value="0">
     </form>
 
-    <script src="app.js?v=30.0"></script>
+    <script src="app.js?v=31.0"></script>
 </body>
 </html>
