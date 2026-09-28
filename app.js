@@ -3646,19 +3646,28 @@ function escapeHtml(str) {
 
 // Word-by-word diff algorithm using LCS with flexible bracket placeholder support
 function diffWords(userText, targetText) {
+    const isPunctOrSignOnly = (w) => /^[+\-–—−.,!?;:()\[\]\s]+$/.test(w);
+
     const preProcess = (t) => t
         .replace(/…/g, '...')
         .replace(/\.\s*\.\s*\./g, '...')
         .replace(/[’‘]/g, "'")
         .replace(/[“”]/g, '"')
+        // Strip leading bullet marks (+, -, *, etc.)
+        .replace(/^[\s+\-–—−*•]+/, '')
+        // Normalize V-ing and V-o notation variations first
+        .replace(/(^|[^a-zA-Z0-9])([vV])\s*[-_–—−]\s*(ing\b|[0oO]\b)/gi, '$1$2$3')
+        // Normalize hành động slot delimiters (+, -, –, —, :, /, or space)
+        .replace(/(hành\s*động)\s*([+\-:–—−/]|->)?\s*/gi, '$1 ')
+        // Normalize hyphens between English words (e.g. part-time -> part time)
+        .replace(/([a-zA-Z0-9])\s*[-–—−]\s*([a-zA-Z0-9])/g, '$1 $2')
         .replace(/[–—−]/g, '-')
-        .replace(/(^|[^a-zA-Z0-9])([vV])\s*[-_]\s*(ing\b|[0oO]\b)/gi, '$1$2-$3')
-        .replace(/(hành\s*động)\s*-\s*/gi, '$1 - ')
-        .replace(/\s*\+\s*/g, ' + ');
+        .replace(/\s*\+\s*/g, ' + ')
+        .replace(/\s*-\s*/g, ' - ');
         
     const clean = (w) => {
         let s = w.toLowerCase().trim();
-        s = s.replace(/^[.,!?;:()+\[\]\s]+|[.,!?;:()+\[\]\s]+$/g, '');
+        s = s.replace(/^[.,!?;:()+\[\]\s\-–—−/]+|[.,!?;:()+\[\]\s\-–—−/]+$/g, '');
         s = s.replace(/^[vV]\s*[-_]?ing$/i, 'ving');
         s = s.replace(/^[vV]\s*[-_]?[0oO]$/i, 'vo');
         return s;
@@ -3669,32 +3678,35 @@ function diffWords(userText, targetText) {
         const altTargets = targetText.split(' / ');
         let bestDiff = null;
         for (const alt of altTargets) {
-            const curDiff = diffWordsSingle(userText, alt.trim(), preProcess, clean);
+            const curDiff = diffWordsSingle(userText, alt.trim(), preProcess, clean, isPunctOrSignOnly);
             if (!bestDiff || curDiff.accuracy > bestDiff.accuracy) {
                 bestDiff = curDiff;
             }
         }
         // Also compare against full targetText
-        const fullDiff = diffWordsSingle(userText, targetText, preProcess, clean);
+        const fullDiff = diffWordsSingle(userText, targetText, preProcess, clean, isPunctOrSignOnly);
         if (fullDiff.accuracy > bestDiff.accuracy) {
             bestDiff = fullDiff;
         }
         return bestDiff;
     }
 
-    return diffWordsSingle(userText, targetText, preProcess, clean);
+    return diffWordsSingle(userText, targetText, preProcess, clean, isPunctOrSignOnly);
 }
 
-function diffWordsSingle(userText, targetText, preProcess, clean) {
+function diffWordsSingle(userText, targetText, preProcess, clean, isPunctOrSignOnly) {
+    if (!isPunctOrSignOnly) {
+        isPunctOrSignOnly = (w) => /^[+\-–—−.,!?;:()\[\]\s]+$/.test(w);
+    }
     const rawUser = preProcess(userText).trim();
     const rawTarget = preProcess(targetText).trim();
 
-    // If target has "+ Vo" or "+ Ving" without brackets, treat as bracket slot [+ Vo] or [+ Ving]
-    // This allows template matching to accept any user notation (V-ing, ving, + Ving, (+ Ving), actual verb, etc.)
+    // If target has "+ Vo", "- Vo", or "Vo", or "+ Ving", "- Ving", or "Ving" without brackets, treat as bracket slot [+ Vo] or [+ Ving]
+    // This allows template matching to accept any user notation (+/-, V-ing, ving, + Ving, (+ Ving), actual verb, etc.)
     let adjustedTarget = rawTarget;
     if (!adjustedTarget.includes('[') && !adjustedTarget.includes(']')) {
-        adjustedTarget = adjustedTarget.replace(/(^|[^a-zA-Z0-9])\+\s*Vo\b/g, '$1[+ Vo]');
-        adjustedTarget = adjustedTarget.replace(/(^|[^a-zA-Z0-9])\+\s*Ving\b/g, '$1[+ Ving]');
+        adjustedTarget = adjustedTarget.replace(/(^|[^a-zA-Z0-9])[+\-–—−]?\s*Vo\b/g, '$1[+ Vo]');
+        adjustedTarget = adjustedTarget.replace(/(^|[^a-zA-Z0-9])[+\-–—−]?\s*Ving\b/g, '$1[+ Ving]');
     }
 
     // Check if target has bracketed slots [ ... ]
@@ -3709,19 +3721,19 @@ function diffWordsSingle(userText, targetText, preProcess, clean) {
         for (let i = 0; i < slots.length; i++) {
             const pStr = parts[i].trim();
             if (pStr) {
-                const words = pStr.split(/\s+/).map(w => w.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'));
-                pattern += words.join('\\s*') + '\\s*(.+?)\\s*';
+                const words = pStr.split(/\s+/).filter(w => !isPunctOrSignOnly(w) || w === '.' || w === '!' || w === '?').map(w => w.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'));
+                pattern += words.join('[\\s+\\-–—−]*') + '[\\s+\\-–—−]*(.+?)[\\s+\\-–—−]*';
             } else {
-                pattern += '(.+?)\\s*';
+                pattern += '(.+?)[\\s+\\-–—−]*';
             }
         }
         const pLast = parts[parts.length - 1].trim();
         if (pLast) {
-            const lastWords = pLast.split(/\s+/).map(w => w.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'));
+            const lastWords = pLast.split(/\s+/).filter(w => !isPunctOrSignOnly(w) || w === '.' || w === '!' || w === '?').map(w => w.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'));
             if (/^[.,!?;:]+$/.test(pLast)) {
-                pattern += '(?:\\s*[' + pLast.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '])?';
+                pattern += '(?:[\\s+\\-–—−]*[' + pLast.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '])?';
             } else {
-                pattern += lastWords.join('\\s*');
+                pattern += lastWords.join('[\\s+\\-–—−]*');
             }
         }
         pattern += '\\s*$';
@@ -3863,14 +3875,16 @@ function diffWordsSingle(userText, targetText, preProcess, clean) {
             }
         }
 
-        const matchCount = diff.filter(d => d.type === 'match').length;
-        const maxWords = Math.max(tWords.length, uWords.length);
+        const meaningfulUserWords = uWords.filter(w => !isPunctOrSignOnly(w));
+        const meaningfulTargetWords = tWords.filter(w => !isPunctOrSignOnly(w));
+        const matchCount = diff.filter(d => d.type === 'match' && !isPunctOrSignOnly(d.word)).length;
+        const maxWords = Math.max(meaningfulTargetWords.length, meaningfulUserWords.length);
         const accuracy = maxWords > 0 ? Math.round((matchCount / maxWords) * 100) : 0;
 
         return {
             diff,
             accuracy,
-            isPerfect: matchCount === tWords.length && uWords.length === tWords.length
+            isPerfect: matchCount === meaningfulTargetWords.length && meaningfulUserWords.length === meaningfulTargetWords.length
         };
     }
 
@@ -3908,14 +3922,16 @@ function diffWordsSingle(userText, targetText, preProcess, clean) {
         }
     }
 
-    const matchCount = diff.filter(d => d.type === 'match').length;
-    const maxWords = Math.max(tWords.length, uWords.length);
+    const meaningfulUserWords = uWords.filter(w => !isPunctOrSignOnly(w));
+    const meaningfulTargetWords = tWords.filter(w => !isPunctOrSignOnly(w));
+    const matchCount = diff.filter(d => d.type === 'match' && !isPunctOrSignOnly(d.word)).length;
+    const maxWords = Math.max(meaningfulTargetWords.length, meaningfulUserWords.length);
     const accuracy = maxWords > 0 ? Math.round((matchCount / maxWords) * 100) : 0;
 
     return {
         diff,
         accuracy,
-        isPerfect: matchCount === tWords.length && uWords.length === tWords.length
+        isPerfect: matchCount === meaningfulTargetWords.length && meaningfulUserWords.length === meaningfulTargetWords.length
     };
 }
 
