@@ -5363,44 +5363,100 @@ function initAntiCopyProtection() {
         }
     });
 
-    // Block Copy Event
+    // Check if element is inside allowed practice zones (THỰC HÀNH & BÀI LUYỆN TẬP THÊM)
+    function isAllowedPasteTarget(el) {
+        if (!el) return false;
+        // Direct ID check
+        if (el.id === 'fullPracticeInput' || el.id === 'extraWritingArea' || el.id === 'extraWritingInput') {
+            return true;
+        }
+        // Class check
+        if (el.classList && (el.classList.contains('extra-textarea') || el.classList.contains('practice-textarea'))) {
+            return true;
+        }
+        // Ancestor container check
+        if (el.closest) {
+            const panel = el.closest('#fullPracticePanel, #extraPracticePanel, .full-practice-writing-box, .extra-practice-container');
+            if (panel && (el.tagName === 'TEXTAREA' || (el.tagName === 'INPUT' && !['button', 'submit', 'radio', 'checkbox'].includes(el.type)))) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    // Block Copy Event (Allowed inside THỰC HÀNH & BÀI LUYỆN TẬP THÊM textareas)
     document.addEventListener('copy', (e) => {
+        if (isAllowedPasteTarget(e.target) || isAllowedPasteTarget(document.activeElement)) {
+            return;
+        }
         e.preventDefault();
         showAntiCopyToast('Chức năng Sao chép (Copy) đã bị khóa trên hệ thống!');
     });
 
-    // Block Cut Event
+    // Block Cut Event (Allowed inside THỰC HÀNH & BÀI LUYỆN TẬP THÊM textareas)
     document.addEventListener('cut', (e) => {
+        if (isAllowedPasteTarget(e.target) || isAllowedPasteTarget(document.activeElement)) {
+            return;
+        }
         e.preventDefault();
         showAntiCopyToast('Chức năng Cắt (Cut) đã bị khóa trên hệ thống!');
     });
 
-    // Block Paste Event
+    // Block Paste Event (Allowed inside THỰC HÀNH & BÀI LUYỆN TẬP THÊM textareas)
     document.addEventListener('paste', (e) => {
+        if (isAllowedPasteTarget(e.target) || isAllowedPasteTarget(document.activeElement)) {
+            const target = isAllowedPasteTarget(e.target) ? e.target : document.activeElement;
+            setTimeout(() => {
+                if (target) {
+                    target.dispatchEvent(new Event('input', { bubbles: true }));
+                    target.dispatchEvent(new Event('change', { bubbles: true }));
+                }
+            }, 30);
+            return;
+        }
         e.preventDefault();
         showAntiCopyToast('Không được phép Dán (Paste)! Vui lòng tự gõ phím để học thuộc và nhớ bài lâu hơn.');
     });
 
-    // Block Context Menu (Right Click)
+    // Block Context Menu (Right Click) - Allowed inside practice textareas for pasting/editing
     document.addEventListener('contextmenu', (e) => {
+        if (isAllowedPasteTarget(e.target) || isAllowedPasteTarget(document.activeElement)) {
+            return;
+        }
         e.preventDefault();
         showAntiCopyToast('Chuột phải đã bị vô hiệu hóa để bảo vệ nội dung học tập!');
     });
 
     // Block Drag and Drop text
     document.addEventListener('dragstart', (e) => {
+        if (isAllowedPasteTarget(e.target) || isAllowedPasteTarget(document.activeElement)) {
+            return;
+        }
         e.preventDefault();
     });
     document.addEventListener('drop', (e) => {
+        if (isAllowedPasteTarget(e.target) || isAllowedPasteTarget(document.activeElement)) {
+            const target = isAllowedPasteTarget(e.target) ? e.target : document.activeElement;
+            setTimeout(() => {
+                if (target) {
+                    target.dispatchEvent(new Event('input', { bubbles: true }));
+                }
+            }, 30);
+            return;
+        }
         e.preventDefault();
     });
 
     // Block Keyboard Shortcuts (Ctrl+C, Ctrl+V, Ctrl+X, Ctrl+U, Cmd+C, Cmd+V, Cmd+X, Cmd+U)
+    // Permitted: Ctrl/Cmd+V, Ctrl/Cmd+C, Ctrl/Cmd+X inside THỰC HÀNH & BÀI LUYỆN TẬP THÊM
     document.addEventListener('keydown', (e) => {
         const isCtrlOrCmd = e.ctrlKey || e.metaKey;
         const key = e.key ? e.key.toLowerCase() : '';
 
         if (isCtrlOrCmd && ['c', 'v', 'x', 'u', 's'].includes(key)) {
+            if (['c', 'v', 'x'].includes(key) && (isAllowedPasteTarget(e.target) || isAllowedPasteTarget(document.activeElement))) {
+                return;
+            }
             e.preventDefault();
             e.stopPropagation();
             if (['c', 'x'].includes(key)) {
