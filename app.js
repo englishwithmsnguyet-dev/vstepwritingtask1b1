@@ -4789,9 +4789,9 @@ function renderFullPracticeEvaluationResult(rawText, typeId, timeSpentStr) {
             </div>
         </div>
 
-        <div class="recitation-report-status" style="margin-top: 15px; margin-bottom: 20px;">
-            <i class="fa-solid fa-circle-check report-status-icon"></i>
-            <span>Đã ghi nhận toàn bộ kết quả bài làm của học viên và tự động báo cáo lên hệ thống của giáo viên!</span>
+        <div class="recitation-report-status" style="margin-top: 15px; margin-bottom: 20px; background: #ecfdf5; border: 1.5px solid #10b981; border-radius: 12px; padding: 14px 18px; color: #065f46;">
+            <i class="fa-solid fa-circle-check report-status-icon" style="color: #10b981; font-size: 18px;"></i>
+            <span><strong>BẢN ĐÁNH GIÁ VÀ SỬA BÀI CHI TIẾT DÀNH CHO HỌC VIÊN:</strong> Dưới đây là điểm số 4 tiêu chí chuẩn VSTEP, bản sửa lỗi từng câu từ trên bài viết của bạn và bài mẫu đối chiếu để bạn học hỏi và cải thiện ngay lập tức! (Đồng thời kết quả cũng đã tự động gửi lưu về hệ thống quản lý của giáo viên).</span>
         </div>
 
         <!-- 4 Criteria Rubric Grid based on VSTEP SCORING GUIDE (media_1787637818545.jpg) -->
@@ -4940,7 +4940,7 @@ function submitFullPractice(isAutoTimeUp = false) {
         } else {
             confirmMsg += `✓ Số từ đạt: ${wordCount} từ (đạt chuẩn độ dài VSTEP B1).\n\n`;
         }
-        confirmMsg += 'Hệ thống sẽ chấm điểm chi tiết theo 4 tiêu chí VSTEP của Bộ GD&ĐT, chỉ ra từng lỗi sai ngữ pháp, và hiển thị bài mẫu đối chiếu!';
+        confirmMsg += 'Hệ thống sẽ chấm điểm chi tiết theo 4 tiêu chí VSTEP (30%), chỉ ra từng lỗi sai ngữ pháp, và hiển thị bài mẫu đối chiếu trực tiếp trên màn hình của bạn!';
         if (!confirm(confirmMsg)) return;
     }
 
@@ -4954,6 +4954,9 @@ function submitFullPractice(isAutoTimeUp = false) {
     if (fullPracticeResultBox) {
         fullPracticeResultBox.classList.remove('hidden');
         renderFullPracticeEvaluationResult(userText, activeLetterTypeId, timeSpentStr);
+        setTimeout(() => {
+            fullPracticeResultBox.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }, 100);
     }
 }
 
