@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>VSTEP WRITING TASK 01 - B1 LEVEL</title>
-    <link rel="stylesheet" href="style.css?v=35.0">
+    <link rel="stylesheet" href="style.css?v=36.0">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400..700;1,400..700&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap" rel="stylesheet">
@@ -170,8 +170,11 @@
                         <button class="tab-btn practice-tab" data-tab="writingPractice">
                             <i class="fa-solid fa-graduation-cap"></i> TRẢ BÀI
                         </button>
+                        <button class="tab-btn full-practice-tab" data-tab="fullPractice">
+                            <i class="fa-solid fa-pen-nib"></i> THỰC HÀNH
+                        </button>
                         <button class="tab-btn extra-practice-tab" data-tab="extraPractice">
-                            <i class="fa-solid fa-pen-nib"></i> BÀI LUYỆN TẬP THÊM
+                            <i class="fa-solid fa-book-open"></i> BÀI LUYỆN TẬP THÊM
                         </button>
                     </div>
 
@@ -302,6 +305,65 @@
                             </div>
                         </div>
                     </div>
+
+                    <div class="tab-panel" id="fullPracticePanel">
+                        <div class="full-practice-container">
+                            <!-- Full Practice Lock Notice Banner -->
+                            <div class="recitation-locked-banner hidden" id="fullPracticeLockedBanner">
+                                <i class="fa-solid fa-lock"></i>
+                                <span><strong>Chế độ Thực hành đang hoạt động:</strong> Toàn bộ các tab tài liệu và danh mục đã được khóa trong 20 phút để đảm bảo tính trung thực. Bạn cần hoàn thành hoặc chọn <strong>Nộp bài sớm</strong> để mở khóa!</span>
+                            </div>
+
+                            <div class="full-practice-header">
+                                <div class="full-practice-title-group">
+                                    <h3>THỰC HÀNH VIẾT THƯ HOÀN CHỈNH (20 PHÚT)</h3>
+                                    <p class="full-practice-subtitle"><i class="fa-solid fa-circle-info"></i> Vận dụng dàn ý và từ vựng đã học để tự viết hoàn chỉnh bức thư theo đề bài bên dưới.</p>
+                                </div>
+                                <div class="full-practice-header-right">
+                                    <div class="recitation-timer-badge timer-normal" id="fullPracticeTimerBadge" title="Thời gian làm bài: 20 phút">
+                                        <i class="fa-solid fa-stopwatch"></i>
+                                        <span class="timer-label">Thời gian:</span>
+                                        <span class="timer-countdown" id="fullPracticeCountdown">20:00</span>
+                                    </div>
+                                    <div class="word-counter-badge" id="fullPracticeWordBadge" title="Yêu cầu tối thiểu 120 từ">
+                                        <i class="fa-solid fa-pen-fancy"></i>
+                                        <span class="word-counter-label">Số từ:</span>
+                                        <span class="word-counter-count" id="fullPracticeWordCount">0</span> / 120 từ
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Topic Prompt Box (Matches BÀI MẪU prompt) -->
+                            <div class="full-practice-prompt-box" id="fullPracticePromptBox">
+                                <!-- Populated by JS -->
+                            </div>
+
+                            <!-- Writing Box -->
+                            <div class="full-practice-writing-box" id="fullPracticeWritingBox">
+                                <div class="writing-input-area">
+                                    <textarea id="fullPracticeInput" placeholder="Bắt đầu viết toàn bộ bức thư của bạn tại đây (ví dụ: Dear Helen, ...)..."></textarea>
+                                    <div class="full-practice-note">
+                                        <i class="fa-solid fa-circle-exclamation"></i>
+                                        <span>Quy định làm bài: Viết tối thiểu <strong>120 từ</strong>. Trình bày đầy đủ 3 phần (Mở bài, Thân bài, Kết bài). Không sao chép/dán từ nguồn khác.</span>
+                                    </div>
+                                </div>
+
+                                <div class="full-practice-actions">
+                                    <button class="btn btn-primary btn-submit-practice" id="btnSubmitFullPractice">
+                                        <i class="fa-solid fa-paper-plane"></i> Nộp bài thực hành
+                                    </button>
+                                    <button class="btn btn-early-submit" id="btnSubmitFullPracticeEarly" title="Nộp bài và mở khóa các tab ngay lập tức">
+                                        <i class="fa-solid fa-flag-checkered"></i> Nộp bài sớm
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Evaluation / Review Result Box -->
+                            <div class="full-practice-result-box hidden" id="fullPracticeResultBox">
+                                <!-- Rendered by JS upon submission -->
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
             
@@ -346,6 +408,6 @@
         <input type="hidden" name="pageHistory" value="0">
     </form>
 
-    <script src="app.js?v=35.0"></script>
+    <script src="app.js?v=36.0"></script>
 </body>
 </html>
