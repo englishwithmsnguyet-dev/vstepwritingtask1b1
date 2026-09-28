@@ -3850,26 +3850,27 @@ function handleLoginSubmit() {
     }
 
     if (isTeacher) {
-        if (classVal !== 'GV' && classVal !== 'CB206') {
+        if (classVal && classVal !== 'GV' && classVal !== 'CB206') {
             showLoginError('Giáo viên vui lòng điền Lớp: GV (hoặc CB206)!');
             if (classEl) classEl.focus();
             return;
         }
+        // Giáo viên PTMN không cần mật khẩu
     } else {
         if (classVal !== 'CB206') {
             showLoginError('Lớp học không đúng. Hệ thống chỉ tiếp nhận học viên thuộc lớp CB206!');
             if (classEl) classEl.focus();
             return;
         }
-    }
 
-    if (passVal !== MANDATORY_PASSWORD) {
-        showLoginError('Mật khẩu không chính xác! Vui lòng nhập đúng mật khẩu STUDYHARD.');
-        if (studentPasswordInput) {
-            studentPasswordInput.value = '';
-            studentPasswordInput.focus();
+        if (passVal !== MANDATORY_PASSWORD) {
+            showLoginError('Mật khẩu không chính xác! Vui lòng nhập đúng mật khẩu STUDYHARD.');
+            if (studentPasswordInput) {
+                studentPasswordInput.value = '';
+                studentPasswordInput.focus();
+            }
+            return;
         }
-        return;
     }
 
     if (isTeacher) {
