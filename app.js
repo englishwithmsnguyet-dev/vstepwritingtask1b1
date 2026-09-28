@@ -2984,6 +2984,7 @@ const STUDENTS_BY_CLASS = {
         'Võ Thị Kim Nguyên',
         'Võ Hùng Sanh',
         'Trần Thị Thanh Thảo',
+        'Tiền Thị Thanh Thảo',
         'Đặng Thị Kim Thoa',
         'Trần Thị Tiên Tiên',
         'Lê Kim Tuyền'
