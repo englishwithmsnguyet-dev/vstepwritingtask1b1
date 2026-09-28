@@ -2536,7 +2536,19 @@ function diagnoseVstepErrors(rawText, promptData) {
         "tution": "tuition",
         "schedul": "schedule",
         "materiels": "materials",
-        "curiculum": "curriculum"
+        "curiculum": "curriculum",
+        "accomodation": "accommodation",
+        "necesary": "necessary",
+        "neccessary": "necessary",
+        "oppinion": "opinion",
+        "freind": "friend",
+        "sincerly": "sincerely",
+        "intrested": "interested",
+        "intresting": "interesting",
+        "conveniance": "convenience",
+        "begining": "beginning",
+        "knowlege": "knowledge",
+        "reccomend": "recommend"
     };
 
     Object.keys(spellingDict).forEach(wrongWord => {
@@ -2552,6 +2564,100 @@ function diagnoseVstepErrors(rawText, promptData) {
             });
         }
     });
+
+    // --- J. SENTENCE-START CAPITALIZATION (VIẾT HOA ĐẦU CÂU) ---
+    const rStartSentenceLower = /([.!?]\s+)([a-z])([a-zA-Z]*)/g;
+    let mStart;
+    while ((mStart = rStartSentenceLower.exec(rawText)) !== null) {
+        const punctSpace = mStart[1];
+        const lowerChar = mStart[2];
+        const restWord = mStart[3];
+        const wrongWord = lowerChar + restWord;
+        const correctWord = lowerChar.toUpperCase() + restWord;
+        if (wrongWord !== 'eg' && wrongWord !== 'etc') {
+            errors.push({
+                type: "Viết hoa đầu câu (Capitalization)",
+                category: "spelling",
+                wrong: `${punctSpace}${wrongWord}`,
+                correct: `${punctSpace}${correctWord}`,
+                reason: `Chữ cái đầu câu sau dấu kết thúc câu (${punctSpace.trim()}) bắt buộc phải viết hoa: '${correctWord}'.`
+            });
+        }
+    }
+
+    // --- K. PROPER NOUNS CAPITALIZATION (VIẾT HOA DANH TỪ RIÊNG, THỨ, THÁNG, ĐỊA DANH) ---
+    const properNouns = {
+        "monday": "Monday",
+        "tuesday": "Tuesday",
+        "wednesday": "Wednesday",
+        "thursday": "Thursday",
+        "friday": "Friday",
+        "saturday": "Saturday",
+        "sunday": "Sunday",
+        "january": "January",
+        "february": "February",
+        "march": "March",
+        "april": "April",
+        "june": "June",
+        "july": "July",
+        "august": "August",
+        "september": "September",
+        "october": "October",
+        "november": "November",
+        "december": "December",
+        "can tho": "Can Tho",
+        "ninh kieu": "Ninh Kieu",
+        "cai rang": "Cai Rang",
+        "vietnam": "Vietnam",
+        "viet nam": "Viet Nam",
+        "hanoi": "Hanoi",
+        "ha noi": "Ha Noi",
+        "saigon": "Saigon",
+        "sai gon": "Sai Gon"
+    };
+
+    Object.keys(properNouns).forEach(pKey => {
+        const rProper = new RegExp(`\\b${pKey}\\b`, 'g'); // Case-sensitive: only catches lowercase!
+        let mP;
+        while ((mP = rProper.exec(rawText)) !== null) {
+            errors.push({
+                type: "Viết hoa danh từ riêng (Proper Nouns)",
+                category: "spelling",
+                wrong: mP[0],
+                correct: properNouns[pKey],
+                reason: `Tên thứ trong tuần, tháng hoặc địa danh riêng '${properNouns[pKey]}' bắt buộc phải viết hoa chữ cái đầu.`
+            });
+        }
+    });
+
+    // --- L. PUNCTUATION RULES (QUY CÁCH DẤU CÂU) ---
+    // Missing comma after salutation (e.g. Dear Helen without comma)
+    if (/\bDear\s+[A-Za-z]+(?!\s*,)\s*(\n|$)/i.test(rawText)) {
+        const mSal = rawText.match(/\bDear\s+[A-Za-z]+/i);
+        if (mSal) {
+            errors.push({
+                type: "Dấu câu lời mở đầu (Punctuation)",
+                category: "punctuation",
+                wrong: mSal[0],
+                correct: `${mSal[0]},`,
+                reason: "Sau lời chào mở đầu thư (Dear + Tên người nhận) bắt buộc phải có dấu phẩy ','."
+            });
+        }
+    }
+
+    // Missing comma after sign-off (e.g. Best regards without comma)
+    if (/\b(Best regards|Best wishes|Warm regards|Yours sincerely|Yours faithfully)(?!\s*,)\s*(\n|$)/i.test(rawText)) {
+        const mClose = rawText.match(/\b(Best regards|Best wishes|Warm regards|Yours sincerely|Yours faithfully)\b/i);
+        if (mClose) {
+            errors.push({
+                type: "Dấu câu kết thúc thư (Punctuation)",
+                category: "punctuation",
+                wrong: mClose[0],
+                correct: `${mClose[0]},`,
+                reason: `Sau lời chào kết thư '${mClose[0]}' bắt buộc phải có dấu phẩy ','.`
+            });
+        }
+    }
 
     const punctSpacingErrors = rawText.match(/[a-zA-Z0-9]+[.,!?:;][a-zA-Z]+/g);
     if (punctSpacingErrors && punctSpacingErrors.length > 0) {
