@@ -3651,14 +3651,16 @@ function diffWords(userText, targetText) {
         .replace(/\.\s*\.\s*\./g, '...')
         .replace(/[’‘]/g, "'")
         .replace(/[“”]/g, '"')
-        .replace(/\s*[-‐‑–—−]+\s*/g, ' - ')
-        .replace(/\s*\+\s*/g, ' + ')
-        .replace(/(^|[^a-zA-Z0-9])([vV][0oO])([^a-zA-Z0-9]|$)/g, '$1Vo$3');
+        .replace(/[–—−]/g, '-')
+        .replace(/(^|[^a-zA-Z0-9])([vV])\s*[-_]\s*(ing\b|[0oO]\b)/gi, '$1$2-$3')
+        .replace(/(hành\s*động)\s*-\s*/gi, '$1 - ')
+        .replace(/\s*\+\s*/g, ' + ');
         
     const clean = (w) => {
         let s = w.toLowerCase().trim();
-        s = s.replace(/(^|[^a-z0-9])v0([^a-z0-9]|$)/gi, '$1vo$2');
-        s = s.replace(/^v0$/, 'vo');
+        s = s.replace(/^[.,!?;:()+\[\]\s]+|[.,!?;:()+\[\]\s]+$/g, '');
+        s = s.replace(/^[vV]\s*[-_]?ing$/i, 'ving');
+        s = s.replace(/^[vV]\s*[-_]?[0oO]$/i, 'vo');
         return s;
     };
 
@@ -3687,12 +3689,20 @@ function diffWordsSingle(userText, targetText, preProcess, clean) {
     const rawUser = preProcess(userText).trim();
     const rawTarget = preProcess(targetText).trim();
 
+    // If target has "+ Vo" or "+ Ving" without brackets, treat as bracket slot [+ Vo] or [+ Ving]
+    // This allows template matching to accept any user notation (V-ing, ving, + Ving, (+ Ving), actual verb, etc.)
+    let adjustedTarget = rawTarget;
+    if (!adjustedTarget.includes('[') && !adjustedTarget.includes(']')) {
+        adjustedTarget = adjustedTarget.replace(/(^|[^a-zA-Z0-9])\+\s*Vo\b/g, '$1[+ Vo]');
+        adjustedTarget = adjustedTarget.replace(/(^|[^a-zA-Z0-9])\+\s*Ving\b/g, '$1[+ Ving]');
+    }
+
     // Check if target has bracketed slots [ ... ]
-    const slotMatches = [...rawTarget.matchAll(/\[([^\]]+)\]/g)];
+    const slotMatches = [...adjustedTarget.matchAll(/\[([^\]]+)\]/g)];
 
     if (slotMatches.length > 0) {
         const slots = slotMatches.map(m => m[1]);
-        const parts = rawTarget.split(/\[[^\]]+\]/);
+        const parts = adjustedTarget.split(/\[[^\]]+\]/);
 
         // 1. Try template regex match (English skeleton matches + slots filled with any text)
         let pattern = '^\\s*';
@@ -3708,7 +3718,11 @@ function diffWordsSingle(userText, targetText, preProcess, clean) {
         const pLast = parts[parts.length - 1].trim();
         if (pLast) {
             const lastWords = pLast.split(/\s+/).map(w => w.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'));
-            pattern += lastWords.join('\\s*');
+            if (/^[.,!?;:]+$/.test(pLast)) {
+                pattern += '(?:\\s*[' + pLast.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '])?';
+            } else {
+                pattern += lastWords.join('\\s*');
+            }
         }
         pattern += '\\s*$';
 
@@ -3724,9 +3738,10 @@ function diffWordsSingle(userText, targetText, preProcess, clean) {
                     diff.push({ word: pw, targetWord: pw, type: 'match' });
                 }
                 const userSlotVal = tm[i + 1].trim();
+                const targetSlotDisplay = slots[i].startsWith('+ ') ? slots[i] : `[${slots[i]}]`;
                 diff.push({
                     word: userSlotVal,
-                    targetWord: `[${slots[i]}]`,
+                    targetWord: targetSlotDisplay,
                     type: 'match'
                 });
             }
@@ -3744,7 +3759,7 @@ function diffWordsSingle(userText, targetText, preProcess, clean) {
 
         // 2. Fallback: normalize slots into unique tokens for LCS alignment
         let uNorm = rawUser;
-        let tNorm = rawTarget;
+        let tNorm = adjustedTarget;
         const slotValues = {};
 
         // Check if user explicitly used brackets
@@ -3756,7 +3771,7 @@ function diffWordsSingle(userText, targetText, preProcess, clean) {
                 tNorm = tNorm.replace(`[${slots[i]}]`, ` ${tok} `);
                 slotValues[tok] = {
                     user: `[${userBrackets[i]}]`,
-                    target: `[${slots[i]}]`
+                    target: slots[i].startsWith('+ ') ? slots[i] : `[${slots[i]}]`
                 };
             }
         } else {
@@ -3788,8 +3803,8 @@ function diffWordsSingle(userText, targetText, preProcess, clean) {
                 }
 
                 slotValues[tok] = {
-                    user: extractedUserSlot || `[${slots[i]}]`,
-                    target: `[${slots[i]}]`
+                    user: extractedUserSlot || (slots[i].startsWith('+ ') ? slots[i] : `[${slots[i]}]`),
+                    target: slots[i].startsWith('+ ') ? slots[i] : `[${slots[i]}]`
                 };
             }
         }
