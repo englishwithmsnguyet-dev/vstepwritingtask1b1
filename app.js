@@ -3986,4 +3986,84 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     }
+
+    // Initialize Anti-Copy / Anti-Paste Protection
+    initAntiCopyProtection();
 });
+
+// --- Anti Copy/Paste Protection System ---
+function initAntiCopyProtection() {
+    let toastTimeout = null;
+
+    function showAntiCopyToast(message) {
+        let toast = document.getElementById('antiCopyToast');
+        if (!toast) {
+            toast = document.createElement('div');
+            toast.id = 'antiCopyToast';
+            toast.className = 'anti-copy-toast';
+            toast.innerHTML = `<i class="fa-solid fa-ban"></i> <span id="antiCopyToastMsg"></span>`;
+            document.body.appendChild(toast);
+        }
+
+        const msgSpan = document.getElementById('antiCopyToastMsg');
+        if (msgSpan) {
+            msgSpan.textContent = message || 'Không được phép Sao chép hoặc Dán (Copy/Paste)! Vui lòng tự gõ phím để rèn luyện.';
+        }
+
+        toast.classList.add('show');
+
+        if (toastTimeout) clearTimeout(toastTimeout);
+        toastTimeout = setTimeout(() => {
+            toast.classList.remove('show');
+        }, 2500);
+    }
+
+    // Block Copy Event
+    document.addEventListener('copy', (e) => {
+        e.preventDefault();
+        showAntiCopyToast('Chức năng Sao chép (Copy) đã bị khóa trên hệ thống!');
+    });
+
+    // Block Cut Event
+    document.addEventListener('cut', (e) => {
+        e.preventDefault();
+        showAntiCopyToast('Chức năng Cắt (Cut) đã bị khóa trên hệ thống!');
+    });
+
+    // Block Paste Event
+    document.addEventListener('paste', (e) => {
+        e.preventDefault();
+        showAntiCopyToast('Không được phép Dán (Paste)! Vui lòng tự gõ phím để học thuộc và nhớ bài lâu hơn.');
+    });
+
+    // Block Context Menu (Right Click)
+    document.addEventListener('contextmenu', (e) => {
+        e.preventDefault();
+        showAntiCopyToast('Chuột phải đã bị vô hiệu hóa để bảo vệ nội dung học tập!');
+    });
+
+    // Block Drag and Drop text
+    document.addEventListener('dragstart', (e) => {
+        e.preventDefault();
+    });
+    document.addEventListener('drop', (e) => {
+        e.preventDefault();
+    });
+
+    // Block Keyboard Shortcuts (Ctrl+C, Ctrl+V, Ctrl+X, Ctrl+U, Cmd+C, Cmd+V, Cmd+X, Cmd+U)
+    document.addEventListener('keydown', (e) => {
+        const isCtrlOrCmd = e.ctrlKey || e.metaKey;
+        const key = e.key ? e.key.toLowerCase() : '';
+
+        if (isCtrlOrCmd && ['c', 'v', 'x', 'u', 's'].includes(key)) {
+            e.preventDefault();
+            e.stopPropagation();
+            if (['c', 'x'].includes(key)) {
+                showAntiCopyToast('Chức năng Sao chép (Copy) đã bị vô hiệu hóa!');
+            } else if (key === 'v') {
+                showAntiCopyToast('Chức năng Dán (Paste) đã bị vô hiệu hóa! Vui lòng tự gõ bài viết.');
+            }
+            return false;
+        }
+    }, true);
+}
