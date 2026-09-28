@@ -2950,38 +2950,90 @@ let themeToggle;
 let isDarkMode = false;
 
 // Auth & Student Information
-const ALLOWED_CLASSES = ['CB206', 'GV'];
+const ALLOWED_CLASSES = ['CB206', 'CB210', 'GV'];
 const MANDATORY_PASSWORD = 'STUDYHARD';
 
+const STUDENTS_BY_CLASS = {
+    'CB206': [
+        'Nguyễn Thị Vân Anh',
+        'Nguyễn Thị Hồng Duyên',
+        'Nguyễn Thị Thúy Hồng',
+        'Trương Ngọc Nhi',
+        'Nguyễn Phạm Như Quỳnh',
+        'Trần Lê Quỳnh',
+        'Thị Mỹ Tâm',
+        'Ông Lê Thành',
+        'Trần Nguyễn Thanh Thảo',
+        'Phan Nhật Thiện',
+        'Nguyễn Mỹ Tiên',
+        'Trần Thị Cẩm Tiên',
+        'Võ Trần Bảo Tính',
+        'Trương Thanh Toàn',
+        'Phạm Ngọc Trâm',
+        'Nguyễn Võ Bảo Trân'
+    ],
+    'CB210': [
+        'Lê Huỳnh Thanh Duy',
+        'Nguyễn Cao Kỳ Duyên',
+        'Nguyễn Võ Thành Đạt',
+        'Đào Ngọc Hân',
+        'Trần Văn Hữu',
+        'Trần Văn Kim Khoa',
+        'Nguyễn Thanh Nâng',
+        'Huỳnh Kỳ Nguyên',
+        'Võ Thị Kim Nguyên',
+        'Võ Hùng Sanh',
+        'Trần Thị Thanh Thảo',
+        'Đặng Thị Kim Thoa',
+        'Trần Thị Tiên Tiên',
+        'Lê Kim Tuyền'
+    ]
+};
+
 const AUTHORIZED_STUDENTS = [
-    'Nguyễn Thị Vân Anh',
-    'Nguyễn Thị Hồng Duyên',
-    'Nguyễn Thị Thúy Hồng',
-    'Trương Ngọc Nhi',
-    'Nguyễn Phạm Như Quỳnh',
-    'Trần Lê Quỳnh',
-    'Thị Mỹ Tâm',
-    'Ông Lê Thành',
-    'Trần Nguyễn Thanh Thảo',
-    'Phan Nhật Thiện',
-    'Nguyễn Mỹ Tiên',
-    'Trần Thị Cẩm Tiên',
-    'Võ Trần Bảo Tính',
-    'Trương Thanh Toàn',
-    'Phạm Ngọc Trâm',
-    'Nguyễn Võ Bảo Trân',
+    ...STUDENTS_BY_CLASS['CB206'],
+    ...STUDENTS_BY_CLASS['CB210'],
     'PTMN'
 ];
+
+function removeVietnameseTones(str) {
+    if (!str) return '';
+    return str
+        .normalize('NFD')
+        .replace(/[̀-ͯ]/g, '')
+        .replace(/đ/g, 'd').replace(/Đ/g, 'D');
+}
 
 function normalizeVietnameseName(str) {
     if (!str) return '';
     return str.trim().toLowerCase().replace(/\s+/g, ' ');
 }
 
-function isAuthorizedStudent(name) {
+function findStudentInfo(name) {
+    if (!name) return null;
     const norm = normalizeVietnameseName(name);
-    if (norm === 'ptmn') return true;
-    return AUTHORIZED_STUDENTS.some(auth => normalizeVietnameseName(auth) === norm);
+    const noTone = removeVietnameseTones(norm);
+
+    if (norm === 'ptmn' || noTone === 'ptmn') {
+        return { name: 'Cô Nguyệt (PTMN)', class: 'GV', isTeacher: true };
+    }
+
+    for (const [cls, list] of Object.entries(STUDENTS_BY_CLASS)) {
+        // Try exact match first
+        let found = list.find(s => normalizeVietnameseName(s) === norm);
+        // Try without tones if not found
+        if (!found) {
+            found = list.find(s => removeVietnameseTones(normalizeVietnameseName(s)) === noTone);
+        }
+        if (found) {
+            return { name: found, class: cls, isTeacher: false };
+        }
+    }
+    return null;
+}
+
+function isAuthorizedStudent(name) {
+    return findStudentInfo(name) !== null;
 }
 
 const GOOGLE_FORM_ACTION_URL = "https://docs.google.com/forms/d/e/1FAIpQLSes7cy3Z9Wxr_QQRuJcohfqFycoc0_i5JNEt05FFBBGod2f5A/formResponse";
@@ -3841,28 +3893,31 @@ function handleLoginSubmit() {
         return;
     }
 
-    const isTeacher = normalizeVietnameseName(nameVal) === 'ptmn' || nameVal.toUpperCase() === 'PTMN';
+    const studentInfo = findStudentInfo(nameVal);
 
-    if (!isAuthorizedStudent(nameVal)) {
-        showLoginError('Họ và tên không nằm trong danh sách học viên hoặc giáo viên được cấp quyền truy cập!');
+    if (!studentInfo) {
+        showLoginError('Họ và tên không nằm trong danh sách học viên (CB206, CB210) hoặc giáo viên!');
         if (studentNameInput) studentNameInput.focus();
         return;
     }
 
-    if (isTeacher) {
-        if (classVal && classVal !== 'GV' && classVal !== 'CB206') {
-            showLoginError('Giáo viên vui lòng điền Lớp: GV (hoặc CB206)!');
+    if (studentInfo.isTeacher) {
+        if (classVal && classVal !== 'GV' && !ALLOWED_CLASSES.includes(classVal)) {
+            showLoginError('Giáo viên vui lòng điền Lớp: GV (hoặc để trống)!');
             if (classEl) classEl.focus();
             return;
         }
-        // Giáo viên PTMN không cần mật khẩu
+        currentStudentName = 'Cô Nguyệt (PTMN)';
+        currentStudentClass = classVal || 'GV';
     } else {
-        if (classVal !== 'CB206') {
-            showLoginError('Lớp học không đúng. Hệ thống chỉ tiếp nhận học viên thuộc lớp CB206!');
+        // Check student class
+        if (classVal !== studentInfo.class) {
+            showLoginError('Lớp học không đúng! Học viên ' + studentInfo.name + ' thuộc lớp ' + studentInfo.class + '.');
             if (classEl) classEl.focus();
             return;
         }
 
+        // Check password
         if (passVal !== MANDATORY_PASSWORD) {
             showLoginError('Mật khẩu không chính xác! Vui lòng nhập đúng mật khẩu STUDYHARD.');
             if (studentPasswordInput) {
@@ -3871,16 +3926,9 @@ function handleLoginSubmit() {
             }
             return;
         }
-    }
 
-    if (isTeacher) {
-        currentStudentName = 'Cô Nguyệt (PTMN)';
-        currentStudentClass = classVal || 'GV';
-    } else {
-        // Match exact name from whitelist
-        const matched = AUTHORIZED_STUDENTS.find(auth => normalizeVietnameseName(auth) === normalizeVietnameseName(nameVal));
-        currentStudentName = matched || nameVal;
-        currentStudentClass = 'CB206';
+        currentStudentName = studentInfo.name;
+        currentStudentClass = studentInfo.class;
     }
 
     updateStudentProfileUI(currentStudentName, currentStudentClass);
