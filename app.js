@@ -2794,6 +2794,8 @@ function gradeExtraPractice(typeId) {
     }
 
     let bulletsCount = (hasReq1 ? 1 : 0) + (hasReq2 ? 1 : 0) + (hasReq3 ? 1 : 0) + (hasReq4 ? 1 : 0);
+    const isCompletelyOffTopic = (bulletsCount === 0);
+    const isPartiallyOffTopic = (bulletsCount === 1);
 
     let tfScore = 8.5;
     if (bulletsCount === 4) {
@@ -2802,8 +2804,10 @@ function gradeExtraPractice(typeId) {
         tfScore = wordCount >= 120 ? 7.0 : 6.0;
     } else if (bulletsCount === 2) {
         tfScore = 5.5;
+    } else if (bulletsCount === 1) {
+        tfScore = wordCount >= 120 ? 4.0 : 3.0;
     } else {
-        tfScore = 4.0;
+        tfScore = 1.5; // Completely off-topic
     }
 
     // --- 2. ORGANIZATION (Thang 10) ---
@@ -2875,7 +2879,13 @@ function gradeExtraPractice(typeId) {
 
     let vstepLevel = "B1 LEVEL (ĐẠT CHUẨN)";
     let levelDesc = "Bài viết đáp ứng đầy đủ yêu cầu đề bài, cấu trúc đoạn rõ ràng. Tuy nhiên còn một số lỗi ngữ pháp, mạo từ và dùng từ cần lưu ý sửa chữa.";
-    if (overallBand >= 8.5) {
+    if (isCompletelyOffTopic) {
+        vstepLevel = "LẠC ĐỀ HOÀN TOÀN (OFF-TOPIC)";
+        levelDesc = "Cảnh báo nghiêm trọng: Bài viết hoàn toàn không bám sát yêu cầu đề bài! Bị chấm điểm liệt Task Fulfilment (1.5/10) và khống chế điểm toàn bài.";
+    } else if (isPartiallyOffTopic) {
+        vstepLevel = "NGUY CƠ LẠC ĐỀ (PARTIALLY OFF-TOPIC)";
+        levelDesc = "Cảnh báo: Bài viết chỉ chạm vào 1 ý nhỏ và bỏ sót hầu hết các yêu cầu cốt lõi của đề bài. Điểm Task Fulfilment bị trừ rất nặng.";
+    } else if (overallBand >= 8.5) {
         vstepLevel = "B2 LEVEL (XUẤT SẮC - VƯỢT CHUẨN)";
         levelDesc = "Bài viết rất ấn tượng! Bố cục chuẩn mực 5 bước, từ vựng và ngữ pháp đa dạng, hầu như không có lỗi sai.";
     } else if (overallBand < 6.0) {
@@ -2933,8 +2943,50 @@ function gradeExtraPractice(typeId) {
         `;
     }
 
+    // Build Off-Topic Alert Box
+    let offTopicAlertHtml = '';
+    if (isCompletelyOffTopic) {
+        offTopicAlertHtml = `
+            <div class="off-topic-alert-box" style="background: #fef2f2; border: 2.5px solid #ef4444; border-radius: 14px; padding: 20px 24px; margin-bottom: 24px; box-shadow: 0 4px 14px rgba(239, 68, 68, 0.15);">
+                <div style="display: flex; align-items: center; gap: 12px; color: #b91c1c; font-size: 19px; font-weight: 800;">
+                    <i class="fa-solid fa-triangle-exclamation" style="font-size: 26px; color: #ef4444;"></i>
+                    <span>CẢNH BÁO NGUY HIỂM: BÀI VIẾT LẠC ĐỀ HOÀN TOÀN (OFF-TOPIC)!</span>
+                </div>
+                <p style="margin: 12px 0 8px 0; color: #991b1b; font-size: 15px; line-height: 1.6;">
+                    ⚠️ Bài viết của bạn <strong>hoàn toàn không bám sát yêu cầu đề bài ${data ? data.title : ''}</strong>! Bạn không trả lời được ý nào trong các ý hỏi cốt lõi của đề bài. Theo quy định chấm thi VSTEP của Bộ GD&ĐT, bài viết lạc đề sẽ bị chấm điểm liệt (Band 1.0 - 2.0) ở tiêu chí Task Fulfilment và khống chế tối đa điểm toàn bài.
+                </p>
+                <div style="margin-top: 12px; background: rgba(239, 68, 68, 0.08); padding: 14px 18px; border-radius: 10px; font-size: 14px; color: #7f1d1d;">
+                    <strong>Các yêu cầu cốt lõi đề bài bắt buộc phải có:</strong>
+                    <ul style="margin: 8px 0 0 20px; line-height: 1.7;">
+                        ${reqLabels.map(l => `<li>${l}</li>`).join('')}
+                    </ul>
+                </div>
+            </div>
+        `;
+    } else if (isPartiallyOffTopic) {
+        offTopicAlertHtml = `
+            <div class="off-topic-alert-box" style="background: #fffbeb; border: 2px solid #f59e0b; border-radius: 14px; padding: 18px 22px; margin-bottom: 24px;">
+                <div style="display: flex; align-items: center; gap: 10px; color: #b45309; font-size: 18px; font-weight: 800;">
+                    <i class="fa-solid fa-circle-exclamation" style="font-size: 24px; color: #f59e0b;"></i>
+                    <span>CẢNH BÁO: BÀI VIẾT CÓ DẤU HIỆU LẠC ĐỀ / THIẾU Ý TRỌNG TÂM!</span>
+                </div>
+                <p style="margin: 10px 0 6px 0; color: #92400e; font-size: 14.5px; line-height: 1.6;">
+                    ⚠️ Bài viết chỉ mới chạm vào <strong>1/${reqLabels.length} yêu cầu</strong> của đề bài và bỏ sót các trọng tâm còn lại. Điểm Task Fulfilment bị trừ rất nặng.
+                </p>
+                <div style="margin-top: 8px; font-size: 13.5px; color: #78350f;">
+                    <strong>Kiểm tra lại các ý cần có trong bài:</strong>
+                    <ul style="margin: 6px 0 0 20px; line-height: 1.7;">
+                        ${reqLabels.map(l => `<li>${l}</li>`).join('')}
+                    </ul>
+                </div>
+            </div>
+        `;
+    }
+
     // Build Results HTML
     resultCard.innerHTML = `
+        ${offTopicAlertHtml}
+
         <h3><i class="fa-solid fa-square-poll-vertical"></i> KẾT QUẢ ĐÁNH GIÁ & CHẤM ĐIỂM CHI TIẾT</h3>
 
         <div class="extra-score-banner">
@@ -3022,10 +3074,11 @@ function gradeExtraPractice(typeId) {
     resultCard.scrollIntoView({ behavior: 'smooth', block: 'start' });
 
     // Send Form Report to Teacher
-    sendExtraPracticeReport(typeId, wordCount, overallBand, convertedScore, errors.length, rawText);
+    const offTopicStatus = isCompletelyOffTopic ? '⚠️ LẠC ĐỀ HOÀN TOÀN' : (isPartiallyOffTopic ? '⚠️ NGUY CƠ LẠC ĐỀ' : '✓ ĐÚNG ĐỀ');
+    sendExtraPracticeReport(typeId, wordCount, overallBand, convertedScore, errors.length, rawText, offTopicStatus);
 }
 
-function sendExtraPracticeReport(typeId, wordCount, bandScore, convertedScore, errorCount, studentText) {
+function sendExtraPracticeReport(typeId, wordCount, bandScore, convertedScore, errorCount, studentText, offTopicStatus) {
     if (!currentStudentName || !currentStudentClass) return;
 
     const data = extraPracticeData[typeId];
@@ -3033,7 +3086,7 @@ function sendExtraPracticeReport(typeId, wordCount, bandScore, convertedScore, e
     const now = new Date().toLocaleString('vi-VN');
     const cleanSnippet = studentText.replace(/\s+/g, ' ').substring(0, 120);
 
-    const reportPayload = `[BÀI LUYỆN TẬP THÊM - ${typeTitle.toUpperCase()}]: Học viên ${currentStudentName} (Lớp ${currentStudentClass}) | Điểm Task 1 (30%): ${convertedScore.toFixed(2)}/3.00 (Band ${bandScore.toFixed(1)}/10) | Số từ: ${wordCount} | Lỗi: ${errorCount} lỗi | Thời gian: ${now} | Bài làm: "${cleanSnippet}..."`;
+    const reportPayload = `[BÀI LUYỆN TẬP THÊM - ${typeTitle.toUpperCase()}]: Học viên ${currentStudentName} (Lớp ${currentStudentClass}) | [CHỦ ĐỀ]: ${offTopicStatus || '✓ ĐÚNG ĐỀ'} | Điểm Task 1 (30%): ${convertedScore.toFixed(2)}/3.00 (Band ${bandScore.toFixed(1)}/10) | Số từ: ${wordCount} | Lỗi: ${errorCount} lỗi | Thời gian: ${now} | Bài làm: "${cleanSnippet}..."`;
 
     try {
         const formInput = document.getElementById('gform_hidden_input');
@@ -4710,6 +4763,9 @@ function renderFullPracticeEvaluationResult(rawText, typeId, timeSpentStr) {
     }
 
     let coveredCount = [hasReq1, hasReq2, hasReq3, hasReq4].filter(Boolean).length;
+    const isCompletelyOffTopic = (coveredCount === 0);
+    const isPartiallyOffTopic = (coveredCount === 1);
+
     let tfScore = 8.5;
     if (coveredCount === 4) {
         tfScore = wordCount >= 140 ? 9.0 : (wordCount >= 120 ? 8.5 : 7.5);
@@ -4717,11 +4773,13 @@ function renderFullPracticeEvaluationResult(rawText, typeId, timeSpentStr) {
         tfScore = wordCount >= 120 ? 7.5 : 6.5;
     } else if (coveredCount === 2) {
         tfScore = 5.5;
+    } else if (coveredCount === 1) {
+        tfScore = wordCount >= 120 ? 4.0 : 3.0;
     } else {
-        tfScore = 3.5;
+        tfScore = 1.5; // Completely off-topic (0 bullet points met)
     }
-    if (wordCount < 100) tfScore = Math.max(2.0, tfScore - 2.0);
-    if (wordCount < 60) tfScore = Math.max(1.0, tfScore - 3.0);
+    if (wordCount < 100 && !isCompletelyOffTopic) tfScore = Math.max(2.0, tfScore - 2.0);
+    if (wordCount < 60 && !isCompletelyOffTopic) tfScore = Math.max(1.0, tfScore - 3.0);
 
     // --- 2. ORGANIZATION (0 - 10) ---
     const hasGreeting = /^dear\s+[a-z]+/i.test(rawText.trim()) || /dear\s+(mr|ms|mrs|sir|madam)/i.test(rawText.trim());
@@ -4805,7 +4863,15 @@ function renderFullPracticeEvaluationResult(rawText, typeId, timeSpentStr) {
     let levelBadgeStyle = "background: #10b981; color: #ffffff;";
     let levelSummary = "Bài viết đạt chuẩn yêu cầu VSTEP B1. Bố cục đầy đủ và nội dung bám sát đề thi. Cần xem lại các lỗi nhỏ được đánh dấu bên dưới để tối ưu điểm số.";
 
-    if (overallBand >= 8.5) {
+    if (isCompletelyOffTopic) {
+        vstepLevel = "LẠC ĐỀ HOÀN TOÀN (OFF-TOPIC)";
+        levelBadgeStyle = "background: #dc2626; color: #ffffff;";
+        levelSummary = "Cảnh báo nghiêm trọng: Bài viết hoàn toàn không bám sát yêu cầu đề bài! Bị chấm điểm liệt Task Fulfilment (1.5/10) và khống chế điểm toàn bài.";
+    } else if (isPartiallyOffTopic) {
+        vstepLevel = "NGUY CƠ LẠC ĐỀ (PARTIALLY OFF-TOPIC)";
+        levelBadgeStyle = "background: #d97706; color: #ffffff;";
+        levelSummary = "Cảnh báo: Bài viết chỉ chạm vào 1 ý nhỏ và bỏ sót hầu hết các yêu cầu cốt lõi của đề bài. Điểm Task Fulfilment bị trừ rất nặng.";
+    } else if (overallBand >= 8.5) {
         vstepLevel = "B2 LEVEL (XUẤT SẮC - VƯỢT CHUẨN)";
         levelBadgeStyle = "background: #6366f1; color: #ffffff;";
         levelSummary = "Bài viết xuất sắc! Độ hoàn thành cao, câu văn tự nhiên, từ vựng phong phú và cấu trúc chuẩn mực B2.";
@@ -4871,8 +4937,50 @@ function renderFullPracticeEvaluationResult(rawText, typeId, timeSpentStr) {
         `;
     }
 
+    // Build Off-Topic Alert Box if essay fails core prompts
+    let offTopicAlertHtml = '';
+    if (isCompletelyOffTopic) {
+        offTopicAlertHtml = `
+            <div class="off-topic-alert-box" style="background: #fef2f2; border: 2.5px solid #ef4444; border-radius: 14px; padding: 20px 24px; margin-bottom: 24px; box-shadow: 0 4px 14px rgba(239, 68, 68, 0.15);">
+                <div style="display: flex; align-items: center; gap: 12px; color: #b91c1c; font-size: 19px; font-weight: 800;">
+                    <i class="fa-solid fa-triangle-exclamation" style="font-size: 26px; color: #ef4444;"></i>
+                    <span>CẢNH BÁO NGUY HIỂM: BÀI VIẾT LẠC ĐỀ HOÀN TOÀN (OFF-TOPIC)!</span>
+                </div>
+                <p style="margin: 12px 0 8px 0; color: #991b1b; font-size: 15px; line-height: 1.6;">
+                    ⚠️ Bài viết của bạn <strong>hoàn toàn không bám sát yêu cầu đề bài ${letterTitle}</strong>! Bạn không trả lời được ý nào trong 4 ý hỏi cốt lõi của đề bài. Theo quy định chấm thi VSTEP của Bộ GD&ĐT, bài viết lạc đề sẽ bị chấm điểm liệt (Band 1.0 - 2.0) ở tiêu chí Task Fulfilment và khống chế tối đa điểm toàn bài.
+                </p>
+                <div style="margin-top: 12px; background: rgba(239, 68, 68, 0.08); padding: 14px 18px; border-radius: 10px; font-size: 14px; color: #7f1d1d;">
+                    <strong>Các yêu cầu cốt lõi đề bài bắt buộc phải có:</strong>
+                    <ul style="margin: 8px 0 0 20px; line-height: 1.7;">
+                        ${reqLabels.map(l => `<li>${l}</li>`).join('')}
+                    </ul>
+                </div>
+            </div>
+        `;
+    } else if (isPartiallyOffTopic) {
+        offTopicAlertHtml = `
+            <div class="off-topic-alert-box" style="background: #fffbeb; border: 2px solid #f59e0b; border-radius: 14px; padding: 18px 22px; margin-bottom: 24px;">
+                <div style="display: flex; align-items: center; gap: 10px; color: #b45309; font-size: 18px; font-weight: 800;">
+                    <i class="fa-solid fa-circle-exclamation" style="font-size: 24px; color: #f59e0b;"></i>
+                    <span>CẢNH BÁO: BÀI VIẾT CÓ DẤU HIỆU LẠC ĐỀ / THIẾU Ý TRỌNG TÂM!</span>
+                </div>
+                <p style="margin: 10px 0 6px 0; color: #92400e; font-size: 14.5px; line-height: 1.6;">
+                    ⚠️ Bài viết chỉ mới chạm vào <strong>1/${reqLabels.length} yêu cầu</strong> của đề bài và bỏ sót các trọng tâm còn lại. Điểm Task Fulfilment bị trừ rất nặng.
+                </p>
+                <div style="margin-top: 8px; font-size: 13.5px; color: #78350f;">
+                    <strong>Kiểm tra lại các ý cần có trong bài:</strong>
+                    <ul style="margin: 6px 0 0 20px; line-height: 1.7;">
+                        ${reqLabels.map(l => `<li>${l}</li>`).join('')}
+                    </ul>
+                </div>
+            </div>
+        `;
+    }
+
     // Render HTML in fullPracticeResultBox
     fullPracticeResultBox.innerHTML = `
+        ${offTopicAlertHtml}
+
         <!-- VSTEP Overall Score Banner -->
         <div class="extra-score-banner">
             <div class="score-main-group">
@@ -5030,7 +5138,8 @@ function renderFullPracticeEvaluationResult(rawText, typeId, timeSpentStr) {
     // Send Google Form report to Teacher
     const now = new Date().toLocaleString('vi-VN');
     const excerpt = rawText.length > 200 ? rawText.substring(0, 200) + '...' : rawText;
-    const payload = `[THỰC HÀNH VIẾT BÀI]: Học viên: ${currentStudentName || 'Học viên'} | Lớp: ${currentStudentClass || 'CB206'} | Dạng bài: ${letterTitle} | Điểm 30%: ${convertedScore.toFixed(2)}/3.00 (Band ${overallBand.toFixed(1)}/10) | TF: ${tfConv.toFixed(2)}/0.75 | ORG: ${orgConv.toFixed(2)}/0.75 | VOC: ${vocConv.toFixed(2)}/0.75 | GRAM: ${gramConv.toFixed(2)}/0.75 | Lỗi: ${errors.length} | Số từ: ${wordCount} | Thời gian: ${timeSpentStr}/20:00 | Thời điểm: ${now} | Trích đoạn: "${excerpt}"`;
+    const offTopicStatusStr = isCompletelyOffTopic ? '⚠️ LẠC ĐỀ HOÀN TOÀN (0/4 ý)' : (isPartiallyOffTopic ? '⚠️ NGUY CƠ LẠC ĐỀ (1/4 ý)' : '✓ ĐÚNG ĐỀ');
+    const payload = `[THỰC HÀNH VIẾT BÀI]: Học viên: ${currentStudentName || 'Học viên'} | Lớp: ${currentStudentClass || 'CB206'} | Dạng bài: ${letterTitle} | [CHỦ ĐỀ]: ${offTopicStatusStr} | Điểm 30%: ${convertedScore.toFixed(2)}/3.00 (Band ${overallBand.toFixed(1)}/10) | TF: ${tfConv.toFixed(2)}/0.75 | ORG: ${orgConv.toFixed(2)}/0.75 | VOC: ${vocConv.toFixed(2)}/0.75 | GRAM: ${gramConv.toFixed(2)}/0.75 | Lỗi: ${errors.length} | Số từ: ${wordCount} | Thời gian: ${timeSpentStr}/20:00 | Thời điểm: ${now} | Trích đoạn: "${excerpt}"`;
 
     reportResultToGoogleForm(payload);
 }
