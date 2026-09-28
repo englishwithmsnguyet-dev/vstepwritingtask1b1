@@ -2679,3 +2679,273 @@ h1, h2, h3, h4, h5, h6 {
     color: #34d399;
     background: rgba(16, 185, 129, 0.25);
 }
+
+/* ==========================================================================
+   ENHANCED MOBILE & TABLET RESPONSIVE SYSTEM
+   ========================================================================== */
+@media (max-width: 768px) {
+    body {
+        overflow: auto;
+    }
+
+    .app-container {
+        flex-direction: column;
+        height: 100vh;
+        height: 100dvh;
+    }
+    
+    .sidebar {
+        width: 100%;
+        height: auto;
+        border-right: none;
+        border-bottom: 1px solid var(--border-color);
+        box-shadow: var(--shadow-sm);
+        flex-shrink: 0;
+    }
+
+    .sidebar-header {
+        padding: 12px 16px 8px;
+        flex-direction: row;
+        align-items: center;
+        justify-content: flex-start;
+        gap: 12px;
+        border-bottom: none;
+    }
+
+    .sidebar-header .logo {
+        width: 36px;
+        height: 36px;
+        font-size: 18px;
+        margin-bottom: 0;
+        transform: none;
+        border-radius: 10px;
+    }
+
+    .sidebar-header h2 {
+        font-size: 17px;
+        margin-bottom: 0;
+    }
+
+    .sidebar-header p {
+        display: none;
+    }
+
+    .student-profile-card {
+        margin: 4px 12px 6px;
+        padding: 8px 12px;
+    }
+
+    .student-avatar {
+        width: 32px;
+        height: 32px;
+        font-size: 14px;
+        border-radius: 8px;
+    }
+
+    .student-name-display {
+        font-size: 13px;
+    }
+
+    .sidebar-progress-container {
+        margin: 2px 12px 6px;
+        padding: 8px 12px;
+    }
+
+    .sidebar-footer {
+        display: none;
+    }
+    
+    .letter-nav {
+        flex-direction: row;
+        overflow-x: auto;
+        padding: 6px 12px 10px;
+        gap: 8px;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+        border-bottom: 1px solid var(--border-color);
+    }
+
+    .letter-nav::-webkit-scrollbar {
+        display: none;
+    }
+    
+    .nav-item {
+        white-space: nowrap;
+        flex-shrink: 0;
+        padding: 8px 14px;
+        border-radius: 10px;
+    }
+
+    .nav-item .nav-text {
+        margin-left: 8px;
+    }
+
+    .nav-title-en {
+        font-size: 13.5px;
+    }
+
+    .nav-title-vi {
+        font-size: 11px;
+    }
+    
+    .top-header {
+        min-height: auto;
+        padding: 10px 14px;
+        border-bottom: 1px solid var(--glass-border);
+    }
+
+    .main-title-en {
+        font-size: 15px;
+    }
+
+    .main-title-vi {
+        font-size: 12px;
+    }
+
+    .theme-toggle {
+        width: 36px;
+        height: 36px;
+        font-size: 14px;
+        flex-shrink: 0;
+    }
+    
+    .content-scroll-area {
+        padding: 14px 10px;
+        flex: 1;
+        -webkit-overflow-scrolling: touch;
+    }
+    
+    .tabs-container {
+        padding: 6px;
+        gap: 6px;
+        margin-bottom: 16px;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+    }
+
+    .tabs-container::-webkit-scrollbar {
+        display: none;
+    }
+
+    .tab-btn {
+        padding: 8px 14px;
+        font-size: 13px;
+        gap: 6px;
+        flex-shrink: 0;
+    }
+    
+    .tab-panel {
+        padding: 18px 14px;
+        border-radius: 16px;
+    }
+
+    .sample-prompt-container,
+    .extra-prompt-box {
+        padding: 16px 14px;
+        border-radius: 14px;
+    }
+
+    .sample-analysis-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 8px;
+    }
+
+    #writingArea,
+    #extraWritingArea {
+        padding: 14px 12px;
+        font-size: 15px;
+        min-height: 220px;
+        line-height: 1.6;
+    }
+
+    .editor-header {
+        padding: 10px 14px;
+        font-size: 13px;
+    }
+
+    .editor-actions {
+        padding: 12px 14px;
+        gap: 8px;
+    }
+
+    .btn {
+        padding: 10px 16px;
+        font-size: 13.5px;
+    }
+
+    .extra-score-banner {
+        padding: 16px 14px;
+        flex-direction: column;
+        text-align: center;
+        gap: 12px;
+    }
+
+    .score-main-group {
+        flex-direction: column;
+        text-align: center;
+        gap: 10px;
+    }
+
+    .criteria-grid {
+        grid-template-columns: 1fr;
+        gap: 10px;
+    }
+
+    .table-responsive {
+        width: 100%;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .error-table {
+        min-width: 520px;
+    }
+
+    .welcome-screen {
+        flex-direction: column;
+        padding: 15px 10px;
+        gap: 20px;
+    }
+
+    .welcome-illustration {
+        width: 140px;
+    }
+
+    .quest-card {
+        padding: 20px 16px;
+        border-radius: 16px;
+    }
+
+    .login-modal-box,
+    .teacher-modal-box {
+        width: 92% !important;
+        max-width: 440px !important;
+        padding: 20px 16px !important;
+    }
+}
+
+@media (max-width: 480px) {
+    .sample-analysis-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .editor-actions {
+        flex-direction: column;
+        width: 100%;
+    }
+
+    .editor-actions .btn {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .comparison-boxes {
+        grid-template-columns: 1fr;
+    }
+
+    .annotated-box {
+        margin: 2px 0;
+        display: inline-block;
+    }
+}
