@@ -4110,7 +4110,7 @@ h1, h2, h3, h4, h5, h6 {
 /* Clean Letter Box Paragraphs */
 .sample-letter-box p {
     margin: 0 0 16px 0;
-    text-indent: 24px;
+    text-indent: 0 !important;
 }
 .sample-letter-box p:last-of-type {
     margin-bottom: 16px;
@@ -4122,4 +4122,25 @@ h1, h2, h3, h4, h5, h6 {
 .sample-letter-box strong:last-child {
     margin-top: 14px;
     margin-bottom: 0;
+}
+
+.translation-box p {
+    text-indent: 0 !important;
+}
+
+/* Highlight for Filled-in Information (Thông tin đã thế vào) */
+.sample-filled-info {
+    color: #1d4ed8;
+    font-weight: 700;
+    background-color: rgba(219, 234, 254, 0.6);
+    padding: 1px 6px;
+    border-radius: 4px;
+    border-bottom: 2px solid #3b82f6;
+    display: inline;
+}
+
+[data-theme="dark"] .sample-filled-info {
+    color: #93c5fd;
+    background-color: rgba(59, 130, 246, 0.25);
+    border-bottom-color: #60a5fa;
 }
