@@ -2002,7 +2002,7 @@ h1, h2, h3, h4, h5, h6 {
     box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05), 0 2px 5px rgba(0, 0, 0, 0.03);
     font-family: "Georgia", "Times New Roman", serif;
     font-size: 16px;
-    line-height: 1.9;
+    line-height: 2.3;
     margin-top: 15px;
     overflow: hidden;
 }
@@ -4109,7 +4109,8 @@ h1, h2, h3, h4, h5, h6 {
 
 /* Clean Letter Box Paragraphs */
 .sample-letter-box p {
-    margin: 0 0 16px 0;
+    margin: 0 0 22px 0;
+    line-height: 2.3;
     text-indent: 0 !important;
 }
 .sample-letter-box p:last-of-type {
@@ -4125,22 +4126,81 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .translation-box p {
+    margin: 0 0 20px 0;
+    line-height: 2.2;
     text-indent: 0 !important;
 }
 
-/* Highlight for Filled-in Information (Thông tin đã thế vào) */
+/* Highlight for Filled-in Information (Thông tin đã thế vào - Không gạch chân, đa màu sắc, dãn dòng thoáng) */
 .sample-filled-info {
-    color: #1d4ed8;
     font-weight: 700;
-    background-color: rgba(219, 234, 254, 0.6);
-    padding: 1px 6px;
-    border-radius: 4px;
-    border-bottom: 2px solid #3b82f6;
+    padding: 3px 8px;
+    border-radius: 6px;
     display: inline;
+    border: none !important;
+    border-bottom: none !important;
+    text-decoration: none !important;
+    box-shadow: none !important;
+    line-height: inherit;
+    margin: 0 2px;
 }
 
-[data-theme="dark"] .sample-filled-info {
+/* Color 1: Sapphire Blue */
+.sample-filled-info.filled-c1 {
+    color: #1e40af;
+    background-color: rgba(219, 234, 254, 0.85);
+}
+[data-theme="dark"] .sample-filled-info.filled-c1 {
     color: #93c5fd;
-    background-color: rgba(59, 130, 246, 0.25);
-    border-bottom-color: #60a5fa;
+    background-color: rgba(30, 58, 138, 0.45);
+}
+
+/* Color 2: Emerald Green */
+.sample-filled-info.filled-c2 {
+    color: #065f46;
+    background-color: rgba(209, 250, 229, 0.85);
+}
+[data-theme="dark"] .sample-filled-info.filled-c2 {
+    color: #6ee7b7;
+    background-color: rgba(6, 78, 59, 0.45);
+}
+
+/* Color 3: Warm Amber / Golden */
+.sample-filled-info.filled-c3 {
+    color: #92400e;
+    background-color: rgba(254, 243, 199, 0.9);
+}
+[data-theme="dark"] .sample-filled-info.filled-c3 {
+    color: #fcd34d;
+    background-color: rgba(120, 53, 15, 0.45);
+}
+
+/* Color 4: Rich Violet / Purple */
+.sample-filled-info.filled-c4 {
+    color: #5b21b6;
+    background-color: rgba(237, 233, 254, 0.85);
+}
+[data-theme="dark"] .sample-filled-info.filled-c4 {
+    color: #c4b5fd;
+    background-color: rgba(76, 29, 149, 0.45);
+}
+
+/* Color 5: Rose Coral */
+.sample-filled-info.filled-c5 {
+    color: #9f1239;
+    background-color: rgba(255, 228, 230, 0.9);
+}
+[data-theme="dark"] .sample-filled-info.filled-c5 {
+    color: #fda4af;
+    background-color: rgba(136, 19, 55, 0.45);
+}
+
+/* Color 6: Deep Teal / Ocean */
+.sample-filled-info.filled-c6 {
+    color: #155e75;
+    background-color: rgba(207, 250, 254, 0.9);
+}
+[data-theme="dark"] .sample-filled-info.filled-c6 {
+    color: #67e8f9;
+    background-color: rgba(22, 78, 99, 0.45);
 }
