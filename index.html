@@ -4,13 +4,19 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>VSTEP WRITING TASK 01 - B1 LEVEL</title>
-    <link rel="stylesheet" href="style.css?v=49.0">
+    <link rel="stylesheet" href="style.css?v=50.0">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400..700;1,400..700&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <script>
         window.onerror = function(msg, url, line, col, error) {
+            var msgStr = String(msg || '');
+            var urlStr = String(url || '');
+            // Bỏ qua lỗi từ trình duyệt nhúng bên ngoài (Zalo, Facebook, extensions, v.v.)
+            if (msgStr.toLowerCase().includes('zalo') || msgStr.includes('Script error') || !urlStr.includes('app.js')) {
+                return false;
+            }
             var debugDiv = document.getElementById('debug-error-banner');
             if (!debugDiv) {
                 debugDiv = document.createElement('div');
@@ -413,6 +419,6 @@
         <input type="hidden" name="pageHistory" value="0">
     </form>
 
-    <script src="app.js?v=49.0"></script>
+    <script src="app.js?v=50.0"></script>
 </body>
 </html>
