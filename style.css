@@ -4204,3 +4204,304 @@ h1, h2, h3, h4, h5, h6 {
     color: #67e8f9;
     background-color: rgba(22, 78, 99, 0.45);
 }
+
+
+
+/* ==========================================================================
+   BẢNG RÀ SOÁT CHI TIẾT TỪNG CÂU (SENTENCE-BY-SENTENCE AUDIT STYLES)
+   ========================================================================== */
+.sentence-audit-wrapper {
+    background: var(--bg-card, #ffffff);
+    border: 1.5px solid var(--border-color, #e2e8f0);
+    border-radius: 16px;
+    padding: 24px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
+}
+
+.sentence-audit-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-bottom: 8px;
+}
+
+.sentence-audit-title {
+    font-size: 17px;
+    font-weight: 800;
+    color: var(--text-main, #1e293b);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.sentence-audit-stats {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.stat-pill {
+    font-size: 12.5px;
+    font-weight: 700;
+    padding: 4px 10px;
+    border-radius: 20px;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.stat-pill.success {
+    background: #ecfdf5;
+    color: #059669;
+    border: 1px solid #10b981;
+}
+
+.stat-pill.warning {
+    background: #fef2f2;
+    color: #dc2626;
+    border: 1px solid #ef4444;
+}
+
+.stat-pill.upgrade {
+    background: #f5f3ff;
+    color: #7c3aed;
+    border: 1px solid #8b5cf6;
+}
+
+.sentence-audit-sub {
+    font-size: 14px;
+    color: var(--text-muted, #64748b);
+    margin: 0 0 20px 0;
+    line-height: 1.5;
+}
+
+.sentence-cards-list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.sentence-audit-card {
+    background: var(--bg-main, #f8fafc);
+    border: 1.5px solid var(--border-color, #cbd5e1);
+    border-radius: 12px;
+    padding: 16px 20px;
+    transition: all 0.2s ease;
+}
+
+.sentence-audit-card.success {
+    border-left: 5px solid #10b981;
+}
+
+.sentence-audit-card.warning {
+    border-left: 5px solid #ef4444;
+    background: #fffafa;
+}
+
+.sentence-audit-card.upgrade {
+    border-left: 5px solid #8b5cf6;
+    background: #faf8ff;
+}
+
+.sentence-card-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 12px;
+    border-bottom: 1px dashed var(--border-color, #e2e8f0);
+    padding-bottom: 10px;
+}
+
+.sentence-head-left {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.sentence-index-badge {
+    font-size: 12px;
+    font-weight: 800;
+    background: var(--primary-color, #6366f1);
+    color: #ffffff;
+    padding: 3px 8px;
+    border-radius: 6px;
+}
+
+.sentence-role-badge {
+    font-size: 12.5px;
+    font-weight: 600;
+    color: var(--text-muted, #64748b);
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.sentence-status-pill {
+    font-size: 12px;
+    font-weight: 700;
+    padding: 3px 10px;
+    border-radius: 12px;
+}
+
+.sentence-status-pill.badge-success {
+    background: #d1fae5;
+    color: #065f46;
+}
+
+.sentence-status-pill.badge-warning {
+    background: #fee2e2;
+    color: #991b1b;
+}
+
+.sentence-status-pill.badge-upgrade {
+    background: #ede9fe;
+    color: #5b21b6;
+}
+
+.sentence-card-content {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.sentence-row {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.row-tag {
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.row-tag.original-tag {
+    color: var(--text-muted, #64748b);
+}
+
+.row-tag.rewrite-tag {
+    color: #059669;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.sentence-text {
+    font-size: 15px;
+    line-height: 1.6;
+    padding: 8px 12px;
+    border-radius: 8px;
+}
+
+.sentence-text.original-text {
+    background: rgba(0, 0, 0, 0.03);
+    color: var(--text-main, #1e293b);
+    font-style: italic;
+}
+
+.sentence-text.rewrite-text {
+    background: rgba(16, 185, 129, 0.08);
+    color: #065f46;
+    font-weight: 600;
+    border: 1px solid rgba(16, 185, 129, 0.2);
+}
+
+.audit-err-highlight {
+    background: #fecaca;
+    color: #991b1b;
+    padding: 1px 4px;
+    border-radius: 4px;
+    border-bottom: 2px solid #ef4444;
+    font-weight: 700;
+}
+
+.sentence-errors-box {
+    background: #fff5f5;
+    border: 1px solid #fecaca;
+    border-radius: 8px;
+    padding: 10px 14px;
+}
+
+.sentence-error-items {
+    margin: 6px 0 0 18px;
+    padding: 0;
+    font-size: 13.5px;
+    line-height: 1.6;
+    color: #7f1d1d;
+}
+
+.sentence-error-items li {
+    margin-bottom: 6px;
+}
+
+.err-sub-type {
+    font-weight: 700;
+    color: #b91c1c;
+}
+
+.err-strike {
+    text-decoration: line-through;
+    color: #ef4444;
+    font-weight: 600;
+}
+
+.err-fix {
+    color: #059669;
+    font-weight: 700;
+}
+
+.err-reason-note {
+    font-size: 12.5px;
+    color: #555555;
+    margin-top: 2px;
+}
+
+/* Dark mode compatibility */
+[data-theme="dark"] .sentence-audit-wrapper {
+    background: #1e293b;
+    border-color: #334155;
+}
+
+[data-theme="dark"] .sentence-audit-card {
+    background: #0f172a;
+    border-color: #334155;
+}
+
+[data-theme="dark"] .sentence-audit-card.warning {
+    background: #1f1315;
+}
+
+[data-theme="dark"] .sentence-audit-card.upgrade {
+    background: #171228;
+}
+
+[data-theme="dark"] .sentence-text.original-text {
+    background: rgba(255, 255, 255, 0.04);
+    color: #e2e8f0;
+}
+
+[data-theme="dark"] .sentence-text.rewrite-text {
+    background: rgba(16, 185, 129, 0.15);
+    color: #6ee7b7;
+    border-color: rgba(16, 185, 129, 0.35);
+}
+
+[data-theme="dark"] .sentence-errors-box {
+    background: rgba(239, 68, 68, 0.1);
+    border-color: rgba(239, 68, 68, 0.3);
+}
+
+[data-theme="dark"] .sentence-error-items {
+    color: #fca5a5;
+}
+
+[data-theme="dark"] .err-reason-note {
+    color: #cbd5e1;
+}
