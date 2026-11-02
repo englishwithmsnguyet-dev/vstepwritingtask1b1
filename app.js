@@ -120,6 +120,18 @@ target: "Best wishes,"
 ],
 request: [
 {
+cue: "Viết lời chào mở đầu thân mật: 'Kính gửi [tên của người nhận],'",
+target: "Dear [tên của người nhận],"
+},
+{
+cue: "Viết lời chào mở đầu trang trọng (không biết chắc chắn nam hay nữ): 'Kính gửi Ông/Bà,'",
+target: "Dear Sir/Madam,"
+},
+{
+cue: "Viết lời chào mở đầu bán trang trọng: 'Kính gửi Ông/Bà [họ của người nhận],'",
+target: "Dear Mr. / Ms. / Mrs. [họ của người nhận],"
+},
+{
 cue: "Viết câu mở thư yêu cầu (Thân mật): 'Cậu khỏe không? Tớ hy vọng cậu vẫn khỏe. Tớ viết thư này để hỏi một vài thông tin về [thứ cần xin thông tin] vì [lý do].'",
 target: "How are you? I hope you are doing well. I’m writing to ask for some information about [thứ cần xin thông tin] because [lý do]."
 },
@@ -174,9 +186,33 @@ target: "I hope you can help me with this. Write back soon."
 {
 cue: "Viết câu kết thư (Trang trọng & Bán trang trọng): 'Cảm ơn vì thời gian của ông/bà. Tôi rất mong đợi phản hồi từ ông/bà.'",
 target: "Thank you for your time. I look forward to your reply."
+},
+{
+cue: "Viết lời chào kết thúc thân mật: 'Lời chúc tốt đẹp nhất,'",
+target: "Best wishes,"
+},
+{
+cue: "Viết lời chào kết thúc trang trọng: 'Trân trọng,'",
+target: "Yours faithfully,"
+},
+{
+cue: "Viết lời chào kết thúc bán trang trọng: 'Trân trọng,'",
+target: "Yours sincerely,"
 }
 ],
 description: [
+{
+cue: "Viết lời chào mở đầu thân mật: 'Kính gửi [tên của người nhận],'",
+target: "Dear [tên của người nhận],"
+},
+{
+cue: "Viết lời chào mở đầu trang trọng (không biết chắc chắn nam hay nữ): 'Kính gửi Ông/Bà,'",
+target: "Dear Sir/Madam,"
+},
+{
+cue: "Viết lời chào mở đầu bán trang trọng: 'Kính gửi Ông/Bà [họ của người nhận],'",
+target: "Dear Mr. / Ms. / Mrs. [họ của người nhận],"
+},
 {
 cue: "Viết câu mở đầu khi thư yêu cầu CUNG CẤP THÔNG TIN (Thân mật): 'Cậu khỏe không? Tớ hy vọng cậu vẫn khỏe. Trong thư của cậu, cậu đã hỏi tớ về [thứ cần mô tả thông tin], vì vậy dưới đây là một số thông tin.'",
 target: "How are you? I hope you are doing well. In your letter, you asked me about [thứ cần mô tả thông tin], so here is some information."
@@ -200,9 +236,29 @@ target: "I hope you will find this information useful. Let me know if you need m
 {
 cue: "Viết câu kết thư mô tả (Trang trọng & Bán trang trọng): 'Tôi hy vọng thông tin trên sẽ giúp ích cho ông/bà. Xin vui lòng liên hệ với tôi nếu ông/bà cần thêm chi tiết.'",
 target: "I hope the information above will be helpful to you. Please feel free to contact me if you need more details."
+},
+{
+cue: "Viết lời chào kết thúc thân mật: 'Lời chúc tốt đẹp nhất,'",
+target: "Best wishes,"
+},
+{
+cue: "Viết lời chào kết thúc trang trọng: 'Trân trọng,'",
+target: "Yours faithfully,"
+},
+{
+cue: "Viết lời chào kết thúc bán trang trọng: 'Trân trọng,'",
+target: "Yours sincerely,"
 }
 ],
 complaint: [
+{
+cue: "Viết lời chào mở đầu trang trọng (không biết chắc chắn nam hay nữ): 'Kính gửi Ông/Bà,'",
+target: "Dear Sir/Madam,"
+},
+{
+cue: "Viết lời chào mở đầu bán trang trọng: 'Kính gửi Ông/Bà [họ của người nhận],'",
+target: "Dear Mr. / Ms. / Mrs. [họ của người nhận],"
+},
 {
 cue: "Viết câu mở thư phàn nàn: 'Tôi viết thư này để phàn nàn về [vấn đề cần phàn nàn]. Gần đây tôi đã sử dụng [sản phẩm/dịch vụ] của ông/bà và không hài lòng với nó.'",
 target: "I am writing to complain about [vấn đề cần phàn nàn]. I recently used your [sản phẩm/dịch vụ] and was not satisfied with it."
@@ -230,9 +286,25 @@ target: "I hope that you will look into these issues soon."
 {
 cue: "Viết câu kết thư thể hiện sự mong chờ phản hồi: 'Tôi rất mong sớm nhận được phản hồi từ ông/bà.'",
 target: "I look forward to receiving your reply soon."
+},
+{
+cue: "Viết lời chào kết thúc trang trọng: 'Trân trọng,'",
+target: "Yours faithfully,"
+},
+{
+cue: "Viết lời chào kết thúc bán trang trọng: 'Trân trọng,'",
+target: "Yours sincerely,"
 }
 ],
 feedback: [
+{
+cue: "Viết lời chào mở đầu trang trọng (không biết chắc chắn nam hay nữ): 'Kính gửi Ông/Bà,'",
+target: "Dear Sir/Madam,"
+},
+{
+cue: "Viết lời chào mở đầu bán trang trọng: 'Kính gửi Ông/Bà [họ của người nhận],'",
+target: "Dear Mr. / Ms. / Mrs. [họ của người nhận],"
+},
 {
 cue: "Viết câu mở thư phản hồi: 'Tôi viết thư này để đưa ra phản hồi về [vấn đề cần phản hồi đánh giá]. Gần đây tôi đã sử dụng [sản phẩm/dịch vụ] của ông/bà và muốn chia sẻ trải nghiệm của mình.'",
 target: "I am writing to give you feedback on [vấn đề cần phản hồi đánh giá]. I recently used your [sản phẩm/dịch vụ] and would like to share my experience."
@@ -300,9 +372,29 @@ target: "I hope you will consider [hành động – Ving]."
 {
 cue: "Viết câu kết thư phản hồi: 'Tôi hy vọng phản hồi của mình sẽ giúp ông/bà cải thiện [sản phẩm/dịch vụ]. Xin vui lòng liên hệ với tôi nếu có thêm câu hỏi nào.'",
 target: "I hope my feedback will help you improve your [sản phẩm/dịch vụ]. Please feel free to contact me if you have any further questions."
+},
+{
+cue: "Viết lời chào kết thúc trang trọng: 'Trân trọng,'",
+target: "Yours faithfully,"
+},
+{
+cue: "Viết lời chào kết thúc bán trang trọng: 'Trân trọng,'",
+target: "Yours sincerely,"
 }
 ],
 apology: [
+{
+cue: "Viết lời chào mở đầu thân mật: 'Kính gửi [tên của người nhận],'",
+target: "Dear [tên của người nhận],"
+},
+{
+cue: "Viết lời chào mở đầu trang trọng (không biết chắc chắn nam hay nữ): 'Kính gửi Ông/Bà,'",
+target: "Dear Sir/Madam,"
+},
+{
+cue: "Viết lời chào mở đầu bán trang trọng: 'Kính gửi Ông/Bà [họ của người nhận],'",
+target: "Dear Mr. / Ms. / Mrs. [họ của người nhận],"
+},
 {
 cue: "Viết câu mở thư xin lỗi (Thân mật): 'Tớ thực sự xin lỗi vì [vấn đề cần xin lỗi]. Hãy để tớ giải thích những gì đã xảy ra để cậu hiểu rõ tình hình nhé.'",
 target: "I’m really sorry for [vấn đề cần xin lỗi]. Let me explain what happened so you can understand the situation."
@@ -366,9 +458,25 @@ target: "Sorry once again. Thanks for taking the time to read this. Write back s
 {
 cue: "Viết câu kết thư xin lỗi trang trọng: 'Tôi muốn xin lỗi một lần nữa vì sự bất tiện này. Cảm ơn vì đã dành thời gian đọc thư của tôi. Tôi rất mong nhận được hồi âm sớm.'",
 target: "I would like to apologize once again for the inconvenience. Thank you for taking the time to read my letter. I look forward to receiving your reply soon."
+},
+{
+cue: "Viết lời chào kết thúc thân mật: 'Lời chúc tốt đẹp nhất,'",
+target: "Best wishes,"
+},
+{
+cue: "Viết lời chào kết thúc trang trọng: 'Trân trọng,'",
+target: "Yours faithfully,"
+},
+{
+cue: "Viết lời chào kết thúc bán trang trọng: 'Trân trọng,'",
+target: "Yours sincerely,"
 }
 ],
 application: [
+{
+cue: "Viết lời chào mở đầu trang trọng (không biết chắc chắn nam hay nữ): 'Kính gửi Ông/Bà,'",
+target: "Dear Sir/Madam,"
+},
 {
 cue: "Viết câu mở thư ứng tuyển: 'Tôi viết thư này để ứng tuyển vào vị trí [vị trí công việc] được quảng cáo trên/trong [nguồn tuyển dụng].'",
 target: "I am writing to apply for the position of [vị trí công việc] which was advertised on/in [nguồn tuyển dụng]."
@@ -392,6 +500,10 @@ target: "I believe I would be a suitable candidate for this position. This is be
 {
 cue: "Viết câu kết thư ứng tuyển: 'Tôi sẽ rất biết ơn nếu ông/bà có thể xem xét hồ sơ ứng tuyển của tôi. Tôi rất mong sớm nhận được phản hồi từ ông/bà.'",
 target: "I would be grateful if you could consider my application. I look forward to receiving your reply soon."
+},
+{
+cue: "Viết lời chào kết thúc trang trọng: 'Trân trọng,'",
+target: "Yours faithfully,"
 }
 ]
 };
@@ -4162,6 +4274,13 @@ function getHintText(target) {
         return hintOpts.join(' / ');
     }
 
+    if (/^dear\s+sir\s*\/\s*madam/i.test(target)) {
+        return 'Dear S...,';
+    }
+    if (/^dear\s+mr\b/i.test(target) && target.includes('Ms.') && target.includes('Mrs.')) {
+        return 'Dear M... [họ...]';
+    }
+
     const targetClean = target
         .replace(/\s*\/\s*quite unhappy/i, '')
         .replace(/on\/in/g, 'on/in');
@@ -4185,6 +4304,12 @@ function getHintText(target) {
                 cues.push(`${words[0]} ${words[1][0]}...,`);
             } else if (words[0].toLowerCase() === 'yours' && words.length >= 2) {
                 cues.push(`${words[0]} ${words[1][0]}...,`);
+            } else if (words[0].toLowerCase() === 'dear' && words.length >= 2) {
+                if (words[1].startsWith('[')) {
+                    cues.push(`${words[0]} ${words[1]}`);
+                } else {
+                    cues.push(`${words[0]} ${words[1][0]}...,`);
+                }
             } else {
                 cues.push(words.join(' '));
             }
@@ -4266,6 +4391,42 @@ function diffWords(userText, targetText) {
         s = s.replace(/^[vV]\s*[-_]?[0oO]$/i, 'vo');
         return s;
     };
+
+    // Special handling for salutation Dear Sir/Madam, (accept Dear Sir,, Dear Madam,, Dear Sir/Madam,)
+    if (/^dear\s+sir\s*\/\s*madam/i.test(targetText)) {
+        const altTargets = [
+            'Dear Sir/Madam,',
+            'Dear Sir,',
+            'Dear Madam,'
+        ];
+        let bestDiff = null;
+        for (const alt of altTargets) {
+            const curDiff = diffWordsSingle(userText, alt, preProcess, clean, isPunctOrSignOnly);
+            if (!bestDiff || curDiff.accuracy > bestDiff.accuracy) {
+                bestDiff = curDiff;
+            }
+        }
+        return bestDiff;
+    }
+
+    // Special handling for semi-formal salutation Dear Mr. / Ms. / Mrs. [họ của người nhận],
+    if (/^dear\s+mr\b/i.test(targetText) && targetText.includes('Ms.') && targetText.includes('Mrs.')) {
+        const altTargets = [
+            targetText,
+            'Dear Mr. [họ của người nhận],',
+            'Dear Ms. [họ của người nhận],',
+            'Dear Mrs. [họ của người nhận],',
+            'Dear Mr./Ms./Mrs. [họ của người nhận],'
+        ];
+        let bestDiff = null;
+        for (const alt of altTargets) {
+            const curDiff = diffWordsSingle(userText, alt, preProcess, clean, isPunctOrSignOnly);
+            if (!bestDiff || curDiff.accuracy > bestDiff.accuracy) {
+                bestDiff = curDiff;
+            }
+        }
+        return bestDiff;
+    }
 
     // If target has alternate options separated by ' / ' (e.g. 'Remember to + Vo. / Don’t forget to + Vo.')
     if (targetText.includes(' / ') && (targetText.includes('+ Vo') || targetText.includes('+ Ving') || targetText.includes('Don’t forget') || targetText.includes('quite unhappy'))) {
