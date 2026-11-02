@@ -2125,7 +2125,7 @@ function renderExtraPracticePanel(typeId) {
                     <span>Nhập bài viết tại đây (Yêu cầu ≥ 120 từ):</span>
                     <div class="word-count" id="extraLiveWordCount">Số từ: <strong>0</strong></div>
                 </div>
-                <textarea id="extraWritingArea" placeholder="Dear Hiring Manager,&#10;&#10;I am writing to apply for the receptionist position..." rows="12"></textarea>
+                <textarea id="extraWritingArea" placeholder="Dear Hiring Manager,&#10;&#10;I am writing to apply for the receptionist position..." rows="12" oncopy="return false;" onpaste="return false;" oncut="return false;" ondrop="return false;"></textarea>
                 <div class="editor-actions">
                     <button class="btn btn-secondary" onclick="resetExtraPracticeArea()"><i class="fa-solid fa-rotate-left"></i> Viết lại</button>
                     <button class="btn btn-primary" onclick="gradeExtraPractice('${typeId}')"><i class="fa-solid fa-circle-check"></i> Nộp bài & Chấm điểm VSTEP (30%)</button>
@@ -2142,6 +2142,9 @@ function renderExtraPracticePanel(typeId) {
     const writingArea = document.getElementById('extraWritingArea');
     if (writingArea) {
         writingArea.addEventListener('input', updateExtraWordCount);
+        if (typeof attachAntiCopyPasteToElement === 'function') {
+            attachAntiCopyPasteToElement(writingArea, 'BÀI THỰC HÀNH THÊM');
+        }
     }
 }
 
@@ -6775,6 +6778,50 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 // --- Anti Copy/Paste Protection System ---
+function getWritingZone(el) {
+    if (!el) el = document.activeElement;
+    if (!el) return 'general';
+    if (el.id === 'recitationInput' || (el.closest && el.closest('#recitationSection, #recitationPanel'))) {
+        return 'TRẢ BÀI';
+    }
+    if (el.id === 'fullPracticeInput' || (el.closest && el.closest('#fullPracticePanel, #fullPracticeSection, .full-practice-writing-box'))) {
+        return 'THỰC HÀNH';
+    }
+    if (el.id === 'extraWritingArea' || el.id === 'extraWritingInput' || (el.closest && el.closest('#extraPracticePanel, #extraPracticeSection, .extra-practice-container'))) {
+        return 'BÀI THỰC HÀNH THÊM';
+    }
+    return 'general';
+}
+
+function isLoginInput(el) {
+    if (!el) el = document.activeElement;
+    return el && (el.id === 'studentNameInput' || el.id === 'studentClassInput');
+}
+
+function attachAntiCopyPasteToElement(el, zoneName) {
+    if (!el) return;
+    ['copy', 'cut', 'paste', 'drop', 'contextmenu'].forEach(evtType => {
+        el.addEventListener(evtType, (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            if (evtType === 'paste' || evtType === 'drop') {
+                showAntiCopyToast(`Không được phép Dán (Paste) ở phần ${zoneName}! Vui lòng tự gõ phím.`);
+            } else if (evtType === 'copy' || evtType === 'cut') {
+                showAntiCopyToast(`Không được phép Sao chép (Copy) ở phần ${zoneName}!`);
+            } else if (evtType === 'contextmenu') {
+                showAntiCopyToast(`Chuột phải đã bị vô hiệu hóa ở phần ${zoneName}!`);
+            }
+        });
+    });
+    el.addEventListener('beforeinput', (e) => {
+        if (e.inputType === 'insertFromPaste' || e.inputType === 'insertFromDrop') {
+            e.preventDefault();
+            e.stopPropagation();
+            showAntiCopyToast(`Không được phép Dán (Paste) ở phần ${zoneName}! Vui lòng tự gõ phím.`);
+        }
+    });
+}
+
 function initAntiCopyProtection() {
     // Warn before leaving page during active recitation or full practice
     window.addEventListener('beforeunload', (e) => {
@@ -6785,108 +6832,144 @@ function initAntiCopyProtection() {
         }
     });
 
-    // Check if element is inside allowed practice zones (THỰC HÀNH & BÀI LUYỆN TẬP THÊM)
-    function isAllowedPasteTarget(el) {
-        if (!el) return false;
-        // Direct ID check
-        if (el.id === 'fullPracticeInput' || el.id === 'extraWritingArea' || el.id === 'extraWritingInput') {
-            return true;
-        }
-        // Class check
-        if (el.classList && (el.classList.contains('extra-textarea') || el.classList.contains('practice-textarea'))) {
-            return true;
-        }
-        // Ancestor container check
-        if (el.closest) {
-            const panel = el.closest('#fullPracticePanel, #extraPracticePanel, .full-practice-writing-box, .extra-practice-container');
-            if (panel && (el.tagName === 'TEXTAREA' || (el.tagName === 'INPUT' && !['button', 'submit', 'radio', 'checkbox'].includes(el.type)))) {
-                return true;
-            }
-        }
-        return false;
-    }
+    // Attach to existing elements immediately
+    const recitInput = document.getElementById('recitationInput');
+    if (recitInput) attachAntiCopyPasteToElement(recitInput, 'TRẢ BÀI');
 
-    // Block Copy Event (Allowed inside THỰC HÀNH & BÀI LUYỆN TẬP THÊM textareas)
+    const fullPracticeInput = document.getElementById('fullPracticeInput');
+    if (fullPracticeInput) attachAntiCopyPasteToElement(fullPracticeInput, 'THỰC HÀNH');
+
+    // Block Copy Event everywhere on site, with specific messaging for writing zones
     document.addEventListener('copy', (e) => {
-        if (isAllowedPasteTarget(e.target) || isAllowedPasteTarget(document.activeElement)) {
-            return;
-        }
         e.preventDefault();
-        showAntiCopyToast('Chức năng Sao chép (Copy) đã bị khóa trên hệ thống!');
+        const zone = getWritingZone(e.target || document.activeElement);
+        if (zone !== 'general') {
+            showAntiCopyToast(`Không được phép Sao chép (Copy) ở phần ${zone}! Vui lòng tự gõ phím.`);
+        } else {
+            showAntiCopyToast('Chức năng Sao chép (Copy) đã bị khóa trên hệ thống!');
+        }
     });
 
-    // Block Cut Event (Allowed inside THỰC HÀNH & BÀI LUYỆN TẬP THÊM textareas)
+    // Block Cut Event everywhere on site
     document.addEventListener('cut', (e) => {
-        if (isAllowedPasteTarget(e.target) || isAllowedPasteTarget(document.activeElement)) {
-            return;
-        }
         e.preventDefault();
-        showAntiCopyToast('Chức năng Cắt (Cut) đã bị khóa trên hệ thống!');
+        const zone = getWritingZone(e.target || document.activeElement);
+        if (zone !== 'general') {
+            showAntiCopyToast(`Không được phép Cắt (Cut) ở phần ${zone}! Vui lòng tự gõ phím.`);
+        } else {
+            showAntiCopyToast('Chức năng Cắt (Cut) đã bị khóa trên hệ thống!');
+        }
     });
 
-    // Block Paste Event (Allowed inside THỰC HÀNH & BÀI LUYỆN TẬP THÊM textareas)
+    // Block Paste Event (allowed only in login name/class inputs)
     document.addEventListener('paste', (e) => {
-        if (isAllowedPasteTarget(e.target) || isAllowedPasteTarget(document.activeElement)) {
-            const target = isAllowedPasteTarget(e.target) ? e.target : document.activeElement;
-            setTimeout(() => {
-                if (target) {
-                    target.dispatchEvent(new Event('input', { bubbles: true }));
-                    target.dispatchEvent(new Event('change', { bubbles: true }));
-                }
-            }, 30);
+        const targetEl = e.target || document.activeElement;
+        if (isLoginInput(targetEl)) {
             return;
         }
         e.preventDefault();
-        showAntiCopyToast('Không được phép Dán (Paste)! Vui lòng tự gõ phím để học thuộc và nhớ bài lâu hơn.');
+        const zone = getWritingZone(targetEl);
+        if (zone !== 'general') {
+            showAntiCopyToast(`Không được phép Dán (Paste) ở phần ${zone}! Vui lòng tự gõ phím để rèn luyện kỹ năng.`);
+        } else {
+            showAntiCopyToast('Không được phép Dán (Paste)! Vui lòng tự gõ phím.');
+        }
     });
 
-    // Block Context Menu (Right Click) - Allowed inside practice textareas for pasting/editing
+    // Block Context Menu (Right Click)
     document.addEventListener('contextmenu', (e) => {
-        if (isAllowedPasteTarget(e.target) || isAllowedPasteTarget(document.activeElement)) {
+        const targetEl = e.target || document.activeElement;
+        if (isLoginInput(targetEl)) {
             return;
         }
         e.preventDefault();
-        showAntiCopyToast('Chuột phải đã bị vô hiệu hóa để bảo vệ nội dung học tập!');
+        const zone = getWritingZone(targetEl);
+        if (zone !== 'general') {
+            showAntiCopyToast(`Chuột phải đã bị vô hiệu hóa ở phần ${zone}! Không được phép copy/paste bài làm.`);
+        } else {
+            showAntiCopyToast('Chuột phải đã bị vô hiệu hóa để bảo vệ nội dung học tập!');
+        }
     });
 
     // Block Drag and Drop text
     document.addEventListener('dragstart', (e) => {
-        if (isAllowedPasteTarget(e.target) || isAllowedPasteTarget(document.activeElement)) {
-            return;
+        if (!isLoginInput(e.target)) {
+            e.preventDefault();
         }
-        e.preventDefault();
     });
     document.addEventListener('drop', (e) => {
-        if (isAllowedPasteTarget(e.target) || isAllowedPasteTarget(document.activeElement)) {
-            const target = isAllowedPasteTarget(e.target) ? e.target : document.activeElement;
-            setTimeout(() => {
-                if (target) {
-                    target.dispatchEvent(new Event('input', { bubbles: true }));
-                }
-            }, 30);
+        const targetEl = e.target || document.activeElement;
+        if (isLoginInput(targetEl)) {
             return;
         }
         e.preventDefault();
+        const zone = getWritingZone(targetEl);
+        if (zone !== 'general') {
+            showAntiCopyToast(`Không được phép kéo thả nội dung vào ô làm bài ${zone}! Vui lòng tự gõ phím.`);
+        }
     });
 
-    // Block Keyboard Shortcuts (Ctrl+C, Ctrl+V, Ctrl+X, Ctrl+U, Cmd+C, Cmd+V, Cmd+X, Cmd+U)
-    // Permitted: Ctrl/Cmd+V, Ctrl/Cmd+C, Ctrl/Cmd+X inside THỰC HÀNH & BÀI LUYỆN TẬP THÊM
+    // Block Keyboard Shortcuts (Ctrl/Cmd+C, Ctrl/Cmd+V, Ctrl/Cmd+X, Shift+Insert, Ctrl+Insert, Shift+Delete)
     document.addEventListener('keydown', (e) => {
         const isCtrlOrCmd = e.ctrlKey || e.metaKey;
         const key = e.key ? e.key.toLowerCase() : '';
+        const targetEl = e.target || document.activeElement;
 
-        if (isCtrlOrCmd && ['c', 'v', 'x', 'u', 's'].includes(key)) {
-            if (['c', 'v', 'x'].includes(key) && (isAllowedPasteTarget(e.target) || isAllowedPasteTarget(document.activeElement))) {
-                return;
-            }
+        const isShiftInsert = e.shiftKey && (e.key === 'Insert' || e.keyCode === 45);
+        const isCtrlInsert = isCtrlOrCmd && (e.key === 'Insert' || e.keyCode === 45);
+        const isShiftDelete = e.shiftKey && (e.key === 'Delete' || e.keyCode === 46);
+
+        const isPaste = (isCtrlOrCmd && key === 'v') || isShiftInsert;
+        const isCopy = (isCtrlOrCmd && key === 'c') || isCtrlInsert;
+        const isCut = (isCtrlOrCmd && key === 'x') || isShiftDelete;
+
+        if (isPaste) {
+            if (isLoginInput(targetEl)) return;
             e.preventDefault();
             e.stopPropagation();
-            if (['c', 'x'].includes(key)) {
-                showAntiCopyToast('Chức năng Sao chép (Copy) đã bị vô hiệu hóa!');
-            } else if (key === 'v') {
+            const zone = getWritingZone(targetEl);
+            if (zone !== 'general') {
+                showAntiCopyToast(`Không được phép Dán (Paste) ở phần ${zone}! Vui lòng tự gõ phím.`);
+            } else {
                 showAntiCopyToast('Chức năng Dán (Paste) đã bị vô hiệu hóa! Vui lòng tự gõ bài viết.');
             }
             return false;
+        }
+
+        if (isCopy || isCut) {
+            if (isLoginInput(targetEl)) return;
+            e.preventDefault();
+            e.stopPropagation();
+            const zone = getWritingZone(targetEl);
+            const action = isCut ? 'Cắt (Cut)' : 'Sao chép (Copy)';
+            if (zone !== 'general') {
+                showAntiCopyToast(`Không được phép ${action} ở phần ${zone}! Vui lòng tự gõ phím.`);
+            } else {
+                showAntiCopyToast(`Chức năng ${action} đã bị khóa trên hệ thống!`);
+            }
+            return false;
+        }
+
+        if (isCtrlOrCmd && ['u', 's', 'p'].includes(key)) {
+            e.preventDefault();
+            e.stopPropagation();
+            return false;
+        }
+    }, true);
+
+    // Block beforeinput (insertFromPaste / insertFromDrop) for mobile and extensions
+    document.addEventListener('beforeinput', (e) => {
+        const targetEl = e.target || document.activeElement;
+        if (isLoginInput(targetEl)) return;
+        if (e.inputType === 'insertFromPaste' || e.inputType === 'insertFromDrop') {
+            e.preventDefault();
+            e.stopPropagation();
+            const zone = getWritingZone(targetEl);
+            if (zone !== 'general') {
+                showAntiCopyToast(`Không được phép Dán (Paste) ở phần ${zone}! Vui lòng tự gõ phím.`);
+            } else {
+                showAntiCopyToast('Chức năng Dán (Paste) đã bị vô hiệu hóa!');
+            }
         }
     }, true);
 }
