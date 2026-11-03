@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>VSTEP WRITING TASK 01 - B1 LEVEL</title>
-    <link rel="stylesheet" href="style.css?v=57.0">
+    <link rel="stylesheet" href="style.css?v=58.0">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400..700;1,400..700&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap" rel="stylesheet">
@@ -78,6 +78,14 @@
                 <div class="progress-bar-bg">
                     <div class="progress-bar-fill" id="sidebarProgressFill" style="width: 0%;"></div>
                 </div>
+                <div class="sidebar-backup-mini">
+                    <button class="btn-mini-backup" id="btnMiniBackup" title="Tải tệp sao lưu tiến độ (.json)">
+                        <i class="fa-solid fa-cloud-arrow-down"></i> Sao lưu
+                    </button>
+                    <button class="btn-mini-backup" id="btnMiniRestore" title="Khôi phục tiến độ từ tệp (.json)">
+                        <i class="fa-solid fa-cloud-arrow-up"></i> Khôi phục
+                    </button>
+                </div>
             </div>
             
             <nav class="letter-nav" id="letterNav">
@@ -137,6 +145,22 @@
                                 </button>
                             </div>
                             <p class="quest-progress-status" id="dashboardProgressStatus">Chưa hoàn thành dạng thư nào. Hãy bắt đầu học tập!</p>
+                            
+                            <!-- Progress Backup & Restore Toolbar -->
+                            <div class="progress-actions-toolbar">
+                                <div class="progress-backup-actions">
+                                    <button class="btn-progress-action btn-backup-data" id="btnExportProgress" title="Tải xuống tệp sao lưu tiến độ học tập (.json) để cất giữ hoặc chuyển sang máy tính khác">
+                                        <i class="fa-solid fa-cloud-arrow-down"></i> Sao lưu tiến độ (.json)
+                                    </button>
+                                    <button class="btn-progress-action btn-restore-data" id="btnImportProgress" title="Khôi phục tiến độ học tập từ tệp sao lưu (.json) đã lưu">
+                                        <i class="fa-solid fa-cloud-arrow-up"></i> Khôi phục tiến độ
+                                    </button>
+                                    <input type="file" id="inputRestoreProgressFile" accept=".json,application/json" style="display: none;">
+                                </div>
+                                <div class="progress-autosave-badge" id="progressAutoSaveNotice" title="Dữ liệu học tập và bản nháp bài viết luôn được tự động sao lưu an toàn theo thời gian thực">
+                                    <i class="fa-solid fa-shield-halved"></i> Tự động sao lưu: <span id="autoSaveStatusText">Bật (Thời gian thực)</span>
+                                </div>
+                            </div>
                         </div>
                         
                         <div class="quest-unlocked-block">
@@ -360,6 +384,10 @@
                                 <div class="editor-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; flex-wrap: wrap; gap: 10px;">
                                     <span style="font-size: 14.5px; font-weight: 600; color: var(--text-main);"><i class="fa-solid fa-keyboard" style="color: var(--primary-color);"></i> Nhập bài viết tại đây (Yêu cầu ≥ 120 từ):</span>
                                     <div style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap;">
+                                        <div class="autosave-pill" id="fullPracticeAutoSavePill" title="Bản nháp được hệ thống tự động sao lưu liên tục">
+                                            <i class="fa-solid fa-cloud-check"></i>
+                                            <span id="fullPracticeAutoSaveText">Tự động sao lưu sẵn sàng</span>
+                                        </div>
                                         <div class="recitation-timer-badge timer-normal" id="fullPracticeTimerBadgeSticky" title="Thời gian làm bài: 20 phút">
                                             <i class="fa-solid fa-stopwatch"></i>
                                             <span class="timer-label">Thời gian:</span>
@@ -389,6 +417,9 @@
                                     </button>
                                     <button class="btn btn-early-submit" id="btnSubmitFullPracticeEarly" title="Nộp bài và mở khóa các tab ngay lập tức">
                                         <i class="fa-solid fa-flag-checkered"></i> Nộp bài sớm
+                                    </button>
+                                    <button class="btn btn-secondary btn-clear-draft" id="btnClearFullPracticeDraft" title="Xóa bản nháp bài viết để viết lại từ đầu" type="button">
+                                        <i class="fa-solid fa-trash-can"></i> Xóa nháp
                                     </button>
                                 </div>
 
@@ -490,6 +521,6 @@
         <input type="hidden" name="pageHistory" value="0">
     </form>
 
-    <script src="app.js?v=57.0"></script>
+    <script src="app.js?v=58.0"></script>
 </body>
 </html>
