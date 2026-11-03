@@ -3570,7 +3570,7 @@ let themeToggle;
 let isDarkMode = false;
 
 // Auth & Student Information
-const ALLOWED_CLASSES = ['CB206', 'CB210', 'CB211', 'ONB103', 'GV'];
+const ALLOWED_CLASSES = ['CB206', 'CB210', 'CB211', 'CB213', 'ONB103', 'GV'];
 const MANDATORY_PASSWORD = 'STUDYHARD';
 
 const STUDENTS_BY_CLASS = {
@@ -3618,6 +3618,21 @@ const STUDENTS_BY_CLASS = {
         'Lê Thị Uyển Nhi',
         'Nguyễn Thụy Thanh Trúc'
     ],
+    'CB213': [
+        'Nguyễn Quốc Anh',
+        'Hoàng Hợp Minh Châu',
+        'Đặng Châu Gia Huy',
+        'Trần Minh Tuệ Mẩn',
+        'Đặng Thị Trúc Măng',
+        'Trương Thị Kha My',
+        'Ngô Diễm My',
+        'Chiêm Chúc Ngân',
+        'Huỳnh Thị Yến Nhi',
+        'Phạm Nguyễn Tâm Như',
+        'Phạm Nhựt Tiến',
+        'Lê Thị Tú Trinh',
+        'Trần Ngọc Vinh'
+    ],
     'ONB103': [
         'Nguyễn Thị Duy',
         'Phạm Trần Mỹ Hân',
@@ -3642,6 +3657,7 @@ const AUTHORIZED_STUDENTS = [
     ...STUDENTS_BY_CLASS['CB206'],
     ...STUDENTS_BY_CLASS['CB210'],
     ...STUDENTS_BY_CLASS['CB211'],
+    ...STUDENTS_BY_CLASS['CB213'],
     ...STUDENTS_BY_CLASS['ONB103'],
     'PTMN'
 ];
@@ -6386,7 +6402,7 @@ function handleLoginSubmit() {
     const studentInfo = findStudentInfo(nameVal);
 
     if (!studentInfo) {
-        showLoginError('Họ và tên không nằm trong danh sách học viên (CB206, CB210, CB211, ONB103) hoặc giáo viên!');
+        showLoginError('Họ và tên không nằm trong danh sách học viên (CB206, CB210, CB211, CB213, ONB103) hoặc giáo viên!');
         if (studentNameInput) studentNameInput.focus();
         return;
     }
