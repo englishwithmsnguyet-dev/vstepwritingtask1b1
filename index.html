@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>VSTEP WRITING TASK 01 - B1 LEVEL</title>
-    <link rel="stylesheet" href="style.css?v=59.0">
+    <link rel="stylesheet" href="style.css?v=60.0">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400..700;1,400..700&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap" rel="stylesheet">
@@ -48,11 +48,16 @@
         <!-- Sidebar -->
         <aside class="sidebar">
             <div class="sidebar-header">
-                <div class="logo">
-                    <i class="fa-solid fa-pen-nib"></i>
+                <div class="sidebar-brand-box">
+                    <div class="sidebar-avatar-wrap">
+                        <img src="miss_nguyet.jpg" alt="Miss Nguyet" class="brand-avatar">
+                        <span class="online-indicator" title="Miss Nguyet Online"></span>
+                    </div>
+                    <div class="brand-info">
+                        <div class="brand-title">VSTEP WRITING B1</div>
+                        <div class="brand-sub">ENGLISH WITH MISS NGUYET</div>
+                    </div>
                 </div>
-                <h2>VSTEP WRITING</h2>
-                <p>TASK 01 - WRITING A LETTER</p>
             </div>
 
             <!-- Student Profile Badge in Sidebar -->
@@ -93,6 +98,17 @@
             </nav>
 
             <div class="sidebar-footer">
+                <div class="sidebar-footer-brand">
+                    <a href="https://www.facebook.com/nguyetpham28" target="_blank" rel="noopener noreferrer" class="sidebar-footer-link" title="Facebook: English with Miss Nguyet">
+                        <img src="miss_nguyet.jpg" alt="Miss Nguyet" class="sidebar-footer-avatar">
+                        <div class="sidebar-footer-text">
+                            <div class="sidebar-footer-title">ENGLISH WITH MISS NGUYET</div>
+                            <div class="sidebar-footer-subtitle">
+                                <i class="fa-brands fa-facebook" style="color: #1877f2;"></i> Theo dõi Fanpage
+                            </div>
+                        </div>
+                    </a>
+                </div>
                 <p>Designed for B1 Level</p>
                 <div class="sidebar-hashtag">#englishwithmissnguyet</div>
             </div>
@@ -450,27 +466,67 @@
 
     <!-- Login Modal Overlay -->
     <div class="login-modal-overlay" id="loginModalOverlay">
-        <div class="login-modal-card">
-            <div class="login-circle-icon">
-                <i class="fa-solid fa-pencil"></i>
+        <div class="login-modal-card login-card-custom">
+            <!-- Miss Nguyet Avatar Brand Ring -->
+            <div class="login-teacher-avatar-wrap">
+                <div class="login-teacher-halo">
+                    <img src="miss_nguyet.jpg" alt="Miss Nguyet" class="login-teacher-avatar">
+                </div>
+                <span class="login-teacher-badge">
+                    <i class="fa-solid fa-certificate"></i> LEAD INSTRUCTOR
+                </span>
             </div>
-            
-            <h2 class="login-title">CHÀO MỪNG BẠN ĐẾN VỚI LỚP HỌC CỦA MISS NGUYET</h2>
-            <p class="login-subtitle">Vui lòng điền Họ tên và Lớp học của bạn để bắt đầu học. Kết quả luyện tập sẽ được ghi nhận và gửi báo cáo cho giáo viên.</p>
-            
-            <div class="login-form-inputs">
-                <input type="text" id="studentNameInput" class="login-input-clean" placeholder="HỌ VÀ TÊN" autocomplete="off">
-                <input type="text" id="studentClassInput" class="login-input-clean" placeholder="LỚP HỌC" autocomplete="off">
-                <input type="password" id="studentPasswordInput" class="login-input-clean" placeholder="MẬT KHẨU" autocomplete="off">
+
+            <div class="login-brand-tag">
+                <i class="fa-solid fa-graduation-cap"></i> Welcome to Miss Nguyet's Class!
+            </div>
+            <div class="login-course-title">VSTEP WRITING TASK 01 – B1 LEVEL</div>
+            <h2 class="login-title-custom">NHẬP THÔNG TIN<br/>ĐỂ BẮT ĐẦU HỌC 🚀</h2>
+
+            <div class="input-group-custom">
+                <label for="studentNameInput">
+                    <i class="fa-solid fa-user-pen" style="color: #6366f1;"></i> HỌ VÀ TÊN HỌC VIÊN:
+                </label>
+                <input autocomplete="off" id="studentNameInput" type="text" class="login-input-clean" placeholder="Nhập họ và tên học viên..." />
+            </div>
+
+            <div class="input-group-custom">
+                <label for="studentClassInput">
+                    <i class="fa-solid fa-chalkboard-user" style="color: #06b6d4;"></i> MÃ LỚP HỌC:
+                </label>
+                <input autocomplete="off" id="studentClassInput" type="text" class="login-input-clean" placeholder="Nhập mã lớp học..." />
+            </div>
+
+            <div class="input-group-custom">
+                <label for="studentPasswordInput">
+                    <i class="fa-solid fa-key" style="color: #f59e0b;"></i> MẬT KHẨU TRUY CẬP:
+                </label>
+                <div class="password-input-wrap">
+                    <input autocomplete="off" id="studentPasswordInput" type="password" class="login-input-clean" placeholder="Nhập mật khẩu..." />
+                    <button type="button" onclick="toggleLoginPassword()" class="btn-toggle-pwd" id="btnTogglePassword" title="Hiện/Ẩn mật khẩu" aria-label="Hiện hoặc ẩn mật khẩu">
+                        <svg id="togglePwdIcon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                            <circle cx="12" cy="12" r="3"></circle>
+                        </svg>
+                    </button>
+                </div>
             </div>
 
             <div class="login-error-msg hidden" id="loginErrorMsg">
                 <i class="fa-solid fa-circle-exclamation"></i> <span id="loginErrorText">Vui lòng điền đúng Họ tên và Lớp học.</span>
             </div>
 
-            <button class="btn-login-submit" id="btnLoginSubmit">
-                BẮT ĐẦU HỌC NGAY
+            <button class="btn-login-submit btn-login-custom" id="btnLoginSubmit">
+                <span>BẮT ĐẦU HỌC</span>
+                <i class="fa-solid fa-arrow-right"></i>
             </button>
+
+            <div class="login-footer-signature">
+                <a href="https://www.facebook.com/nguyetpham28" target="_blank" rel="noopener noreferrer" class="login-footer-link">
+                    <i class="fa-brands fa-facebook" style="color: #1877f2; font-size: 16px;"></i>
+                    <span>ENGLISH WITH MISS NGUYET</span>
+                </a>
+            </div>
         </div>
     </div>
 
@@ -524,6 +580,6 @@
         <input type="hidden" name="pageHistory" value="0">
     </form>
 
-    <script src="app.js?v=59.0"></script>
+    <script src="app.js?v=60.0"></script>
 </body>
 </html>
