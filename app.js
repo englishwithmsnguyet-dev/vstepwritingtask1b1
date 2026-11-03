@@ -5243,6 +5243,112 @@ function loadRecitationDraft(letterId) {
     }
 }
 
+// --- Recitation Results Storage & Persistence (v59.0) ---
+function getRecitationResults() {
+    try {
+        const saved = localStorage.getItem('vstep_recitation_results');
+        return saved ? JSON.parse(saved) : {};
+    } catch (e) {
+        return {};
+    }
+}
+
+function getRecitationResult(letterId) {
+    const results = getRecitationResults();
+    return results[letterId] || null;
+}
+
+function saveRecitationResult(letterId, resultData) {
+    if (!letterId || !resultData) return;
+    try {
+        const allResults = getRecitationResults();
+        allResults[letterId] = resultData;
+        localStorage.setItem('vstep_recitation_results', JSON.stringify(allResults));
+    } catch (e) {
+        console.error('Error saving recitation result', e);
+    }
+}
+
+function clearRecitationResult(letterId) {
+    if (!letterId) return;
+    try {
+        const allResults = getRecitationResults();
+        delete allResults[letterId];
+        localStorage.setItem('vstep_recitation_results', JSON.stringify(allResults));
+    } catch (e) {
+        console.error('Error clearing recitation result', e);
+    }
+}
+
+function displaySavedRecitationResult(letterId) {
+    const result = getRecitationResult(letterId);
+    if (!result) return false;
+
+    const typeData = letterTypes.find(t => t.id === letterId);
+    const letterTitleEn = typeData ? typeData.titleEn : 'Letter';
+
+    // Hide quiz box and feedback panel
+    if (recitationQuizBox) recitationQuizBox.classList.add('hidden');
+    if (recitationFeedback) recitationFeedback.classList.add('hidden');
+    
+    // Hide header and progress bar wrapper during evaluation results
+    const recitationHeader = document.querySelector('.recitation-header');
+    if (recitationHeader) recitationHeader.classList.add('hidden');
+    
+    const progressWrapper = document.querySelector('.recitation-progress-wrapper');
+    if (progressWrapper) progressWrapper.style.display = 'none';
+
+    stopRecitationTimer();
+    unlockNavigationAfterRecitation();
+
+    // Fill score and status
+    if (scorePercentageVal) scorePercentageVal.textContent = result.averageScore;
+    if (resultStatusVal) resultStatusVal.textContent = result.status;
+    if (timeSpentVal) timeSpentVal.textContent = result.timeSpent || '00:00';
+
+    const evalCard = document.querySelector('.evaluation-card');
+    if (result.status === 'ĐẠT' || result.averageScore >= 90) {
+        if (evaluationIcon) evaluationIcon.innerHTML = '<i class="fa-solid fa-circle-check"></i>';
+        if (evalCard) {
+            evalCard.classList.remove('failed');
+            evalCard.classList.add('passed');
+        }
+        if (resultMessageVal) {
+            resultMessageVal.textContent = `🎉 Chúc mừng bạn đã chinh phục được ${letterTitleEn}! Kết quả trả bài đã được sao lưu an toàn (${result.completedAtFormatted || ''}).`;
+        }
+    } else {
+        if (evaluationIcon) evaluationIcon.innerHTML = '<i class="fa-solid fa-triangle-exclamation"></i>';
+        if (evalCard) {
+            evalCard.classList.remove('passed');
+            evalCard.classList.add('failed');
+        }
+        if (resultMessageVal) {
+            resultMessageVal.textContent = `Kết quả trả bài trước đó: ${result.averageScore}% (Lưu lúc: ${result.completedAtFormatted || ''}). Bạn có thể bấm nút "Làm lại từ đầu" bên dưới để luyện tập lại nhé!`;
+        }
+    }
+
+    // Display cheat warning count if any occurred
+    if (evaluationCheatRecord && evaluationCheatRecordText) {
+        if (result.cheatAttempts > 0) {
+            evaluationCheatRecord.classList.remove('hidden');
+            evaluationCheatRecordText.innerHTML = `⚠️ Lưu ý: Bài làm này ghi nhận <strong>${result.cheatAttempts} lần</strong> có hành vi chuyển tab / rời bài.`;
+        } else {
+            evaluationCheatRecord.classList.add('hidden');
+        }
+    }
+
+    if (reportStatusBox) {
+        reportStatusBox.classList.remove('hidden');
+        const reportText = document.getElementById('reportStatusText');
+        if (reportText) {
+            reportText.innerHTML = `💾 <strong>Kết quả đã được sao lưu an toàn</strong> • Hoàn thành: ${result.completedAtFormatted || ''} • Học viên: <strong>${result.studentName || 'Bạn'}</strong> (${result.studentClass || ''})`;
+        }
+    }
+
+    if (recitationResultBox) recitationResultBox.classList.remove('hidden');
+    return true;
+}
+
 // --- Progress Backup (Export) & Restore (Import) Files ---
 function exportProgressBackup() {
     try {
@@ -5272,7 +5378,7 @@ function exportProgressBackup() {
 
         const backupData = {
             system: 'VSTEP_WRITING_B1_TASK1',
-            version: '58.0',
+            version: '59.0',
             exportedAt: new Date().toISOString(),
             exportedAtFormatted: new Date().toLocaleString('vi-VN'),
             student: {
@@ -5283,6 +5389,7 @@ function exportProgressBackup() {
             completedCount: completedLetters.length,
             totalLetters: letterTypes.length,
             progressPercentage: letterTypes.length > 0 ? Math.round((completedLetters.length / letterTypes.length) * 100) : 0,
+            recitationResults: getRecitationResults(),
             drafts: {
                 fullPractice: fullPracticeDrafts,
                 extraPractice: extraPracticeDrafts,
@@ -5353,6 +5460,13 @@ function importProgressBackup(file) {
                 } catch (e) {}
             }
 
+            // Restore recitation results (v59.0)
+            if (data.recitationResults && typeof data.recitationResults === 'object') {
+                try {
+                    localStorage.setItem('vstep_recitation_results', JSON.stringify(data.recitationResults));
+                } catch (e) {}
+            }
+
             // Restore drafts
             if (data.drafts) {
                 if (data.drafts.fullPractice) {
@@ -5385,6 +5499,7 @@ function importProgressBackup(file) {
             if (activeLetterTypeId) {
                 loadFullPracticeDraft(activeLetterTypeId);
                 loadExtraPracticeDraft(activeLetterTypeId);
+                resetRecitationUI(false);
             }
 
             showToastNotice(`🎉 Đã khôi phục thành công tiến độ của ${studentName}! (${completedCount}/7 dạng thư)`, 'fa-solid fa-cloud-arrow-up');
@@ -5432,6 +5547,7 @@ function resetLearningProgress() {
     if (confirm('Bạn có chắc chắn muốn làm mới toàn bộ tiến độ học tập không?')) {
         try {
             localStorage.removeItem('vstep_completed_letters');
+            localStorage.removeItem('vstep_recitation_results');
             letterTypes.forEach(t => {
                 localStorage.removeItem('vstep_draft_full_practice_' + t.id);
                 localStorage.removeItem('vstep_draft_extra_practice_' + t.id);
@@ -5446,7 +5562,7 @@ function resetLearningProgress() {
             resetFullPracticeUI();
             resetRecitationUI(true);
         }
-        showToastNotice('🔄 Đã làm mới toàn bộ tiến độ học tập và bản nháp.', 'fa-solid fa-rotate-left');
+        showToastNotice('🔄 Đã làm mới toàn bộ tiến độ học tập, kết quả trả bài và bản nháp.', 'fa-solid fa-rotate-left');
     }
 }
 
@@ -5478,10 +5594,44 @@ function updateGlobalProgress() {
             dashStatus.textContent = '🎉 Xuất sắc! Bạn đã chinh phục toàn bộ 7 dạng thư VSTEP Task 01!';
         }
     }
+
+    // Dashboard Recitation Scores Summary (v59.0)
+    const recSummary = document.getElementById('dashboardRecitationSummary');
+    const recResults = getRecitationResults();
+    const resultKeys = Object.keys(recResults);
+    if (recSummary) {
+        if (resultKeys.length > 0) {
+            recSummary.classList.remove('hidden');
+            let pillsHtml = '<div class="recitation-summary-title"><i class="fa-solid fa-clipboard-check"></i> Kết quả trả bài đã sao lưu:</div><div class="recitation-summary-pills">';
+            letterTypes.forEach(t => {
+                const r = recResults[t.id];
+                if (r) {
+                    const isPassed = r.status === 'ĐẠT' || r.averageScore >= 90;
+                    pillsHtml += `<span class="rec-summary-pill ${isPassed ? 'passed' : 'failed'}" title="${t.titleEn}: ${r.averageScore}% (${r.status}) - Làm lúc: ${r.completedAtFormatted || ''}">
+                        <strong>${t.titleEn}</strong>: ${r.averageScore}% ${isPassed ? '✓ ĐẠT' : '✗'}
+                    </span>`;
+                }
+            });
+            pillsHtml += '</div>';
+            recSummary.innerHTML = pillsHtml;
+        } else {
+            recSummary.classList.add('hidden');
+            recSummary.innerHTML = '';
+        }
+    }
 }
 
 // Reset recitation UI
 function resetRecitationUI(forceFresh = false) {
+    // Check if there is already a saved recitation result for this letter type
+    if (!forceFresh) {
+        const savedResult = getRecitationResult(activeLetterTypeId);
+        if (savedResult) {
+            displaySavedRecitationResult(activeLetterTypeId);
+            return;
+        }
+    }
+
     currentQuestionIndex = 0;
     activeQuestions = recitationQuestions[activeLetterTypeId] || [];
     questionScores = new Array(activeQuestions.length).fill(0);
@@ -5798,8 +5948,39 @@ function showEvaluationResult() {
         }
     }
     
+    // Save Recitation Result to LocalStorage (v59.0)
+    const now = new Date();
+    const resultRecord = {
+        letterId: activeLetterTypeId,
+        averageScore: averageScore,
+        status: statusText,
+        timeSpent: formatTimerString(timeSpentSeconds),
+        timeSpentSeconds: timeSpentSeconds,
+        cheatAttempts: recitationCheatAttempts,
+        questionScores: [...questionScores],
+        totalQuestions: totalQuestions,
+        studentName: currentStudentName || localStorage.getItem('vstep_student_name') || 'Học viên',
+        studentClass: currentStudentClass || localStorage.getItem('vstep_student_class') || 'Chưa rõ',
+        completedAt: now.toISOString(),
+        completedAtFormatted: now.toLocaleString('vi-VN')
+    };
+    saveRecitationResult(activeLetterTypeId, resultRecord);
+
+    // Update saved result status display
+    if (reportStatusBox) {
+        reportStatusBox.classList.remove('hidden');
+        const reportText = document.getElementById('reportStatusText');
+        if (reportText) {
+            reportText.innerHTML = `💾 <strong>Kết quả đã được sao lưu an toàn</strong> trên máy & báo cáo lên giáo viên (${now.toLocaleTimeString('vi-VN')}).`;
+        }
+    }
+    
     // Show result box
     if (recitationResultBox) recitationResultBox.classList.remove('hidden');
+
+    // Update navigation and global progress
+    renderNav();
+    updateGlobalProgress();
 
     // Automatically report result to Google Form
     reportResultToGoogleForm();
@@ -5863,9 +6044,17 @@ function renderNav() {
     letterNav.appendChild(homeItem);
 
     const completed = getCompletedLetters();
+    const recitationResults = getRecitationResults();
 
     letterTypes.forEach(type => {
         const isCompleted = completed.includes(type.id);
+        const recResult = recitationResults[type.id];
+        let scoreBadgeHtml = '';
+        if (recResult && typeof recResult.averageScore === 'number') {
+            const isPassed = recResult.status === 'ĐẠT' || recResult.averageScore >= 90;
+            scoreBadgeHtml = `<span class="nav-score-badge ${isPassed ? 'passed' : 'failed'}" title="Kết quả trả bài: ${recResult.averageScore}% (${recResult.status})">${recResult.averageScore}%</span>`;
+        }
+
         const navItem = document.createElement('div');
         navItem.className = 'nav-item';
         navItem.dataset.id = type.id;
@@ -5875,6 +6064,7 @@ function renderNav() {
                 <div class="nav-title-en">${type.titleEn}</div>
                 <div class="nav-title-vi">${type.titleVi}</div>
             </div>
+            ${scoreBadgeHtml}
             ${isCompleted ? '<span class="nav-completed-badge" title="Đã chinh phục"><i class="fa-solid fa-circle-check"></i></span>' : ''}
         `;
         
@@ -7499,10 +7689,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
             // Handle 20-minute timer and tab locking for TRẢ BÀI
             if (tabId === 'writingPractice') {
-                const isResultShown = recitationResultBox && !recitationResultBox.classList.contains('hidden');
-                if (!isResultShown) {
-                    lockNavigationDuringRecitation();
-                    startRecitationTimer();
+                const savedResult = getRecitationResult(activeLetterTypeId);
+                if (savedResult) {
+                    displaySavedRecitationResult(activeLetterTypeId);
+                } else {
+                    const isResultShown = recitationResultBox && !recitationResultBox.classList.contains('hidden');
+                    if (!isResultShown) {
+                        lockNavigationDuringRecitation();
+                        startRecitationTimer();
+                    }
                 }
             } else {
                 stopRecitationTimer();
@@ -7543,8 +7738,15 @@ document.addEventListener('DOMContentLoaded', () => {
     if (btnNextQuestion) btnNextQuestion.addEventListener('click', nextRecitationQuestion);
     if (btnRestartRecitation) {
         btnRestartRecitation.addEventListener('click', () => {
-            clearRecitationDraft(activeLetterTypeId);
-            resetRecitationUI(true);
+            const savedResult = getRecitationResult(activeLetterTypeId);
+            let confirmMsg = 'Bạn có chắc chắn muốn làm lại bài kiểm tra Trả bài không?';
+            if (savedResult) {
+                confirmMsg = `Bài này đã có kết quả sao lưu: ${savedResult.averageScore}% (${savedResult.status}) lúc ${savedResult.completedAtFormatted || ''}.\n\nBạn có chắc chắn muốn làm lại từ đầu để cải thiện điểm số không?`;
+            }
+            if (confirm(confirmMsg)) {
+                clearRecitationDraft(activeLetterTypeId);
+                resetRecitationUI(true);
+            }
         });
     }
     if (btnSubmitRecitationEarly) btnSubmitRecitationEarly.addEventListener('click', submitRecitationEarly);
@@ -7988,3 +8190,7 @@ window.clearExtraPracticeDraft = clearExtraPracticeDraft;
 window.clearFullPracticeDraft = clearFullPracticeDraft;
 window.exportProgressBackup = exportProgressBackup;
 window.importProgressBackup = importProgressBackup;
+window.getRecitationResults = getRecitationResults;
+window.getRecitationResult = getRecitationResult;
+window.saveRecitationResult = saveRecitationResult;
+window.displaySavedRecitationResult = displaySavedRecitationResult;
