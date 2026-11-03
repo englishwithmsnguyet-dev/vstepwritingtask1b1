@@ -1278,6 +1278,32 @@ h1, h2, h3, h4, h5, h6 {
     letter-spacing: 1px;
 }
 
+.btn-timer-action {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    border: none;
+    background: currentColor;
+    color: var(--bg-card);
+    cursor: pointer;
+    font-size: 10px;
+    margin-left: 4px;
+    transition: opacity 0.2s ease, transform 0.2s ease;
+    opacity: 0.85;
+}
+
+.btn-timer-action:hover {
+    opacity: 1;
+    transform: scale(1.1);
+}
+
+.btn-timer-action i {
+    color: var(--bg-card) !important;
+}
+
 @keyframes timerPulse {
     0%, 100% { transform: scale(1); }
     50% { transform: scale(1.04); }

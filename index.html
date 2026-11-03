@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>VSTEP WRITING TASK 01 - B1 LEVEL</title>
-    <link rel="stylesheet" href="style.css?v=56.0">
+    <link rel="stylesheet" href="style.css?v=57.0">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400..700;1,400..700&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap" rel="stylesheet">
@@ -338,6 +338,9 @@
                                         <i class="fa-solid fa-stopwatch"></i>
                                         <span class="timer-label">Thời gian:</span>
                                         <span class="timer-countdown" id="fullPracticeCountdown">20:00</span>
+                                        <button class="btn-timer-action" id="btnToggleFullPracticeTimer" type="button" onclick="toggleFullPracticeTimer()" title="Tạm dừng / Tiếp tục đếm giờ">
+                                            <i class="fa-solid fa-pause" id="fullPracticeTimerIcon"></i>
+                                        </button>
                                     </div>
                                     <div class="word-counter-badge" id="fullPracticeWordBadge" title="Yêu cầu tối thiểu 120 từ">
                                         <i class="fa-solid fa-pen-fancy"></i>
@@ -354,6 +357,24 @@
 
                             <!-- Writing Box -->
                             <div class="full-practice-writing-box" id="fullPracticeWritingBox">
+                                <div class="editor-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; flex-wrap: wrap; gap: 10px;">
+                                    <span style="font-size: 14.5px; font-weight: 600; color: var(--text-main);"><i class="fa-solid fa-keyboard" style="color: var(--primary-color);"></i> Nhập bài viết tại đây (Yêu cầu ≥ 120 từ):</span>
+                                    <div style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap;">
+                                        <div class="recitation-timer-badge timer-normal" id="fullPracticeTimerBadgeSticky" title="Thời gian làm bài: 20 phút">
+                                            <i class="fa-solid fa-stopwatch"></i>
+                                            <span class="timer-label">Thời gian:</span>
+                                            <span class="timer-countdown" id="fullPracticeCountdownSticky">20:00</span>
+                                            <button class="btn-timer-action" id="btnToggleFullPracticeTimerSticky" type="button" onclick="toggleFullPracticeTimer()" title="Tạm dừng / Tiếp tục đếm giờ">
+                                                <i class="fa-solid fa-pause" id="fullPracticeTimerIconSticky"></i>
+                                            </button>
+                                        </div>
+                                        <div class="word-counter-badge" id="fullPracticeWordBadgeSticky" title="Yêu cầu tối thiểu 120 từ">
+                                            <i class="fa-solid fa-pen-fancy"></i>
+                                            <span class="word-counter-label">Số từ:</span>
+                                            <span class="word-counter-count" id="fullPracticeWordCountSticky">0</span> / 120 từ
+                                        </div>
+                                    </div>
+                                </div>
                                 <div class="writing-input-area">
                                     <textarea id="fullPracticeInput" placeholder="Bắt đầu viết toàn bộ bức thư của bạn tại đây (ví dụ: Dear Helen, ...)..." oncopy="return false;" onpaste="return false;" oncut="return false;" ondrop="return false;"></textarea>
                                     <div class="full-practice-note">
@@ -469,6 +490,6 @@
         <input type="hidden" name="pageHistory" value="0">
     </form>
 
-    <script src="app.js?v=56.0"></script>
+    <script src="app.js?v=57.0"></script>
 </body>
 </html>

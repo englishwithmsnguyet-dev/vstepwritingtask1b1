@@ -2070,6 +2070,29 @@ function renderExtraPracticePanel(typeId) {
     const promptIntro = data.prompt.substring(0, data.prompt.indexOf('•')).trim();
 
     container.innerHTML = `
+        <!-- Extra Practice Header Card with 20-min Timer -->
+        <div class="full-practice-header" style="margin-bottom: 20px;">
+            <div class="full-practice-title-group">
+                <h3><i class="fa-solid fa-book-open"></i> BÀI LUYỆN TẬP THÊM (CANH GIỜ 20 PHÚT)</h3>
+                <p class="full-practice-subtitle"><i class="fa-solid fa-circle-info"></i> Luyện tập thêm một đề thi VSTEP mới cùng dạng. Canh giờ chuẩn 20 phút để rèn luyện tốc độ làm bài thực tế.</p>
+            </div>
+            <div class="full-practice-header-right" style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap;">
+                <div class="recitation-timer-badge timer-normal" id="extraPracticeTimerBadge" title="Thời gian làm bài: 20 phút">
+                    <i class="fa-solid fa-stopwatch"></i>
+                    <span class="timer-label">Thời gian:</span>
+                    <span class="timer-countdown" id="extraPracticeCountdown">20:00</span>
+                    <button class="btn-timer-action" id="btnToggleExtraPracticeTimer" type="button" onclick="toggleExtraPracticeTimer()" title="Tạm dừng / Tiếp tục đếm giờ">
+                        <i class="fa-solid fa-pause" id="extraPracticeTimerIcon"></i>
+                    </button>
+                </div>
+                <div class="word-counter-badge" id="extraPracticeWordBadge" title="Yêu cầu tối thiểu 120 từ">
+                    <i class="fa-solid fa-pen-fancy"></i>
+                    <span class="word-counter-label">Số từ:</span>
+                    <span class="word-counter-count" id="extraPracticeWordCount">0</span> / 120 từ
+                </div>
+            </div>
+        </div>
+
         <!-- Prompt Card (Using standard website style) -->
         <div class="sample-prompt-container">
             <div class="sample-prompt-header">
@@ -2121,13 +2144,27 @@ function renderExtraPracticePanel(typeId) {
         <div class="content-block" style="margin-top: 25px;">
             <h3><i class="fa-solid fa-pen-nib"></i> BÀI LÀM CỦA HỌC VIÊN</h3>
             <div class="editor-area">
-                <div class="editor-header">
-                    <span>Nhập bài viết tại đây (Yêu cầu ≥ 120 từ):</span>
-                    <div class="word-count" id="extraLiveWordCount">Số từ: <strong>0</strong></div>
+                <div class="editor-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; flex-wrap: wrap; gap: 10px;">
+                    <span style="font-size: 14.5px; font-weight: 600; color: var(--text-main);"><i class="fa-solid fa-keyboard" style="color: var(--primary-color);"></i> Nhập bài viết tại đây (Yêu cầu ≥ 120 từ):</span>
+                    <div style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap;">
+                        <div class="recitation-timer-badge timer-normal" id="extraPracticeTimerBadgeSticky" title="Thời gian làm bài: 20 phút">
+                            <i class="fa-solid fa-stopwatch"></i>
+                            <span class="timer-label">Thời gian:</span>
+                            <span class="timer-countdown" id="extraPracticeCountdownSticky">20:00</span>
+                            <button class="btn-timer-action" id="btnToggleExtraPracticeTimerSticky" type="button" onclick="toggleExtraPracticeTimer()" title="Tạm dừng / Tiếp tục đếm giờ">
+                                <i class="fa-solid fa-pause" id="extraPracticeTimerIconSticky"></i>
+                            </button>
+                        </div>
+                        <div class="word-counter-badge" id="extraPracticeWordBadgeSticky" title="Yêu cầu tối thiểu 120 từ">
+                            <i class="fa-solid fa-pen-fancy"></i>
+                            <span class="word-counter-label">Số từ:</span>
+                            <span class="word-counter-count" id="extraLiveWordCount">0</span> / 120 từ
+                        </div>
+                    </div>
                 </div>
                 <textarea id="extraWritingArea" placeholder="Dear Hiring Manager,&#10;&#10;I am writing to apply for the receptionist position..." rows="12" oncopy="return false;" onpaste="return false;" oncut="return false;" ondrop="return false;"></textarea>
                 <div class="editor-actions">
-                    <button class="btn btn-secondary" onclick="resetExtraPracticeArea()"><i class="fa-solid fa-rotate-left"></i> Viết lại</button>
+                    <button class="btn btn-secondary" onclick="resetExtraPracticeArea()"><i class="fa-solid fa-rotate-left"></i> Viết lại (Đặt lại 20 phút)</button>
                     <button class="btn btn-primary" onclick="gradeExtraPractice('${typeId}')"><i class="fa-solid fa-circle-check"></i> Nộp bài & Chấm điểm VSTEP (30%)</button>
                 </div>
             </div>
@@ -2139,12 +2176,20 @@ function renderExtraPracticePanel(typeId) {
         </div>
     `;
 
+    currentExtraPracticeTypeId = typeId;
+    resetExtraPracticeTimer();
+
     const writingArea = document.getElementById('extraWritingArea');
     if (writingArea) {
         writingArea.addEventListener('input', updateExtraWordCount);
         if (typeof attachAntiCopyPasteToElement === 'function') {
             attachAntiCopyPasteToElement(writingArea, 'BÀI THỰC HÀNH THÊM');
         }
+    }
+
+    const panel = document.getElementById('extraPracticePanel');
+    if (panel && panel.classList.contains('active')) {
+        startExtraPracticeTimer();
     }
 }
 
@@ -2160,25 +2205,52 @@ function toggleExtraHints() {
 function updateExtraWordCount() {
     const writingArea = document.getElementById('extraWritingArea');
     const display = document.getElementById('extraLiveWordCount');
-    if (!writingArea || !display) return;
+    const badgeCount = document.getElementById('extraPracticeWordCount');
+    if (!writingArea) return 0;
     const text = writingArea.value.trim();
-    const count = text === '' ? 0 : text.split(/\s+/).length;
-    display.innerHTML = `Số từ: <strong>${count}</strong>`;
-    if (count >= 120) {
-        display.classList.add('success');
-    } else {
-        display.classList.remove('success');
+    const count = text === '' ? 0 : text.split(/\s+/).filter(w => w !== '').length;
+    
+    if (display) {
+        display.textContent = count;
     }
+    if (badgeCount) {
+        badgeCount.textContent = count;
+    }
+
+    const badges = [
+        document.getElementById('extraPracticeWordBadge'),
+        document.getElementById('extraPracticeWordBadgeSticky')
+    ];
+    badges.forEach(b => {
+        if (!b) return;
+        b.classList.remove('word-count-pass', 'word-count-warn');
+        if (count >= 120) {
+            b.classList.add('word-count-pass');
+        } else if (count > 0) {
+            b.classList.add('word-count-warn');
+        }
+    });
+
+    return count;
 }
 
 function resetExtraPracticeArea() {
     const writingArea = document.getElementById('extraWritingArea');
     const resultCard = document.getElementById('extraResultCard');
     if (!writingArea) return;
-    if (confirm('Bạn có chắc muốn xóa bài làm hiện tại để viết lại không?')) {
+    if (confirm('Bạn có chắc muốn xóa bài làm hiện tại để viết lại và đặt lại đồng hồ 20 phút không?')) {
         writingArea.value = '';
+        writingArea.disabled = false;
         updateExtraWordCount();
-        if (resultCard) resultCard.classList.add('hidden');
+        if (resultCard) {
+            resultCard.classList.add('hidden');
+            resultCard.innerHTML = '';
+        }
+        resetExtraPracticeTimer();
+        const panel = document.getElementById('extraPracticePanel');
+        if (panel && panel.classList.contains('active')) {
+            startExtraPracticeTimer();
+        }
         writingArea.focus();
     }
 }
@@ -3159,20 +3231,37 @@ function renderSentenceAuditSectionHtml(sentenceAudits) {
 }
 
 
-function gradeExtraPractice(typeId) {
+function gradeExtraPractice(typeId, isAutoTimeUp = false) {
     const writingArea = document.getElementById('extraWritingArea');
     const resultCard = document.getElementById('extraResultCard');
     if (!writingArea || !resultCard) return;
 
     const rawText = writingArea.value.trim();
-    if (!rawText) {
+    if (!rawText && !isAutoTimeUp) {
         alert('Vui lòng nhập bài viết của bạn trước khi nộp bài!');
         writingArea.focus();
         return;
     }
 
-    const words = rawText.split(/\s+/).filter(w => w !== '');
+    const words = rawText ? rawText.split(/\s+/).filter(w => w !== '') : [];
     const wordCount = words.length;
+
+    if (!isAutoTimeUp) {
+        let confirmMsg = 'BẠN CÓ CHẮC CHẮN MUỐN NỘP BÀI LUYỆN TẬP THÊM KHÔNG?\n\n';
+        if (wordCount < 120) {
+            confirmMsg += `⚠️ Chú ý: Bài viết của bạn hiện có ${wordCount} từ (chưa đạt chuẩn tối thiểu 120 từ).\n\n`;
+        } else {
+            confirmMsg += `✓ Số từ đạt: ${wordCount} từ (đạt chuẩn độ dài VSTEP B1).\n\n`;
+        }
+        confirmMsg += 'Hệ thống sẽ chấm điểm chi tiết theo 4 tiêu chí VSTEP (30%) và hiển thị bản phân tích đối chiếu!';
+        if (!confirm(confirmMsg)) return;
+    }
+
+    stopExtraPracticeTimer();
+    isExtraPracticeInProgress = false;
+
+    const timeSpentSeconds = Math.max(0, EXTRA_PRACTICE_TIME_LIMIT - extraPracticeTimeRemaining);
+    const timeSpentStr = formatTimerString(timeSpentSeconds);
 
     // --- 1. TASK FULFILMENT (Thang 10) ---
     const lower = rawText.toLowerCase();
@@ -3459,6 +3548,15 @@ function gradeExtraPractice(typeId) {
             <div class="extra-b1-badge" style="background: #ffffff; color: var(--primary-color);">
                 TASK 1 = 30% ĐIỂM WRITING
             </div>
+        </div>
+
+        <div style="display: flex; gap: 12px; align-items: center; margin: 14px 0 20px 0; flex-wrap: wrap;">
+            <span class="sample-metric-chip" style="background: rgba(37, 99, 235, 0.08); color: var(--primary-color); border: 1.5px solid rgba(37, 99, 235, 0.25); font-weight: 700; font-size: 14px; padding: 7px 16px; border-radius: 20px;">
+                <i class="fa-solid fa-stopwatch"></i> Thời gian làm bài: <strong>${timeSpentStr}</strong> / 20:00
+            </span>
+            <span class="sample-metric-chip" style="background: rgba(16, 185, 129, 0.08); color: var(--accent-green); border: 1.5px solid rgba(16, 185, 129, 0.25); font-weight: 700; font-size: 14px; padding: 7px 16px; border-radius: 20px;">
+                <i class="fa-solid fa-file-word"></i> Tổng số từ: <strong>${wordCount} từ</strong> ${wordCount >= 120 ? '✓ Đạt chuẩn (≥120 từ)' : '⚠️ Chưa đủ 120 từ'}
+            </span>
         </div>
 
         <!-- 4 Criteria Grid based on VSTEP SCORING GUIDE (Converted to 0.75 pts each) -->
@@ -3813,6 +3911,14 @@ let fullPracticeTimerInterval = null;
 const FULL_PRACTICE_TIME_LIMIT = 20 * 60; // 20 minutes = 1200 seconds
 let fullPracticeTimeRemaining = FULL_PRACTICE_TIME_LIMIT;
 let isFullPracticeTimerRunning = false;
+
+// Extra Practice (BÀI LUYỆN TẬP THÊM) Timer State
+let isExtraPracticeInProgress = false;
+let extraPracticeTimerInterval = null;
+const EXTRA_PRACTICE_TIME_LIMIT = 20 * 60; // 20 minutes = 1200 seconds
+let extraPracticeTimeRemaining = EXTRA_PRACTICE_TIME_LIMIT;
+let isExtraPracticeTimerRunning = false;
+let currentExtraPracticeTypeId = 'advice';
 
 function formatTimerString(totalSeconds) {
     const mins = Math.floor(totalSeconds / 60);
@@ -4197,21 +4303,84 @@ function unlockNavigationAfterFullPractice() {
     removeNavigationLock();
 }
 
+// Audio chime on time up
+function playTimeUpSound() {
+    try {
+        const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+        if (!AudioContextClass) return;
+        const ctx = new AudioContextClass();
+        if (ctx.state === 'suspended') {
+            ctx.resume();
+        }
+        const now = ctx.currentTime;
+        const notes = [
+            { f: 523.25, start: 0, dur: 0.22 },
+            { f: 659.25, start: 0.22, dur: 0.22 },
+            { f: 783.99, start: 0.44, dur: 0.50 }
+        ];
+        notes.forEach(n => {
+            const osc = ctx.createOscillator();
+            const gain = ctx.createGain();
+            osc.type = 'triangle';
+            osc.frequency.setValueAtTime(n.f, now + n.start);
+            gain.gain.setValueAtTime(0, now + n.start);
+            gain.gain.linearRampToValueAtTime(0.35, now + n.start + 0.04);
+            gain.gain.exponentialRampToValueAtTime(0.001, now + n.start + n.dur);
+            osc.connect(gain);
+            gain.connect(ctx.destination);
+            osc.start(now + n.start);
+            osc.stop(now + n.start + n.dur);
+        });
+    } catch (e) {
+        // AudioContext not supported
+    }
+}
+
 // Full Practice Timer
 function updateFullPracticeTimerDisplay() {
-    if (fullPracticeCountdown) {
-        fullPracticeCountdown.textContent = formatTimerString(fullPracticeTimeRemaining);
-    }
+    const timeStr = formatTimerString(fullPracticeTimeRemaining);
+    const countdowns = [
+        fullPracticeCountdown,
+        document.getElementById('fullPracticeCountdownSticky')
+    ];
+    countdowns.forEach(el => {
+        if (el) el.textContent = timeStr;
+    });
 
-    if (fullPracticeTimerBadge) {
-        fullPracticeTimerBadge.classList.remove('timer-normal', 'timer-warning', 'timer-urgent');
+    const badges = [
+        fullPracticeTimerBadge,
+        document.getElementById('fullPracticeTimerBadgeSticky')
+    ];
+    badges.forEach(b => {
+        if (!b) return;
+        b.classList.remove('timer-normal', 'timer-warning', 'timer-urgent');
         if (fullPracticeTimeRemaining > 300) {
-            fullPracticeTimerBadge.classList.add('timer-normal');
+            b.classList.add('timer-normal');
         } else if (fullPracticeTimeRemaining > 60) {
-            fullPracticeTimerBadge.classList.add('timer-warning');
+            b.classList.add('timer-warning');
         } else {
-            fullPracticeTimerBadge.classList.add('timer-urgent');
+            b.classList.add('timer-urgent');
         }
+    });
+
+    updateFullPracticeTimerControls();
+}
+
+function updateFullPracticeTimerControls() {
+    const icon1 = document.getElementById('fullPracticeTimerIcon');
+    const icon2 = document.getElementById('fullPracticeTimerIconSticky');
+    const iconClass = isFullPracticeTimerRunning ? 'fa-solid fa-pause' : 'fa-solid fa-play';
+    if (icon1) icon1.className = iconClass;
+    if (icon2) icon2.className = iconClass;
+}
+
+function toggleFullPracticeTimer() {
+    if (isFullPracticeTimerRunning) {
+        stopFullPracticeTimer();
+        showToastNotice('⏸️ Đã tạm dừng đếm giờ thực hành viết bài.', 'fa-solid fa-pause');
+    } else {
+        startFullPracticeTimer();
+        showToastNotice('▶️ Tiếp tục đếm giờ thực hành viết bài (20 phút).', 'fa-solid fa-play');
     }
 }
 
@@ -4240,6 +4409,7 @@ function stopFullPracticeTimer() {
         fullPracticeTimerInterval = null;
     }
     isFullPracticeTimerRunning = false;
+    updateFullPracticeTimerControls();
 }
 
 function resetFullPracticeTimer() {
@@ -4250,8 +4420,101 @@ function resetFullPracticeTimer() {
 
 function handleFullPracticeTimeUp() {
     stopFullPracticeTimer();
+    playTimeUpSound();
     alert('⏰ ĐÃ HẾT THỜI GIAN 20 PHÚT LÀM BÀI!\nHệ thống tự động nộp bài thực hành viết thư của bạn và mở khóa các tab để bạn đối chiếu với bài mẫu.');
     submitFullPractice(true);
+}
+
+// Extra Practice (BÀI LUYỆN TẬP THÊM) 20-minute Timer System
+function updateExtraPracticeTimerDisplay() {
+    const timeStr = formatTimerString(extraPracticeTimeRemaining);
+    const countdowns = [
+        document.getElementById('extraPracticeCountdown'),
+        document.getElementById('extraPracticeCountdownSticky')
+    ];
+    countdowns.forEach(el => {
+        if (el) el.textContent = timeStr;
+    });
+
+    const badges = [
+        document.getElementById('extraPracticeTimerBadge'),
+        document.getElementById('extraPracticeTimerBadgeSticky')
+    ];
+    badges.forEach(b => {
+        if (!b) return;
+        b.classList.remove('timer-normal', 'timer-warning', 'timer-urgent');
+        if (extraPracticeTimeRemaining > 300) {
+            b.classList.add('timer-normal');
+        } else if (extraPracticeTimeRemaining > 60) {
+            b.classList.add('timer-warning');
+        } else {
+            b.classList.add('timer-urgent');
+        }
+    });
+
+    updateExtraPracticeTimerControls();
+}
+
+function updateExtraPracticeTimerControls() {
+    const icon1 = document.getElementById('extraPracticeTimerIcon');
+    const icon2 = document.getElementById('extraPracticeTimerIconSticky');
+    const iconClass = isExtraPracticeTimerRunning ? 'fa-solid fa-pause' : 'fa-solid fa-play';
+    if (icon1) icon1.className = iconClass;
+    if (icon2) icon2.className = iconClass;
+}
+
+function toggleExtraPracticeTimer() {
+    if (isExtraPracticeTimerRunning) {
+        stopExtraPracticeTimer();
+        showToastNotice('⏸️ Đã tạm dừng đếm giờ bài luyện tập thêm.', 'fa-solid fa-pause');
+    } else {
+        startExtraPracticeTimer();
+        showToastNotice('▶️ Tiếp tục đếm giờ bài luyện tập thêm (20 phút).', 'fa-solid fa-play');
+    }
+}
+
+function startExtraPracticeTimer() {
+    if (isExtraPracticeTimerRunning) return;
+    if (extraPracticeTimeRemaining <= 0) {
+        extraPracticeTimeRemaining = EXTRA_PRACTICE_TIME_LIMIT;
+    }
+    isExtraPracticeTimerRunning = true;
+    isExtraPracticeInProgress = true;
+    updateExtraPracticeTimerDisplay();
+
+    if (extraPracticeTimerInterval) clearInterval(extraPracticeTimerInterval);
+    extraPracticeTimerInterval = setInterval(() => {
+        if (extraPracticeTimeRemaining > 0) {
+            extraPracticeTimeRemaining--;
+            updateExtraPracticeTimerDisplay();
+        } else {
+            handleExtraPracticeTimeUp();
+        }
+    }, 1000);
+}
+
+function stopExtraPracticeTimer() {
+    if (extraPracticeTimerInterval) {
+        clearInterval(extraPracticeTimerInterval);
+        extraPracticeTimerInterval = null;
+    }
+    isExtraPracticeTimerRunning = false;
+    updateExtraPracticeTimerControls();
+}
+
+function resetExtraPracticeTimer() {
+    stopExtraPracticeTimer();
+    extraPracticeTimeRemaining = EXTRA_PRACTICE_TIME_LIMIT;
+    isExtraPracticeInProgress = false;
+    updateExtraPracticeTimerDisplay();
+}
+
+function handleExtraPracticeTimeUp() {
+    stopExtraPracticeTimer();
+    isExtraPracticeInProgress = false;
+    playTimeUpSound();
+    alert('⏰ ĐÃ HẾT THỜI GIAN 20 PHÚT LÀM BÀI!\nHệ thống tự động nộp bài luyện tập thêm của bạn để chấm điểm theo 4 tiêu chí VSTEP (30%).');
+    gradeExtraPractice(currentExtraPracticeTypeId, true);
 }
 
 function submitRecitationEarly() {
@@ -5240,15 +5503,22 @@ function updateFullPracticeWordCount() {
     const text = fullPracticeInput ? fullPracticeInput.value : '';
     const count = countWords(text);
     if (fullPracticeWordCount) fullPracticeWordCount.textContent = count;
+    const stickyWordCount = document.getElementById('fullPracticeWordCountSticky');
+    if (stickyWordCount) stickyWordCount.textContent = count;
 
-    if (fullPracticeWordBadge) {
-        fullPracticeWordBadge.classList.remove('word-count-pass', 'word-count-warn');
+    const badges = [
+        fullPracticeWordBadge,
+        document.getElementById('fullPracticeWordBadgeSticky')
+    ];
+    badges.forEach(b => {
+        if (!b) return;
+        b.classList.remove('word-count-pass', 'word-count-warn');
         if (count >= 120) {
-            fullPracticeWordBadge.classList.add('word-count-pass');
+            b.classList.add('word-count-pass');
         } else if (count > 0) {
-            fullPracticeWordBadge.classList.add('word-count-warn');
+            b.classList.add('word-count-warn');
         }
-    }
+    });
     return count;
 }
 
@@ -6753,6 +7023,17 @@ document.addEventListener('DOMContentLoaded', () => {
             } else {
                 stopFullPracticeTimer();
             }
+
+            // Handle 20-minute timer for BÀI LUYỆN TẬP THÊM
+            if (tabId === 'extraPractice') {
+                const extraResult = document.getElementById('extraResultCard');
+                const isExtraResultShown = extraResult && !extraResult.classList.contains('hidden');
+                if (!isExtraResultShown) {
+                    startExtraPracticeTimer();
+                }
+            } else {
+                stopExtraPracticeTimer();
+            }
         });
     });
 
@@ -6841,7 +7122,7 @@ function attachAntiCopyPasteToElement(el, zoneName) {
 function initAntiCopyProtection() {
     // Warn before leaving page during active recitation or full practice
     window.addEventListener('beforeunload', (e) => {
-        if (isRecitationInProgress || isFullPracticeInProgress) {
+        if (isRecitationInProgress || isFullPracticeInProgress || isExtraPracticeInProgress) {
             e.preventDefault();
             e.returnValue = 'Bạn đang trong quá trình làm bài! Nếu rời khỏi trang, nội dung bài làm sẽ bị hủy.';
             return e.returnValue;
