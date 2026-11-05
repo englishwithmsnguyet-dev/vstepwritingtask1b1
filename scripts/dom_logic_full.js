@@ -7,7 +7,8 @@ let themeToggle;
 let isDarkMode = false;
 
 // Auth & Student Information
-const ALLOWED_CLASSES = ['CB201', 'CB202', 'B209'];
+const ALLOWED_CLASSES = ['B209'];
+const BANNED_CLASSES = ['CB201', 'CB202', 'B220'];
 const GOOGLE_FORM_ACTION_URL = "https://docs.google.com/forms/d/e/1FAIpQLSes7cy3Z9Wxr_QQRuJcohfqFycoc0_i5JNEt05FFBBGod2f5A/formResponse";
 const GOOGLE_FORM_ENTRY_ID = "entry.388968236";
 
@@ -2401,8 +2402,14 @@ function handleLoginSubmit() {
         return;
     }
 
+    if (BANNED_CLASSES.includes(classVal)) {
+        showLoginError(`Lớp ${classVal} đã kết thúc khóa học và không được phép đăng nhập!`);
+        if (studentClassSelect) studentClassSelect.focus();
+        return;
+    }
+
     if (!classVal || !ALLOWED_CLASSES.includes(classVal)) {
-        showLoginError('Hệ thống chỉ tiếp nhận học viên thuộc các lớp: CB201, CB202, B209.');
+        showLoginError('Hệ thống chỉ tiếp nhận học viên thuộc các lớp: B209.');
         if (studentClassSelect) studentClassSelect.focus();
         return;
     }
