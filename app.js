@@ -4291,9 +4291,11 @@ function initRecitationAntiCheatingEvents() {
             if (recitationBlurTimer) clearTimeout(recitationBlurTimer);
             recitationBlurTimer = setTimeout(() => {
                 if (isRecitationInProgress && !isRecitationCheatModalOpen) {
-                    hasLeftRecitationTab = true;
+                    if (!document.hasFocus() || document.hidden) {
+                        hasLeftRecitationTab = true;
+                    }
                 }
-            }, 1200);
+            }, 2000);
         }
     });
 
