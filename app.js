@@ -3967,6 +3967,10 @@ function updateRecitationTimerDisplay() {
     }
 }
 
+function updateRecitationTimerDisplays() {
+    updateRecitationTimerDisplay();
+}
+
 function startRecitationTimer() {
     if (isRecitationTimerRunning) return;
     if (recitationTimeRemaining <= 0) {
@@ -5671,7 +5675,7 @@ function resetRecitationUI(forceFresh = false) {
             }
             if (typeof savedDraft.timeRemaining === 'number') {
                 recitationTimeRemaining = savedDraft.timeRemaining;
-                updateRecitationTimerDisplays();
+                updateRecitationTimerDisplay();
             }
             showToastNotice(`💾 Đã tự động khôi phục tiến độ trả bài (Câu ${currentQuestionIndex + 1}/${activeQuestions.length})`, 'fa-solid fa-clock-rotate-left');
         }
