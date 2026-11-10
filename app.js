@@ -2078,6 +2078,12 @@ function renderExtraPracticePanel(typeId) {
     }
 
     container.innerHTML = `
+        <!-- Extra Practice Lock Notice Banner -->
+        <div class="recitation-locked-banner ${isExtraPracticeInProgress && !isTeacherUser() ? '' : 'hidden'}" id="extraPracticeLockedBanner">
+            <i class="fa-solid fa-lock"></i>
+            <span><strong>Chế độ Luyện tập thêm đang hoạt động:</strong> Toàn bộ các tab tài liệu và danh mục đã được khóa trong 20 phút để đảm bảo tính trung thực. Bạn cần hoàn thành hoặc chọn <strong>Nộp bài & Chấm điểm</strong> để mở khóa!</span>
+        </div>
+
         <!-- Extra Practice Header Card with 20-min Timer -->
         <div class="full-practice-header" style="margin-bottom: 20px;">
             <div class="full-practice-title-group">
@@ -2210,7 +2216,12 @@ function renderExtraPracticePanel(typeId) {
 
     const panel = document.getElementById('extraPracticePanel');
     if (panel && panel.classList.contains('active')) {
-        startExtraPracticeTimer();
+        const extraResult = document.getElementById('extraResultCard');
+        const isExtraResultShown = extraResult && !extraResult.classList.contains('hidden');
+        if (!isExtraResultShown) {
+            lockNavigationDuringExtraPractice();
+            startExtraPracticeTimer();
+        }
     }
 }
 
@@ -2276,6 +2287,7 @@ function resetExtraPracticeArea() {
         updateExtraPracticeAutoSaveUI('Đã xóa bản nháp', false);
         const panel = document.getElementById('extraPracticePanel');
         if (panel && panel.classList.contains('active')) {
+            lockNavigationDuringExtraPractice();
             startExtraPracticeTimer();
         }
         writingArea.focus();
@@ -3285,7 +3297,7 @@ function gradeExtraPractice(typeId, isAutoTimeUp = false) {
     }
 
     stopExtraPracticeTimer();
-    isExtraPracticeInProgress = false;
+    unlockNavigationAfterExtraPractice();
 
     const timeSpentSeconds = Math.max(0, EXTRA_PRACTICE_TIME_LIMIT - extraPracticeTimeRemaining);
     const timeSpentStr = formatTimerString(timeSpentSeconds);
@@ -3965,6 +3977,8 @@ function removeWritingRestrictionsForTeacher() {
         if (banner1) banner1.classList.add('hidden');
         const banner2 = document.getElementById('fullPracticeLockedBanner');
         if (banner2) banner2.classList.add('hidden');
+        const banner3 = document.getElementById('extraPracticeLockedBanner');
+        if (banner3) banner3.classList.add('hidden');
         const cheatModal = document.getElementById('cheatWarningModal');
         if (cheatModal) cheatModal.classList.add('hidden');
     } catch (e) {}
@@ -4029,8 +4043,10 @@ let questionHintsUsed = [];
 let isRecitationInProgress = false;
 let btnSubmitRecitationEarly = null;
 
-// Anti-Cheating & Violation Warning System for TRẢ BÀI
+// Anti-Cheating & Violation Warning System for TRẢ BÀI & THỰC HÀNH & BÀI LUYỆN TẬP THÊM
 let recitationCheatAttempts = 0;
+let fullPracticeCheatAttempts = 0;
+let extraPracticeCheatAttempts = 0;
 const MAX_RECITATION_CHEAT_ATTEMPTS = 3;
 let isRecitationCheatModalOpen = false;
 let hasLeftRecitationTab = false;
@@ -4221,7 +4237,7 @@ function applyNavigationLock(activeTab) {
 }
 
 function removeNavigationLock() {
-    if (!isRecitationInProgress && !isFullPracticeInProgress) {
+    if (!isRecitationInProgress && !isFullPracticeInProgress && !isExtraPracticeInProgress) {
         document.querySelectorAll('.tab-btn').forEach(btn => {
             btn.classList.remove('tab-locked');
             btn.removeAttribute('title');
@@ -4294,12 +4310,28 @@ function playCheatingAlertSound() {
     }
 }
 
-function triggerRecitationCheatWarning(actionDescription) {
+function triggerCheatWarning(actionDescription) {
     if (isTeacherUser()) return; // Teacher account: never trigger cheat warning
-    if (!isRecitationInProgress) return;
+    const isTesting = isRecitationInProgress || isFullPracticeInProgress || isExtraPracticeInProgress;
+    if (!isTesting) return;
     if (isRecitationCheatModalOpen) return;
 
-    recitationCheatAttempts++;
+    let activeSectionName = 'TRẢ BÀI';
+    let currentAttempts = 0;
+    if (isRecitationInProgress) {
+        activeSectionName = 'TRẢ BÀI';
+        recitationCheatAttempts++;
+        currentAttempts = recitationCheatAttempts;
+    } else if (isFullPracticeInProgress) {
+        activeSectionName = 'THỰC HÀNH';
+        fullPracticeCheatAttempts++;
+        currentAttempts = fullPracticeCheatAttempts;
+    } else if (isExtraPracticeInProgress) {
+        activeSectionName = 'BÀI LUYỆN TẬP THÊM';
+        extraPracticeCheatAttempts++;
+        currentAttempts = extraPracticeCheatAttempts;
+    }
+
     isRecitationCheatModalOpen = true;
 
     // Flash screen red alert effect
@@ -4311,8 +4343,8 @@ function triggerRecitationCheatWarning(actionDescription) {
     // Audio siren
     playCheatingAlertSound();
 
-    // Update Header Badge
-    if (recitationCheatCounterBadge && recitationCheatCountText) {
+    // Update Header Badge (if in recitation)
+    if (isRecitationInProgress && recitationCheatCounterBadge && recitationCheatCountText) {
         recitationCheatCounterBadge.classList.remove('hidden');
         recitationCheatCountText.textContent = `${recitationCheatAttempts}/${MAX_RECITATION_CHEAT_ATTEMPTS}`;
     }
@@ -4321,20 +4353,20 @@ function triggerRecitationCheatWarning(actionDescription) {
     if (cheatWarningModal && cheatWarningBadge && cheatWarningReason && cheatWarningConsequence) {
         cheatWarningBadge.className = 'cheat-warning-badge';
 
-        if (recitationCheatAttempts === 1) {
+        if (currentAttempts === 1) {
             cheatWarningBadge.classList.add('badge-warn-1');
             cheatWarningBadge.innerHTML = `<i class="fa-solid fa-shield-halved"></i> CẢNH BÁO GIAN LẬN • LẦN 1/${MAX_RECITATION_CHEAT_ATTEMPTS}`;
-            cheatWarningReason.innerHTML = `Hệ thống ghi nhận bạn vừa có hành vi: <strong style="color: #ef4444;">${actionDescription}</strong> trong lúc đang trả bài!`;
+            cheatWarningReason.innerHTML = `Hệ thống ghi nhận bạn vừa có hành vi: <strong style="color: #ef4444;">${actionDescription}</strong> trong lúc đang làm <strong>${activeSectionName}</strong>!`;
             cheatWarningConsequence.innerHTML = `<i class="fa-solid fa-circle-exclamation"></i> <span>Đây là <strong>cảnh báo lần thứ 1</strong>. Bạn còn <strong>2 lần cảnh báo</strong> nữa trước khi hệ thống tự động đình chỉ bài thi.</span>`;
             if (btnDismissCheatWarning) {
                 btnDismissCheatWarning.classList.remove('hidden');
                 btnDismissCheatWarning.innerHTML = `<i class="fa-solid fa-rotate-left"></i> Tôi đã hiểu & Quay lại làm bài`;
             }
             if (btnDisqualifyRecitation) btnDisqualifyRecitation.classList.add('hidden');
-        } else if (recitationCheatAttempts === 2) {
+        } else if (currentAttempts === 2) {
             cheatWarningBadge.classList.add('badge-warn-2');
             cheatWarningBadge.innerHTML = `<i class="fa-solid fa-triangle-exclamation"></i> CẢNH BÁO NGUY HIỂM • LẦN 2/${MAX_RECITATION_CHEAT_ATTEMPTS}`;
-            cheatWarningReason.innerHTML = `<strong>CẢNH BÁO CUỐI CÙNG:</strong> Bạn tiếp tục tái phạm hành vi: <strong style="color: #ef4444;">${actionDescription}</strong>!`;
+            cheatWarningReason.innerHTML = `<strong>CẢNH BÁO CUỐI CÙNG:</strong> Bạn tiếp tục tái phạm hành vi: <strong style="color: #ef4444;">${actionDescription}</strong> trong lúc làm <strong>${activeSectionName}</strong>!`;
             cheatWarningConsequence.innerHTML = `<i class="fa-solid fa-triangle-exclamation"></i> <span>⚠️ <strong>CỰC KỲ NGUY HIỂM:</strong> Nếu bạn vi phạm thêm <strong>1 lần nữa</strong>, hệ thống sẽ <strong>LẬP TỨC THU BÀI VÀ CHO 0 ĐIỂM (ĐÌNH CHỈ)</strong>!</span>`;
             if (btnDismissCheatWarning) {
                 btnDismissCheatWarning.classList.remove('hidden');
@@ -4344,8 +4376,8 @@ function triggerRecitationCheatWarning(actionDescription) {
         } else {
             // Level 3+ -> Disqualification
             cheatWarningBadge.classList.add('badge-disqualified');
-            cheatWarningBadge.innerHTML = `<i class="fa-solid fa-ban"></i> ĐÃ BỊ ĐÌNH CHỈ • LẦN ${recitationCheatAttempts}/${MAX_RECITATION_CHEAT_ATTEMPTS}`;
-            cheatWarningReason.innerHTML = `Bạn đã vi phạm quy chế chuyển tab quá <strong>${MAX_RECITATION_CHEAT_ATTEMPTS} lần</strong> trong phiên trả bài này!`;
+            cheatWarningBadge.innerHTML = `<i class="fa-solid fa-ban"></i> ĐÃ BỊ ĐÌNH CHỈ • LẦN ${currentAttempts}/${MAX_RECITATION_CHEAT_ATTEMPTS}`;
+            cheatWarningReason.innerHTML = `Bạn đã vi phạm quy chế chuyển tab quá <strong>${MAX_RECITATION_CHEAT_ATTEMPTS} lần</strong> trong lúc làm <strong>${activeSectionName}</strong>!`;
             cheatWarningConsequence.innerHTML = `<i class="fa-solid fa-gavel"></i> <span>🚨 <strong>BÀI LÀM ĐÃ BỊ HỦY BỎ:</strong> Bạn bị tính <strong>0 ĐIỂM</strong> do vi phạm nghiêm trọng quy chế thi. Kết quả vi phạm đã được ghi nhận vào hệ thống giáo viên!</span>`;
             if (btnDismissCheatWarning) btnDismissCheatWarning.classList.add('hidden');
             if (btnDisqualifyRecitation) {
@@ -4358,12 +4390,33 @@ function triggerRecitationCheatWarning(actionDescription) {
     }
 }
 
+function triggerRecitationCheatWarning(actionDescription) {
+    triggerCheatWarning(actionDescription);
+}
+
 function dismissRecitationCheatWarning() {
     if (cheatWarningModal) cheatWarningModal.classList.add('hidden');
     isRecitationCheatModalOpen = false;
     hasLeftRecitationTab = false;
-    if (recitationInput && !recitationInput.disabled) {
+    if (isRecitationInProgress && recitationInput && !recitationInput.disabled) {
         recitationInput.focus();
+    } else if (isFullPracticeInProgress && fullPracticeInput && !fullPracticeInput.disabled) {
+        fullPracticeInput.focus();
+    } else if (isExtraPracticeInProgress) {
+        const extraArea = document.getElementById('extraWritingArea');
+        if (extraArea && !extraArea.disabled) {
+            extraArea.focus();
+        }
+    }
+}
+
+function disqualifyActiveSectionForCheating() {
+    if (isRecitationInProgress) {
+        disqualifyRecitationForCheating();
+    } else if (isFullPracticeInProgress) {
+        disqualifyFullPracticeForCheating();
+    } else if (isExtraPracticeInProgress) {
+        disqualifyExtraPracticeForCheating();
     }
 }
 
@@ -4419,30 +4472,127 @@ function disqualifyRecitationForCheating() {
     const now = new Date().toLocaleString('vi-VN');
     const timeSpentStr = formatTimerString(timeSpentSeconds);
 
-    const cheatPayload = `[HỌC VIÊN]: ${name} | [LỚP]: ${cls} | [DẠNG BÀI]: ${letterTitle} | [ĐIỂM]: 0% (ĐÌNH CHỈ GIAN LẬN) | [VI PHẠM]: Cố tình chuyển tab ${recitationCheatAttempts} lần | [THỜI GIAN LÀM]: ${timeSpentStr}/20:00 | [THỜI ĐIỂM NỘP]: ${now}`;
+    const cheatPayload = `[HỌC VIÊN]: ${name} | [LỚP]: ${cls} | [DẠNG BÀI]: ${letterTitle} | [PHẦN THI]: TRẢ BÀI | [ĐIỂM]: 0% (ĐÌNH CHỈ GIAN LẬN) | [VI PHẠM]: Cố tình chuyển tab ${recitationCheatAttempts} lần | [THỜI GIAN LÀM]: ${timeSpentStr}/20:00 | [THỜI ĐIỂM NỘP]: ${now}`;
+    reportResultToGoogleForm(cheatPayload);
+}
+
+function disqualifyFullPracticeForCheating() {
+    stopFullPracticeTimer();
+    unlockNavigationAfterFullPractice();
+
+    const timeSpentSeconds = Math.max(0, FULL_PRACTICE_TIME_LIMIT - fullPracticeTimeRemaining);
+    const timeSpentStr = formatTimerString(timeSpentSeconds);
+
+    if (fullPracticeWritingBox) fullPracticeWritingBox.classList.add('hidden');
+    if (fullPracticeResultBox) {
+        fullPracticeResultBox.classList.remove('hidden');
+        fullPracticeResultBox.innerHTML = `
+            <div class="evaluation-card failed disqualified" style="background: #fff; border: 2px solid #ef4444; border-radius: 12px; padding: 28px; text-align: center; margin-bottom: 24px; box-shadow: 0 4px 14px rgba(239, 68, 68, 0.15);">
+                <div style="font-size: 52px; color: #ef4444; margin-bottom: 12px;">
+                    <i class="fa-solid fa-ban"></i>
+                </div>
+                <div style="display: inline-block; background: #fee2e2; color: #b91c1c; font-weight: 800; font-size: 13px; padding: 4px 14px; border-radius: 20px; margin-bottom: 12px; letter-spacing: 0.5px;">
+                    ĐÌNH CHỈ THI GIAN LẬN
+                </div>
+                <h2 style="color: #991b1b; font-size: 22px; margin-bottom: 8px;">0.00 / 3.00 ĐIỂM (ĐÌNH CHỈ)</h2>
+                <p style="color: #4b5563; font-size: 15px; max-width: 650px; margin: 0 auto 18px auto; line-height: 1.6;">
+                    Bài thực hành viết thư của bạn đã bị <strong>hủy bỏ và tính 0 điểm</strong> do vi phạm quy chế chuyển tab trình duyệt quá <strong>${fullPracticeCheatAttempts} lần</strong>.
+                </p>
+                <div style="background: #fef2f2; border: 1px solid #fecaca; border-radius: 8px; padding: 12px 18px; display: inline-block; color: #991b1b; font-size: 14px; margin-bottom: 20px;">
+                    <i class="fa-solid fa-triangle-exclamation"></i> Kết quả vi phạm quy chế đã được hệ thống tự động ghi nhận và gửi báo cáo về tài khoản giáo viên!
+                </div>
+                <div>
+                    <button class="btn-timer-action" style="background: var(--primary-color); color: #fff; padding: 10px 24px; border-radius: 8px; border: none; font-weight: 600; cursor: pointer;" onclick="resetFullPracticeUI()">
+                        <i class="fa-solid fa-rotate-left"></i> Làm lại bài thực hành (Đặt lại 20 phút)
+                    </button>
+                </div>
+            </div>
+        `;
+        setTimeout(() => {
+            fullPracticeResultBox.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }, 100);
+    }
+
+    const name = currentStudentName || localStorage.getItem('vstep_student_name') || 'Học viên';
+    const cls = currentStudentClass || localStorage.getItem('vstep_student_class') || 'Chưa rõ';
+    const typeData = letterTypes.find(t => t.id === activeLetterTypeId);
+    const letterTitle = typeData ? `${typeData.titleEn} (${typeData.titleVi})` : 'VSTEP Task 1';
+    const now = new Date().toLocaleString('vi-VN');
+
+    const cheatPayload = `[HỌC VIÊN]: ${name} | [LỚP]: ${cls} | [DẠNG BÀI]: ${letterTitle} | [PHẦN THI]: THỰC HÀNH | [ĐIỂM]: 0/3.0 (ĐÌNH CHỈ GIAN LẬN) | [VI PHẠM]: Cố tình chuyển tab ${fullPracticeCheatAttempts} lần | [THỜI GIAN LÀM]: ${timeSpentStr}/20:00 | [THỜI ĐIỂM NỘP]: ${now}`;
+    reportResultToGoogleForm(cheatPayload);
+}
+
+function disqualifyExtraPracticeForCheating() {
+    stopExtraPracticeTimer();
+    unlockNavigationAfterExtraPractice();
+
+    const timeSpentSeconds = Math.max(0, EXTRA_PRACTICE_TIME_LIMIT - extraPracticeTimeRemaining);
+    const timeSpentStr = formatTimerString(timeSpentSeconds);
+
+    const resultCard = document.getElementById('extraResultCard');
+    if (resultCard) {
+        resultCard.classList.remove('hidden');
+        resultCard.innerHTML = `
+            <div class="evaluation-card failed disqualified" style="background: #fff; border: 2px solid #ef4444; border-radius: 12px; padding: 28px; text-align: center; margin-bottom: 24px; box-shadow: 0 4px 14px rgba(239, 68, 68, 0.15);">
+                <div style="font-size: 52px; color: #ef4444; margin-bottom: 12px;">
+                    <i class="fa-solid fa-ban"></i>
+                </div>
+                <div style="display: inline-block; background: #fee2e2; color: #b91c1c; font-weight: 800; font-size: 13px; padding: 4px 14px; border-radius: 20px; margin-bottom: 12px; letter-spacing: 0.5px;">
+                    ĐÌNH CHỈ THI GIAN LẬN
+                </div>
+                <h2 style="color: #991b1b; font-size: 22px; margin-bottom: 8px;">0.00 / 3.00 ĐIỂM (ĐÌNH CHỈ)</h2>
+                <p style="color: #4b5563; font-size: 15px; max-width: 650px; margin: 0 auto 18px auto; line-height: 1.6;">
+                    Bài luyện tập thêm của bạn đã bị <strong>hủy bỏ và tính 0 điểm</strong> do vi phạm quy chế chuyển tab trình duyệt quá <strong>${extraPracticeCheatAttempts} lần</strong>.
+                </p>
+                <div style="background: #fef2f2; border: 1px solid #fecaca; border-radius: 8px; padding: 12px 18px; display: inline-block; color: #991b1b; font-size: 14px; margin-bottom: 20px;">
+                    <i class="fa-solid fa-triangle-exclamation"></i> Kết quả vi phạm quy chế đã được hệ thống tự động ghi nhận và gửi báo cáo về tài khoản giáo viên!
+                </div>
+                <div>
+                    <button class="btn-timer-action" style="background: var(--primary-color); color: #fff; padding: 10px 24px; border-radius: 8px; border: none; font-weight: 600; cursor: pointer;" onclick="resetExtraPracticeArea()">
+                        <i class="fa-solid fa-rotate-left"></i> Làm lại bài luyện tập (Đặt lại 20 phút)
+                    </button>
+                </div>
+            </div>
+        `;
+        setTimeout(() => {
+            resultCard.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }, 100);
+    }
+
+    const name = currentStudentName || localStorage.getItem('vstep_student_name') || 'Học viên';
+    const cls = currentStudentClass || localStorage.getItem('vstep_student_class') || 'Chưa rõ';
+    const data = extraPracticeData[currentExtraPracticeTypeId];
+    const letterTitle = data ? data.title : 'Extra Practice';
+    const now = new Date().toLocaleString('vi-VN');
+
+    const cheatPayload = `[HỌC VIÊN]: ${name} | [LỚP]: ${cls} | [DẠNG BÀI]: ${letterTitle} | [PHẦN THI]: BÀI LUYỆN TẬP THÊM | [ĐIỂM]: 0/3.0 (ĐÌNH CHỈ GIAN LẬN) | [VI PHẠM]: Cố tình chuyển tab ${extraPracticeCheatAttempts} lần | [THỜI GIAN LÀM]: ${timeSpentStr}/20:00 | [THỜI ĐIỂM NỘP]: ${now}`;
     reportResultToGoogleForm(cheatPayload);
 }
 
 function initRecitationAntiCheatingEvents() {
     document.addEventListener('visibilitychange', () => {
         if (isTeacherUser()) return;
-        if (isRecitationInProgress && !isRecitationCheatModalOpen) {
+        const isTesting = isRecitationInProgress || isFullPracticeInProgress || isExtraPracticeInProgress;
+        if (isTesting && !isRecitationCheatModalOpen) {
             if (document.visibilityState === 'hidden') {
                 hasLeftRecitationTab = true;
             } else if (document.visibilityState === 'visible' && hasLeftRecitationTab) {
                 hasLeftRecitationTab = false;
-                triggerRecitationCheatWarning('chuyển sang tab khác của trình duyệt hoặc rời khỏi màn hình làm bài');
+                triggerCheatWarning('chuyển sang tab khác của trình duyệt hoặc rời khỏi màn hình làm bài');
             }
         }
     });
 
     window.addEventListener('blur', () => {
         if (isTeacherUser()) return;
-        if (isRecitationInProgress && !isRecitationCheatModalOpen) {
+        const isTesting = isRecitationInProgress || isFullPracticeInProgress || isExtraPracticeInProgress;
+        if (isTesting && !isRecitationCheatModalOpen) {
             if (recitationBlurTimer) clearTimeout(recitationBlurTimer);
             recitationBlurTimer = setTimeout(() => {
                 if (isTeacherUser()) return;
-                if (isRecitationInProgress && !isRecitationCheatModalOpen) {
+                const isTestingNow = isRecitationInProgress || isFullPracticeInProgress || isExtraPracticeInProgress;
+                if (isTestingNow && !isRecitationCheatModalOpen) {
                     if (!document.hasFocus() || document.hidden) {
                         hasLeftRecitationTab = true;
                     }
@@ -4457,9 +4607,10 @@ function initRecitationAntiCheatingEvents() {
             clearTimeout(recitationBlurTimer);
             recitationBlurTimer = null;
         }
-        if (isRecitationInProgress && hasLeftRecitationTab && !isRecitationCheatModalOpen) {
+        const isTesting = isRecitationInProgress || isFullPracticeInProgress || isExtraPracticeInProgress;
+        if (isTesting && hasLeftRecitationTab && !isRecitationCheatModalOpen) {
             hasLeftRecitationTab = false;
-            triggerRecitationCheatWarning('rời khỏi cửa sổ bài làm hoặc chuyển sang ứng dụng khác');
+            triggerCheatWarning('rời khỏi cửa sổ bài làm hoặc chuyển sang ứng dụng khác');
         }
     });
 }
@@ -4477,6 +4628,24 @@ function lockNavigationDuringFullPractice() {
 function unlockNavigationAfterFullPractice() {
     isFullPracticeInProgress = false;
     const banner = document.getElementById('fullPracticeLockedBanner');
+    if (banner) banner.classList.add('hidden');
+
+    removeNavigationLock();
+}
+
+// Lock / Unlock Navigation during Extra Practice (BÀI LUYỆN TẬP THÊM)
+function lockNavigationDuringExtraPractice() {
+    if (isTeacherUser()) return; // Teacher account: never lock navigation
+    isExtraPracticeInProgress = true;
+    applyNavigationLock('extraPractice');
+
+    const banner = document.getElementById('extraPracticeLockedBanner');
+    if (banner) banner.classList.remove('hidden');
+}
+
+function unlockNavigationAfterExtraPractice() {
+    isExtraPracticeInProgress = false;
+    const banner = document.getElementById('extraPracticeLockedBanner');
     if (banner) banner.classList.add('hidden');
 
     removeNavigationLock();
@@ -4564,11 +4733,13 @@ function toggleFullPracticeTimer() {
 }
 
 function startFullPracticeTimer() {
+    fullPracticeCheatAttempts = 0;
     if (isFullPracticeTimerRunning) return;
     if (fullPracticeTimeRemaining <= 0) {
         fullPracticeTimeRemaining = FULL_PRACTICE_TIME_LIMIT;
     }
     isFullPracticeTimerRunning = true;
+    isFullPracticeInProgress = true;
     updateFullPracticeTimerDisplay();
 
     if (fullPracticeTimerInterval) clearInterval(fullPracticeTimerInterval);
@@ -4653,12 +4824,16 @@ function toggleExtraPracticeTimer() {
 }
 
 function startExtraPracticeTimer() {
+    extraPracticeCheatAttempts = 0;
     if (isExtraPracticeTimerRunning) return;
     if (extraPracticeTimeRemaining <= 0) {
         extraPracticeTimeRemaining = EXTRA_PRACTICE_TIME_LIMIT;
     }
     isExtraPracticeTimerRunning = true;
     isExtraPracticeInProgress = true;
+    if (!isTeacherUser()) {
+        lockNavigationDuringExtraPractice();
+    }
     updateExtraPracticeTimerDisplay();
 
     if (extraPracticeTimerInterval) clearInterval(extraPracticeTimerInterval);
@@ -4690,7 +4865,7 @@ function resetExtraPracticeTimer() {
 
 function handleExtraPracticeTimeUp() {
     stopExtraPracticeTimer();
-    isExtraPracticeInProgress = false;
+    unlockNavigationAfterExtraPractice();
     playTimeUpSound();
     alert('⏰ ĐÃ HẾT THỜI GIAN 20 PHÚT LÀM BÀI!\nHệ thống tự động nộp bài luyện tập thêm của bạn để chấm điểm theo 4 tiêu chí VSTEP (30%).');
     gradeExtraPractice(currentExtraPracticeTypeId, true);
@@ -6703,6 +6878,10 @@ function showWelcomeScreen() {
             showToastNotice('🔒 Đang trong thời gian thực hành viết bài (20 phút)! Bạn không thể rời khỏi bài cho đến khi nộp bài.', 'fa-solid fa-lock');
             return;
         }
+        if (isExtraPracticeInProgress) {
+            showToastNotice('🔒 Đang trong thời gian làm bài luyện tập thêm (20 phút)! Bạn không thể rời khỏi bài cho đến khi nộp bài.', 'fa-solid fa-lock');
+            return;
+        }
     }
     activeLetterTypeId = null;
     
@@ -6783,6 +6962,10 @@ function selectLetterType(id) {
         }
         if (isFullPracticeInProgress) {
             showToastNotice('🔒 Đang trong thời gian thực hành viết bài (20 phút)! Bạn không thể rời khỏi bài cho đến khi nộp bài.', 'fa-solid fa-lock');
+            return;
+        }
+        if (isExtraPracticeInProgress) {
+            showToastNotice('🔒 Đang trong thời gian làm bài luyện tập thêm (20 phút)! Bạn không thể rời khỏi bài cho đến khi nộp bài.', 'fa-solid fa-lock');
             return;
         }
     }
@@ -8380,7 +8563,7 @@ document.addEventListener('DOMContentLoaded', () => {
         btnDisqualifyRecitation.addEventListener('click', () => {
             if (cheatWarningModal) cheatWarningModal.classList.add('hidden');
             isRecitationCheatModalOpen = false;
-            disqualifyRecitationForCheating();
+            disqualifyActiveSectionForCheating();
         });
     }
 
@@ -8450,6 +8633,14 @@ document.addEventListener('DOMContentLoaded', () => {
                     showToastNotice('🔒 Đang trong thời gian thực hành viết bài (20 phút)! Bạn không thể chuyển sang tab khác cho đến khi nộp bài.', 'fa-solid fa-lock');
                     return false;
                 }
+
+                // Block tab switching if extra practice is currently in progress
+                if (isExtraPracticeInProgress && tabId !== 'extraPractice') {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    showToastNotice('🔒 Đang trong thời gian làm bài luyện tập thêm (20 phút)! Bạn không thể chuyển sang tab khác cho đến khi nộp bài.', 'fa-solid fa-lock');
+                    return false;
+                }
             }
 
             // Remove active class from all buttons and panels
@@ -8498,6 +8689,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 const extraResult = document.getElementById('extraResultCard');
                 const isExtraResultShown = extraResult && !extraResult.classList.contains('hidden');
                 if (!isExtraResultShown) {
+                    lockNavigationDuringExtraPractice();
                     startExtraPracticeTimer();
                     loadExtraPracticeDraft(currentExtraPracticeTypeId);
                 }
