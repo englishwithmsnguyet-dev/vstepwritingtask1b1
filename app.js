@@ -2170,6 +2170,7 @@ function renderExtraPracticePanel(typeId) {
                 <div class="editor-actions">
                     <button class="btn btn-secondary" onclick="resetExtraPracticeArea()"><i class="fa-solid fa-rotate-left"></i> Viết lại (Đặt lại 20 phút)</button>
                     <button class="btn btn-primary" onclick="gradeExtraPractice('${typeId}')"><i class="fa-solid fa-circle-check"></i> Nộp bài & Chấm điểm VSTEP (30%)</button>
+                    <button class="btn btn-secondary btn-download-file" onclick="downloadExtraPracticeEssay('${typeId}', false)" title="Tải bài viết về máy định dạng Word (.doc)"><i class="fa-solid fa-file-word" style="color: #2b579a;"></i> Tải bài viết (.doc)</button>
                     <button class="btn btn-secondary btn-clear-draft" onclick="clearExtraPracticeDraft('${typeId}')" title="Xóa bản nháp bài làm thêm"><i class="fa-solid fa-trash-can"></i> Xóa nháp</button>
                 </div>
             </div>
@@ -3548,9 +3549,42 @@ function gradeExtraPractice(typeId, isAutoTimeUp = false) {
         `;
     }
 
+    // Save evaluation state for Word export
+    lastExtraPracticeEvaluationData[typeId] = {
+        rawText,
+        typeId,
+        timeSpentStr,
+        wordCount,
+        tfScore,
+        orgScore,
+        vocScore,
+        gramScore,
+        overallBand,
+        convertedScore,
+        tfConv,
+        orgConv,
+        vocConv,
+        gramConv,
+        vstepLevel,
+        errors,
+        reqLabels,
+        title: data ? data.title : 'Extra Practice',
+        data
+    };
+
     // Build Results HTML
     resultCard.innerHTML = `
         ${offTopicAlertHtml}
+
+        <!-- Export Action Buttons -->
+        <div style="display: flex; gap: 12px; margin-bottom: 20px; flex-wrap: wrap;">
+            <button class="btn-success-export" onclick="downloadExtraPracticeEssay('${typeId}', true)">
+                <i class="fa-solid fa-file-word"></i> Tải Bài viết & Phiếu chấm (.doc)
+            </button>
+            <button class="btn-download-file" onclick="downloadExtraPracticeEssay('${typeId}', false)">
+                <i class="fa-solid fa-file-lines"></i> Chỉ tải bài làm học viên (.doc)
+            </button>
+        </div>
 
         <h3><i class="fa-solid fa-square-poll-vertical"></i> KẾT QUẢ ĐÁNH GIÁ & CHẤM ĐIỂM CHI TIẾT</h3>
 
@@ -3644,6 +3678,16 @@ function gradeExtraPractice(typeId, isAutoTimeUp = false) {
                 ${data.sampleModelVi.replace(/\n\n/g, '<br><br>').replace(/\n/g, '<br>')}
             </div>
         </div>
+
+        <!-- Action Buttons (Rewrite & Download) -->
+        <div style="display: flex; justify-content: center; gap: 14px; margin-top: 30px; margin-bottom: 20px; flex-wrap: wrap;">
+            <button class="btn btn-secondary" onclick="resetExtraPracticeArea()" style="padding: 12px 28px; font-weight: 700; border-radius: 10px; font-size: 15px;">
+                <i class="fa-solid fa-rotate-left"></i> Viết lại bài này
+            </button>
+            <button class="btn-success-export" onclick="downloadExtraPracticeEssay('${typeId}', true)" style="padding: 12px 28px; font-weight: 700; border-radius: 10px; font-size: 15px;">
+                <i class="fa-solid fa-file-word"></i> Tải Phiếu chấm & Bài viết (.doc)
+            </button>
+        </div>
     `;
 
     resultCard.classList.remove('hidden');
@@ -3689,6 +3733,8 @@ let welcomeScreen;
 let letterContent;
 let themeToggle;
 let isDarkMode = false;
+let lastFullPracticeEvaluationData = null;
+let lastExtraPracticeEvaluationData = {};
 
 // Auth & Student Information
 const ALLOWED_CLASSES = ['CB206', 'CB210', 'CB211', 'CB213', 'ONB103', 'B212', 'B2', 'GV'];
@@ -5461,6 +5507,545 @@ function exportProgressBackup() {
     }
 }
 
+// ============================================================================
+// MICROSOFT WORD (.DOC) EXPORT FOR ESSAYS & EVALUATIONS
+// ============================================================================
+function downloadWordDoc(filename, htmlBody) {
+    const fullHtml = `
+<html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word' xmlns='http://www.w3.org/TR/REC-html40'>
+<head>
+  <meta charset='utf-8'>
+  <title>${escapeHtml(filename)}</title>
+  <style>
+    @page {
+      margin: 1in;
+      size: A4 portrait;
+    }
+    body {
+      font-family: 'Times New Roman', Times, serif;
+      font-size: 13pt;
+      line-height: 1.6;
+      color: #111827;
+    }
+    h1 {
+      font-size: 18pt;
+      text-align: center;
+      color: #1e3a8a;
+      margin-bottom: 2pt;
+      text-transform: uppercase;
+      font-weight: bold;
+    }
+    .sub-title {
+      font-size: 14pt;
+      text-align: center;
+      color: #0284c7;
+      font-weight: bold;
+      margin-top: 0;
+      margin-bottom: 12pt;
+    }
+    .info-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 16pt;
+    }
+    .info-table td {
+      padding: 4pt 8pt;
+      font-size: 11pt;
+      border-bottom: 1px dashed #cbd5e1;
+    }
+    .section-title {
+      font-size: 13pt;
+      font-weight: bold;
+      color: #1e3a8a;
+      background: #f1f5f9;
+      padding: 6pt 10pt;
+      border-left: 4pt solid #2563eb;
+      margin-top: 14pt;
+      margin-bottom: 8pt;
+    }
+    .prompt-box {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      padding: 10pt;
+      font-size: 11.5pt;
+      font-style: italic;
+      color: #334155;
+      margin-bottom: 12pt;
+    }
+    .student-essay-box {
+      border: 1.5px solid #94a3b8;
+      background: #ffffff;
+      padding: 14pt;
+      font-size: 13pt;
+      line-height: 1.7;
+      white-space: pre-wrap;
+      text-align: justify;
+      margin-bottom: 14pt;
+    }
+    .score-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 10pt 0 16pt 0;
+    }
+    .score-table th, .score-table td {
+      border: 1px solid #cbd5e1;
+      padding: 6pt 8pt;
+      font-size: 11pt;
+      text-align: left;
+    }
+    .score-table th {
+      background: #e2e8f0;
+      font-weight: bold;
+      color: #0f172a;
+    }
+    .badge-pass {
+      color: #15803d;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+${htmlBody}
+</body>
+</html>`;
+
+    const blob = new Blob(['\ufeff', fullHtml], { type: 'application/msword;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = filename.replace(/[\/\\?%*:|"<>]/g, '_');
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+    if (typeof showToastNotice === 'function') {
+        showToastNotice(`📥 Đã tải file Word: ${link.download}`, 'fa-solid fa-file-word');
+    }
+}
+
+function downloadFullPracticeEssay(isWithEvaluation = false) {
+    const userText = fullPracticeInput ? fullPracticeInput.value.trim() : '';
+    const typeData = letterTypes.find(t => t.id === activeLetterTypeId) || letterTypes[0];
+    const letterTitle = typeData ? `${typeData.titleEn} (${typeData.titleVi})` : 'VSTEP Task 1';
+    const studentName = currentStudentName || localStorage.getItem('vstep_student_name') || 'Học viên';
+    const studentClass = currentStudentClass || localStorage.getItem('vstep_student_class') || 'Chưa rõ';
+    const now = new Date();
+    const dateStr = now.toLocaleDateString('vi-VN') + ' ' + now.toLocaleTimeString('vi-VN');
+    const safeStudentName = (studentName || 'HocVien').normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-zA-Z0-9]/g, '_');
+    const safeDate = `${now.getFullYear()}${String(now.getMonth()+1).padStart(2,'0')}${String(now.getDate()).padStart(2,'0')}`;
+
+    let textToExport = userText;
+    const evalData = lastFullPracticeEvaluationData;
+
+    if (isWithEvaluation && evalData && evalData.rawText) {
+        textToExport = evalData.rawText;
+    }
+
+    if (!textToExport) {
+        alert('⚠️ Chưa có nội dung bài viết để tải về! Vui lòng nhập bài viết vào khung trước khi tải.');
+        if (fullPracticeInput) fullPracticeInput.focus();
+        return;
+    }
+
+    const words = textToExport.split(/\s+/).filter(w => w !== '').length;
+
+    let promptHtml = '';
+    if (typeData) {
+        promptHtml = typeData.examPrompt || typeData.fullPracticeTopic || typeData.identifyingSigns || '';
+    }
+
+    let evaluationSectionHtml = '';
+    if (isWithEvaluation && evalData) {
+        let errorsRows = '';
+        if (evalData.errors && evalData.errors.length > 0) {
+            errorsRows = evalData.errors.map((err, idx) => `
+                <tr>
+                    <td style="text-align: center;">${idx + 1}</td>
+                    <td><strong>${escapeHtml(err.type || '')}</strong></td>
+                    <td style="color: #b91c1c; text-decoration: line-through;">${escapeHtml(err.wrong || '')}</td>
+                    <td style="color: #15803d; font-weight: bold;">${escapeHtml(err.correct || '')}</td>
+                    <td>${escapeHtml(err.reason || '')}</td>
+                </tr>
+            `).join('');
+        }
+
+        evaluationSectionHtml = `
+            <div class="section-title">KẾT QUẢ ĐÁNH GIÁ VSTEP (30% ĐIỂM THI VIẾT)</div>
+            <table class="score-table">
+                <tr>
+                    <th style="width: 25%;">ĐIỂM TỔNG KẾT (30%)</th>
+                    <th style="width: 25%;">BAND ĐIỂM (THANG 10)</th>
+                    <th style="width: 25%;">ĐÁNH GIÁ CHUẨN</th>
+                    <th style="width: 25%;">THỜI GIAN LÀM BÀI</th>
+                </tr>
+                <tr>
+                    <td style="font-size: 14pt; font-weight: bold; color: #1e3a8a; text-align: center;">${evalData.convertedScore.toFixed(2)} / 3.00 điểm</td>
+                    <td style="font-size: 14pt; font-weight: bold; color: #0284c7; text-align: center;">Band ${evalData.overallBand.toFixed(1)} / 10</td>
+                    <td style="text-align: center;"><span class="badge-pass">${evalData.vstepLevel}</span></td>
+                    <td style="text-align: center;">${evalData.timeSpentStr} / 20:00</td>
+                </tr>
+            </table>
+
+            <table class="score-table">
+                <tr>
+                    <th>Tiêu chí chấm điểm</th>
+                    <th>Điểm thành phần (30%)</th>
+                    <th>Thang 10</th>
+                    <th>Nội dung đánh giá</th>
+                </tr>
+                <tr>
+                    <td><strong>1. Task Fulfilment</strong></td>
+                    <td style="font-weight: bold; text-align: center;">${evalData.tfConv.toFixed(2)} / 0.75</td>
+                    <td style="text-align: center;">${evalData.tfScore.toFixed(1)} / 10</td>
+                    <td>${evalData.reqLabels ? evalData.reqLabels.join(' | ') : 'Đáp ứng yêu cầu đề bài'}</td>
+                </tr>
+                <tr>
+                    <td><strong>2. Organization</strong></td>
+                    <td style="font-weight: bold; text-align: center;">${evalData.orgConv.toFixed(2)} / 0.75</td>
+                    <td style="text-align: center;">${evalData.orgScore.toFixed(1)} / 10</td>
+                    <td>Bố cục chuẩn 5 phần, liên kết câu và đoạn văn mạch lạc</td>
+                </tr>
+                <tr>
+                    <td><strong>3. Vocabulary</strong></td>
+                    <td style="font-weight: bold; text-align: center;">${evalData.vocConv.toFixed(2)} / 0.75</td>
+                    <td style="text-align: center;">${evalData.vocScore.toFixed(1)} / 10</td>
+                    <td>Vốn từ vựng học thuật, độ chính xác từ loại và ngữ cảnh</td>
+                </tr>
+                <tr>
+                    <td><strong>4. Grammar & Accuracy</strong></td>
+                    <td style="font-weight: bold; text-align: center;">${evalData.gramConv.toFixed(2)} / 0.75</td>
+                    <td style="text-align: center;">${evalData.gramScore.toFixed(1)} / 10</td>
+                    <td>Cấu trúc ngữ pháp, mạo từ, giới từ, dấu câu và chính tả</td>
+                </tr>
+            </table>
+
+            ${errorsRows ? `
+            <div class="section-title">CHI TIẾT ${evalData.errors.length} LỖI CẦN SỬA (NGỮ PHÁP, DÙNG TỪ, MẠO TỪ, CHÍNH TẢ)</div>
+            <table class="score-table">
+                <thead>
+                    <tr>
+                        <th style="width: 35px; text-align: center;">#</th>
+                        <th style="width: 130px;">Phân loại lỗi</th>
+                        <th>Học viên viết</th>
+                        <th>Đề xuất sửa đúng</th>
+                        <th>Giải thích chi tiết</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    ${errorsRows}
+                </tbody>
+            </table>
+            ` : '<p style="color: #15803d; font-weight: bold;">✓ Không phát hiện lỗi ngữ pháp hay từ vựng đáng kể nào!</p>'}
+        `;
+    }
+
+    let modelSampleHtml = '';
+    if (typeData && typeData.sampleWriting) {
+        modelSampleHtml = `
+            <div class="section-title">BÀI THƯ MẪU THAM KHẢO CHUẨN B1 (BAND CAO)</div>
+            <div style="background: #f8fafc; border: 1px solid #cbd5e1; padding: 12pt; line-height: 1.7; font-size: 12pt; text-align: justify;">
+                ${typeData.sampleWriting}
+            </div>
+        `;
+    }
+
+    const htmlBody = `
+        <h1>ENGLISH WITH MISS NGUYET</h1>
+        <div class="sub-title">PHÒNG ÔN TẬP THƯ B1 - BÀI THỰC HÀNH VIẾT TOÀN BÀI</div>
+        
+        <table class="info-table">
+            <tr>
+                <td style="width: 50%;"><strong>Họ và tên học viên:</strong> ${escapeHtml(studentName)}</td>
+                <td style="width: 50%;"><strong>Mã lớp học:</strong> ${escapeHtml(studentClass)}</td>
+            </tr>
+            <tr>
+                <td><strong>Dạng bài viết thư:</strong> ${escapeHtml(letterTitle)}</td>
+                <td><strong>Thời điểm xuất file:</strong> ${dateStr}</td>
+            </tr>
+            <tr>
+                <td><strong>Tổng số từ đã viết:</strong> ${words} từ ${words >= 120 ? '(✓ Đạt chuẩn ≥120 từ)' : '(⚠️ Chưa đủ 120 từ)'}</td>
+                <td><strong>Trạng thái:</strong> ${isWithEvaluation ? 'Đã chấm điểm & kiểm toán' : 'Bản làm bài của học viên'}</td>
+            </tr>
+        </table>
+
+        ${promptHtml ? `
+        <div class="section-title">ĐỀ BÀI (PROMPT):</div>
+        <div class="prompt-box">
+            ${promptHtml}
+        </div>
+        ` : ''}
+
+        <div class="section-title">BÀI LÀM CỦA HỌC VIÊN:</div>
+        <div class="student-essay-box">
+${escapeHtml(textToExport)}
+        </div>
+
+        ${evaluationSectionHtml}
+
+        ${modelSampleHtml}
+
+        <hr style="border: none; border-top: 1px dashed #cbd5e1; margin-top: 24pt; margin-bottom: 8pt;">
+        <p style="text-align: center; font-size: 10pt; color: #64748b; font-style: italic;">
+            Hệ thống tự động ôn tập và đánh giá VSTEP Writing Task 01 (B1 LEVEL) - English with Miss Nguyet
+        </p>
+    `;
+
+    const fileName = isWithEvaluation
+        ? `PHIEU_CHAM_B1_${safeStudentName}_THUC_HANH_${typeData.id.toUpperCase()}_${safeDate}.doc`
+        : `BAI_VIET_B1_${safeStudentName}_THUC_HANH_${typeData.id.toUpperCase()}_${safeDate}.doc`;
+
+    downloadWordDoc(fileName, htmlBody);
+}
+
+function downloadExtraPracticeEssay(typeId, isWithEvaluation = false) {
+    const data = extraPracticeData[typeId];
+    const writingArea = document.getElementById('extraWritingArea');
+    const userText = writingArea ? writingArea.value.trim() : '';
+    const studentName = currentStudentName || localStorage.getItem('vstep_student_name') || 'Học viên';
+    const studentClass = currentStudentClass || localStorage.getItem('vstep_student_class') || 'Chưa rõ';
+    const now = new Date();
+    const dateStr = now.toLocaleDateString('vi-VN') + ' ' + now.toLocaleTimeString('vi-VN');
+    const safeStudentName = (studentName || 'HocVien').normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-zA-Z0-9]/g, '_');
+    const safeDate = `${now.getFullYear()}${String(now.getMonth()+1).padStart(2,'0')}${String(now.getDate()).padStart(2,'0')}`;
+
+    let textToExport = userText;
+    const evalData = lastExtraPracticeEvaluationData[typeId];
+
+    if (isWithEvaluation && evalData && evalData.rawText) {
+        textToExport = evalData.rawText;
+    }
+
+    if (!textToExport) {
+        alert('⚠️ Chưa có nội dung bài viết để tải về! Vui lòng nhập bài viết vào khung trước khi tải.');
+        if (writingArea) writingArea.focus();
+        return;
+    }
+
+    const words = textToExport.split(/\s+/).filter(w => w !== '').length;
+    const topicTitle = data ? (data.title || 'Luyện tập thêm') : 'Bài Luyện Tập Thêm';
+
+    let evaluationSectionHtml = '';
+    if (isWithEvaluation && evalData) {
+        let errorsRows = '';
+        if (evalData.errors && evalData.errors.length > 0) {
+            errorsRows = evalData.errors.map((err, idx) => `
+                <tr>
+                    <td style="text-align: center;">${idx + 1}</td>
+                    <td><strong>${escapeHtml(err.type || '')}</strong></td>
+                    <td style="color: #b91c1c; text-decoration: line-through;">${escapeHtml(err.wrong || '')}</td>
+                    <td style="color: #15803d; font-weight: bold;">${escapeHtml(err.correct || '')}</td>
+                    <td>${escapeHtml(err.reason || '')}</td>
+                </tr>
+            `).join('');
+        }
+
+        evaluationSectionHtml = `
+            <div class="section-title">KẾT QUẢ ĐÁNH GIÁ VSTEP (30% ĐIỂM THI VIẾT)</div>
+            <table class="score-table">
+                <tr>
+                    <th style="width: 25%;">ĐIỂM TỔNG KẾT (30%)</th>
+                    <th style="width: 25%;">BAND ĐIỂM (THANG 10)</th>
+                    <th style="width: 25%;">ĐÁNH GIÁ CHUẨN</th>
+                    <th style="width: 25%;">THỜI GIAN LÀM BÀI</th>
+                </tr>
+                <tr>
+                    <td style="font-size: 14pt; font-weight: bold; color: #1e3a8a; text-align: center;">${evalData.convertedScore.toFixed(2)} / 3.00 điểm</td>
+                    <td style="font-size: 14pt; font-weight: bold; color: #0284c7; text-align: center;">Band ${evalData.overallBand.toFixed(1)} / 10</td>
+                    <td style="text-align: center;"><span class="badge-pass">${evalData.vstepLevel}</span></td>
+                    <td style="text-align: center;">${evalData.timeSpentStr} / 20:00</td>
+                </tr>
+            </table>
+
+            <table class="score-table">
+                <tr>
+                    <th>Tiêu chí chấm điểm</th>
+                    <th>Điểm thành phần (30%)</th>
+                    <th>Thang 10</th>
+                    <th>Nội dung đánh giá</th>
+                </tr>
+                <tr>
+                    <td><strong>1. Task Fulfilment</strong></td>
+                    <td style="font-weight: bold; text-align: center;">${evalData.tfConv.toFixed(2)} / 0.75</td>
+                    <td style="text-align: center;">${evalData.tfScore.toFixed(1)} / 10</td>
+                    <td>${evalData.reqLabels ? evalData.reqLabels.join(' | ') : 'Đáp ứng yêu cầu đề bài'}</td>
+                </tr>
+                <tr>
+                    <td><strong>2. Organization</strong></td>
+                    <td style="font-weight: bold; text-align: center;">${evalData.orgConv.toFixed(2)} / 0.75</td>
+                    <td style="text-align: center;">${evalData.orgScore.toFixed(1)} / 10</td>
+                    <td>Bố cục chuẩn 5 phần, liên kết câu và đoạn văn mạch lạc</td>
+                </tr>
+                <tr>
+                    <td><strong>3. Vocabulary</strong></td>
+                    <td style="font-weight: bold; text-align: center;">${evalData.vocConv.toFixed(2)} / 0.75</td>
+                    <td style="text-align: center;">${evalData.vocScore.toFixed(1)} / 10</td>
+                    <td>Vốn từ vựng học thuật, độ chính xác từ loại và ngữ cảnh</td>
+                </tr>
+                <tr>
+                    <td><strong>4. Grammar & Accuracy</strong></td>
+                    <td style="font-weight: bold; text-align: center;">${evalData.gramConv.toFixed(2)} / 0.75</td>
+                    <td style="text-align: center;">${evalData.gramScore.toFixed(1)} / 10</td>
+                    <td>Cấu trúc ngữ pháp, mạo từ, giới từ, dấu câu và chính tả</td>
+                </tr>
+            </table>
+
+            ${errorsRows ? `
+            <div class="section-title">CHI TIẾT ${evalData.errors.length} LỖI CẦN SỬA (NGỮ PHÁP, DÙNG TỪ, MẠO TỪ, CHÍNH TẢ)</div>
+            <table class="score-table">
+                <thead>
+                    <tr>
+                        <th style="width: 35px; text-align: center;">#</th>
+                        <th style="width: 130px;">Phân loại lỗi</th>
+                        <th>Học viên viết</th>
+                        <th>Đề xuất sửa đúng</th>
+                        <th>Giải thích chi tiết</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    ${errorsRows}
+                </tbody>
+            </table>
+            ` : '<p style="color: #15803d; font-weight: bold;">✓ Không phát hiện lỗi ngữ pháp hay từ vựng đáng kể nào!</p>'}
+        `;
+    }
+
+    let modelSampleHtml = '';
+    if (data && data.sampleModel) {
+        modelSampleHtml = `
+            <div class="section-title">BÀI THƯ MẪU THAM KHẢO CHUẨN B1 (MODEL LETTER)</div>
+            <div style="background: #f8fafc; border: 1px solid #cbd5e1; padding: 12pt; line-height: 1.7; font-size: 12pt; text-align: justify; white-space: pre-wrap;">
+${escapeHtml(data.sampleModel)}
+            </div>
+            ${data.sampleModelVi ? `
+            <div class="section-title" style="margin-top: 14pt;">BẢN DỊCH CHI TIẾT SANG TIẾNG VIỆT</div>
+            <div style="background: #f8fafc; border: 1px solid #e2e8f0; padding: 12pt; line-height: 1.7; font-size: 11pt; font-style: italic; color: #475569; white-space: pre-wrap;">
+${escapeHtml(data.sampleModelVi)}
+            </div>
+            ` : ''}
+        `;
+    }
+
+    const htmlBody = `
+        <h1>ENGLISH WITH MISS NGUYET</h1>
+        <div class="sub-title">PHÒNG ÔN TẬP THƯ B1 - BÀI LUYỆN TẬP THÊM</div>
+        
+        <table class="info-table">
+            <tr>
+                <td style="width: 50%;"><strong>Họ và tên học viên:</strong> ${escapeHtml(studentName)}</td>
+                <td style="width: 50%;"><strong>Mã lớp học:</strong> ${escapeHtml(studentClass)}</td>
+            </tr>
+            <tr>
+                <td><strong>Chủ đề luyện tập:</strong> ${escapeHtml(topicTitle)}</td>
+                <td><strong>Thời điểm xuất file:</strong> ${dateStr}</td>
+            </tr>
+            <tr>
+                <td><strong>Tổng số từ đã viết:</strong> ${words} từ ${words >= 120 ? '(✓ Đạt chuẩn ≥120 từ)' : '(⚠️ Chưa đủ 120 từ)'}</td>
+                <td><strong>Trạng thái:</strong> ${isWithEvaluation ? 'Đã chấm điểm & sửa lỗi' : 'Bản làm bài của học viên'}</td>
+            </tr>
+        </table>
+
+        ${data && data.prompt ? `
+        <div class="section-title">ĐỀ BÀI (PROMPT):</div>
+        <div class="prompt-box">
+            ${escapeHtml(data.prompt).replace(/\n/g, '<br>')}
+        </div>
+        ` : ''}
+
+        <div class="section-title">BÀI LÀM CỦA HỌC VIÊN:</div>
+        <div class="student-essay-box">
+${escapeHtml(textToExport)}
+        </div>
+
+        ${evaluationSectionHtml}
+
+        ${modelSampleHtml}
+
+        <hr style="border: none; border-top: 1px dashed #cbd5e1; margin-top: 24pt; margin-bottom: 8pt;">
+        <p style="text-align: center; font-size: 10pt; color: #64748b; font-style: italic;">
+            Hệ thống tự động ôn tập và đánh giá VSTEP Writing Task 01 (B1 LEVEL) - English with Miss Nguyet
+        </p>
+    `;
+
+    const fileName = isWithEvaluation
+        ? `PHIEU_CHAM_B1_${safeStudentName}_LUYEN_TAP_THEM_${typeId.toUpperCase()}_${safeDate}.doc`
+        : `BAI_VIET_B1_${safeStudentName}_LUYEN_TAP_THEM_${typeId.toUpperCase()}_${safeDate}.doc`;
+
+    downloadWordDoc(fileName, htmlBody);
+}
+
+function downloadRecitationDoc() {
+    const typeData = letterTypes.find(t => t.id === activeLetterTypeId) || letterTypes[0];
+    const letterTitle = typeData ? `${typeData.titleEn} (${typeData.titleVi})` : 'VSTEP Task 1';
+    const studentName = currentStudentName || localStorage.getItem('vstep_student_name') || 'Học viên';
+    const studentClass = currentStudentClass || localStorage.getItem('vstep_student_class') || 'Chưa rõ';
+    const now = new Date();
+    const dateStr = now.toLocaleDateString('vi-VN') + ' ' + now.toLocaleTimeString('vi-VN');
+    const safeStudentName = (studentName || 'HocVien').normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-zA-Z0-9]/g, '_');
+    const safeDate = `${now.getFullYear()}${String(now.getMonth()+1).padStart(2,'0')}${String(now.getDate()).padStart(2,'0')}`;
+
+    const score = scorePercentageVal ? scorePercentageVal.textContent : '0';
+    const status = resultStatusVal ? resultStatusVal.textContent : '';
+    const timeSpent = timeSpentVal ? timeSpentVal.textContent : '00:00';
+
+    let questionsRows = '';
+    if (activeQuestions && activeQuestions.length > 0) {
+        questionsRows = activeQuestions.map((q, idx) => {
+            const sc = (questionScores && questionScores[idx] !== undefined) ? questionScores[idx] : 0;
+            return `
+                <tr>
+                    <td style="text-align: center; font-weight: bold;">Câu ${idx + 1}</td>
+                    <td>${escapeHtml(q.questionVi || q.questionEn || '')}</td>
+                    <td style="background: #f8fafc; font-weight: 500;">${escapeHtml(q.correctSentence || '')}</td>
+                    <td style="text-align: center; font-weight: bold; color: ${sc >= 90 ? '#15803d' : '#b91c1c'};">${sc}%</td>
+                </tr>
+            `;
+        }).join('');
+    }
+
+    const htmlBody = `
+        <h1>ENGLISH WITH MISS NGUYET</h1>
+        <div class="sub-title">PHÒNG ÔN TẬP THƯ B1 - KẾT QUẢ HỌC THUỘC LÒNG (RECITATION)</div>
+        
+        <table class="info-table">
+            <tr>
+                <td style="width: 50%;"><strong>Họ và tên học viên:</strong> ${escapeHtml(studentName)}</td>
+                <td style="width: 50%;"><strong>Mã lớp học:</strong> ${escapeHtml(studentClass)}</td>
+            </tr>
+            <tr>
+                <td><strong>Dạng bài viết thư:</strong> ${escapeHtml(letterTitle)}</td>
+                <td><strong>Thời điểm xuất file:</strong> ${dateStr}</td>
+            </tr>
+            <tr>
+                <td><strong>Điểm thuộc bài trung bình:</strong> <span style="font-size: 13pt; font-weight: bold; color: ${parseInt(score) >= 90 ? '#15803d' : '#b91c1c'};">${score}% (${status})</span></td>
+                <td><strong>Thời gian làm bài:</strong> ${timeSpent} / 20:00</td>
+            </tr>
+        </table>
+
+        <div class="section-title">CHI TIẾT 10 CÂU HỎI THỰC HÀNH HỌC THUỘC LÒNG:</div>
+        <table class="score-table">
+            <thead>
+                <tr>
+                    <th style="width: 60px; text-align: center;">STT</th>
+                    <th style="width: 35%;">Yêu cầu câu hỏi (Gợi ý Tiếng Việt)</th>
+                    <th style="width: 45%;">Câu mẫu chuẩn VSTEP (Tiếng Anh)</th>
+                    <th style="width: 70px; text-align: center;">Độ chính xác</th>
+                </tr>
+            </thead>
+            <tbody>
+                ${questionsRows}
+            </tbody>
+        </table>
+
+        <hr style="border: none; border-top: 1px dashed #cbd5e1; margin-top: 24pt; margin-bottom: 8pt;">
+        <p style="text-align: center; font-size: 10pt; color: #64748b; font-style: italic;">
+            Hệ thống tự động ôn tập và đánh giá VSTEP Writing Task 01 (B1 LEVEL) - English with Miss Nguyet
+        </p>
+    `;
+
+    const fileName = `HOC_THUOC_LONG_B1_${safeStudentName}_${typeData.id.toUpperCase()}_${safeDate}.doc`;
+    downloadWordDoc(fileName, htmlBody);
+}
+
 function importProgressBackup(file) {
     if (!file) return;
     const reader = new FileReader();
@@ -7120,9 +7705,41 @@ function renderFullPracticeEvaluationResult(rawText, typeId, timeSpentStr) {
         `;
     }
 
+    // Save evaluation state for Word export
+    lastFullPracticeEvaluationData = {
+        rawText,
+        typeId,
+        timeSpentStr,
+        wordCount,
+        tfScore,
+        orgScore,
+        vocScore,
+        gramScore,
+        overallBand,
+        convertedScore,
+        tfConv,
+        orgConv,
+        vocConv,
+        gramConv,
+        vstepLevel,
+        errors,
+        reqLabels,
+        letterTitle
+    };
+
     // Render HTML in fullPracticeResultBox
     fullPracticeResultBox.innerHTML = `
         ${offTopicAlertHtml}
+
+        <!-- Export Action Buttons -->
+        <div style="display: flex; gap: 12px; margin-bottom: 20px; flex-wrap: wrap;">
+            <button class="btn-success-export" onclick="downloadFullPracticeEssay(true)">
+                <i class="fa-solid fa-file-word"></i> Tải Bài viết & Phiếu chấm (.doc)
+            </button>
+            <button class="btn-download-file" onclick="downloadFullPracticeEssay(false)">
+                <i class="fa-solid fa-file-lines"></i> Chỉ tải bài làm học viên (.doc)
+            </button>
+        </div>
 
         <!-- VSTEP Overall Score Banner -->
         <div class="extra-score-banner">
@@ -7268,10 +7885,13 @@ function renderFullPracticeEvaluationResult(rawText, typeId, timeSpentStr) {
             </div>
         </div>
 
-        <!-- Restart Button -->
-        <div style="text-align: center; margin-top: 30px; margin-bottom: 20px;">
-            <button class="btn btn-primary" id="btnRestartFullPractice" style="padding: 12px 36px; font-weight: 700; border-radius: 10px; font-size: 15px;">
+        <!-- Restart & Download Buttons -->
+        <div style="display: flex; justify-content: center; gap: 14px; margin-top: 30px; margin-bottom: 20px; flex-wrap: wrap;">
+            <button class="btn btn-primary" id="btnRestartFullPractice" style="padding: 12px 30px; font-weight: 700; border-radius: 10px; font-size: 15px;">
                 <i class="fa-solid fa-rotate-left"></i> Viết lại bài này
+            </button>
+            <button class="btn-success-export" onclick="downloadFullPracticeEssay(true)" style="padding: 12px 28px; font-weight: 700; border-radius: 10px; font-size: 15px;">
+                <i class="fa-solid fa-file-word"></i> Tải Phiếu chấm & Bài viết (.doc)
             </button>
         </div>
     `;

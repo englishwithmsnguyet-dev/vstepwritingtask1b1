@@ -639,6 +639,62 @@ h1, h2, h3, h4, h5, h6 {
     color: #ffffff;
 }
 
+/* Download Essay & Evaluation Buttons */
+.btn-download-file {
+    background: transparent;
+    color: #2563eb;
+    border: 1.5px solid #2563eb;
+    padding: 10px 18px;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.btn-download-file:hover {
+    background: #2563eb;
+    color: #ffffff;
+    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
+}
+
+.btn-download-file:hover i {
+    color: #ffffff !important;
+}
+
+[data-theme="dark"] .btn-download-file {
+    border-color: #3b82f6;
+    color: #60a5fa;
+}
+
+[data-theme="dark"] .btn-download-file:hover {
+    background: #2563eb;
+    color: #ffffff;
+}
+
+.btn-success-export {
+    background: #059669;
+    color: #ffffff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.btn-success-export:hover {
+    background: #047857;
+    box-shadow: 0 4px 12px rgba(5, 150, 105, 0.3);
+}
+
 /* Full Practice (THỰC HÀNH) Tab & Layout */
 .tab-btn.full-practice-tab {
     color: var(--text-muted);

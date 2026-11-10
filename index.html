@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PHÒNG ÔN TẬP THƯ B1 - ENGLISH WITH MISS NGUYET</title>
-    <link rel="stylesheet" href="style.css?v=64.0">
+    <link rel="stylesheet" href="style.css?v=65.0">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400..700;1,400..700&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap" rel="stylesheet">
@@ -358,6 +358,9 @@
                                     <button class="btn btn-primary btn-restart" id="btnRestartRecitation">
                                         <i class="fa-solid fa-rotate-left"></i> Làm lại từ đầu
                                     </button>
+                                    <button class="btn btn-secondary btn-download-file" id="btnDownloadRecitationDoc" type="button" onclick="downloadRecitationDoc()" style="margin-top: 10px;">
+                                        <i class="fa-solid fa-file-word" style="color: #2b579a;"></i> Tải kết quả Học thuộc lòng (.doc)
+                                    </button>
                                 </div>
                             </div>
                         </div>
@@ -436,6 +439,9 @@
                                     </button>
                                     <button class="btn btn-early-submit" id="btnSubmitFullPracticeEarly" title="Nộp bài và mở khóa các tab ngay lập tức">
                                         <i class="fa-solid fa-flag-checkered"></i> Nộp bài sớm
+                                    </button>
+                                    <button class="btn btn-secondary btn-download-file" id="btnDownloadFullPractice" title="Tải bài viết về máy định dạng Word (.doc)" type="button" onclick="downloadFullPracticeEssay(false)">
+                                        <i class="fa-solid fa-file-word" style="color: #2b579a;"></i> Tải bài viết (.doc)
                                     </button>
                                     <button class="btn btn-secondary btn-clear-draft" id="btnClearFullPracticeDraft" title="Xóa bản nháp bài viết để viết lại từ đầu" type="button">
                                         <i class="fa-solid fa-trash-can"></i> Xóa nháp
@@ -580,6 +586,6 @@
         <input type="hidden" name="pageHistory" value="0">
     </form>
 
-    <script src="app.js?v=64.0"></script>
+    <script src="app.js?v=65.0"></script>
 </body>
 </html>
