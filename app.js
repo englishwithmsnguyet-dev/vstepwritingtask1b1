@@ -3667,17 +3667,25 @@ function gradeExtraPractice(typeId, isAutoTimeUp = false) {
             ${errorTableHtml}
 
         <!-- Unlocked Sample Model Letter -->
-        <div class="content-block" style="margin-top: 35px;">
-            <h3><i class="fa-solid fa-award"></i> BÀI VIẾT MẪU CHUẨN B1 THAM KHẢO (MODEL LETTER)</h3>
-            <div class="sample-letter-box">
-                ${data.sampleModel.replace(/\n\n/g, '<br><br>').replace(/\n/g, '<br>')}
-            </div>
+        ${(() => {
+            const sampleEn = (data && (data.sampleModel || data.sampleSolution)) ? (data.sampleModel || data.sampleSolution) : '';
+            const sampleVi = (data && (data.sampleModelVi || data.sampleSolutionVi)) ? (data.sampleModelVi || data.sampleSolutionVi) : '';
+            if (!sampleEn) return '';
+            return `
+            <div class="content-block" style="margin-top: 35px;">
+                <h3><i class="fa-solid fa-award"></i> BÀI VIẾT MẪU CHUẨN B1 THAM KHẢO (MODEL LETTER)</h3>
+                <div class="sample-letter-box">
+                    ${sampleEn.replace(/\n\n/g, '<br><br>').replace(/\n/g, '<br>')}
+                </div>
 
-            <h3 style="margin-top: 25px;">BẢN DỊCH CHI TIẾT</h3>
-            <div class="translation-box" style="background-color: var(--bg-main); border: 1px solid var(--border-color); padding: 20px; border-radius: 12px; margin-top: 15px; font-family: var(--font-body); line-height: 1.8; color: var(--text-muted); font-style: italic;">
-                ${data.sampleModelVi.replace(/\n\n/g, '<br><br>').replace(/\n/g, '<br>')}
-            </div>
-        </div>
+                ${sampleVi ? `
+                <h3 style="margin-top: 25px;">BẢN DỊCH CHI TIẾT</h3>
+                <div class="translation-box" style="background-color: var(--bg-main); border: 1px solid var(--border-color); padding: 20px; border-radius: 12px; margin-top: 15px; font-family: var(--font-body); line-height: 1.8; color: var(--text-muted); font-style: italic;">
+                    ${sampleVi.replace(/\n\n/g, '<br><br>').replace(/\n/g, '<br>')}
+                </div>
+                ` : ''}
+            </div>`;
+        })()}
 
         <!-- Action Buttons (Rewrite & Download) -->
         <div style="display: flex; justify-content: center; gap: 14px; margin-top: 30px; margin-bottom: 20px; flex-wrap: wrap;">
