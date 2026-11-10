@@ -2995,7 +2995,7 @@ function auditIndividualSentence(sentence, index, totalSentences, typeId, global
         roleName = "Lời chào kết thúc (Sign-off)";
         roleIcon = "fa-signature";
         isSignOff = true;
-    } else if (index === totalSentences - 1 && sTrim.split(/\s+/).length <= 3 && !/[.!?]$/.test(sTrim)) {
+    } else if (index === totalSentences - 1 && totalSentences > 1 && sTrim.split(/\s+/).length <= 3 && !/[.!?]$/.test(sTrim)) {
         roleName = "Ký tên người gửi (Signature)";
         roleIcon = "fa-user-pen";
         isSignOff = true;
@@ -3294,14 +3294,23 @@ function gradeExtraPractice(typeId, isAutoTimeUp = false, isSilentRestore = fals
     const wordCount = words.length;
 
     if (!isAutoTimeUp && !isSilentRestore) {
-        let confirmMsg = 'BẠN CÓ CHẮC CHẮN MUỐN NỘP BÀI LUYỆN TẬP THÊM KHÔNG?\n\n';
-        if (wordCount < 120) {
-            confirmMsg += `⚠️ Chú ý: Bài viết của bạn hiện có ${wordCount} từ (chưa đạt chuẩn tối thiểu 120 từ).\n\n`;
+        if (wordCount < 20) {
+            let confirmMsg = `⚠️ CẢNH BÁO: BÀI VIẾT QUÁ NGẮN (${wordCount} TỪ)!\n\n` +
+                `Bài viết của bạn hiện mới có ${wordCount} từ (chưa đạt độ dài tối thiểu 20 từ để chấm điểm VSTEP, yêu cầu ≥120 từ).\n\n` +
+                `Nếu nộp lúc này, hệ thống sẽ chấm ĐIỂM LIỆT (0.00 / 3.00 điểm - Band 0.0) cho toàn bộ 4 tiêu chí.\n\n` +
+                `Bạn có chắc chắn muốn nộp bài không?`;
+            if (!confirm(confirmMsg)) return;
+        } else if (wordCount < 120) {
+            let confirmMsg = `BẠN CÓ CHẮC CHẮN MUỐN NỘP BÀI LUYỆN TẬP THÊM KHÔNG?\n\n` +
+                `⚠️ Chú ý: Bài viết của bạn hiện có ${wordCount} từ (chưa đạt chuẩn tối thiểu 120 từ nên sẽ bị trừ điểm độ dài).\n\n` +
+                `Hệ thống sẽ chấm điểm chi tiết theo 4 tiêu chí VSTEP (30%) và hiển thị bản phân tích đối chiếu!`;
+            if (!confirm(confirmMsg)) return;
         } else {
-            confirmMsg += `✓ Số từ đạt: ${wordCount} từ (đạt chuẩn độ dài VSTEP B1).\n\n`;
+            let confirmMsg = `BẠN CÓ CHẮC CHẮN MUỐN NỘP BÀI LUYỆN TẬP THÊM KHÔNG?\n\n` +
+                `✓ Số từ đạt: ${wordCount} từ (đạt chuẩn độ dài VSTEP B1).\n\n` +
+                `Hệ thống sẽ chấm điểm chi tiết theo 4 tiêu chí VSTEP (30%) và hiển thị bản phân tích đối chiếu!`;
+            if (!confirm(confirmMsg)) return;
         }
-        confirmMsg += 'Hệ thống sẽ chấm điểm chi tiết theo 4 tiêu chí VSTEP (30%) và hiển thị bản phân tích đối chiếu!';
-        if (!confirm(confirmMsg)) return;
     }
 
     stopExtraPracticeTimer();
@@ -3385,17 +3394,31 @@ function gradeExtraPractice(typeId, isAutoTimeUp = false, isSilentRestore = fals
     const isCompletelyOffTopic = (bulletsCount === 0);
     const isPartiallyOffTopic = (bulletsCount === 1);
 
+    const isSeverelyShort = (wordCount < 20);
+    const isVeryShort = (wordCount >= 20 && wordCount < 60);
+    const isShort = (wordCount >= 60 && wordCount < 90);
+    const isUnderlength = (wordCount >= 90 && wordCount < 120);
+
     let tfScore = 8.5;
-    if (bulletsCount === 4) {
-        tfScore = wordCount >= 120 ? 8.5 : 7.0;
-    } else if (bulletsCount === 3) {
-        tfScore = wordCount >= 120 ? 7.0 : 6.0;
-    } else if (bulletsCount === 2) {
-        tfScore = 5.5;
-    } else if (bulletsCount === 1) {
-        tfScore = wordCount >= 120 ? 4.0 : 3.0;
+    let tfDescText = '';
+    if (isSeverelyShort) {
+        tfScore = wordCount <= 3 ? 0.0 : 0.5;
+        tfDescText = `Bài viết quá ngắn (${wordCount} từ). Hoàn toàn chưa trả lời các yêu cầu cốt lõi của đề bài.`;
     } else {
-        tfScore = 1.5; // Completely off-topic
+        if (bulletsCount === 4) {
+            tfScore = wordCount >= 120 ? 8.5 : (wordCount >= 90 ? 7.5 : 6.0);
+        } else if (bulletsCount === 3) {
+            tfScore = wordCount >= 120 ? 7.0 : (wordCount >= 90 ? 6.0 : 5.0);
+        } else if (bulletsCount === 2) {
+            tfScore = wordCount >= 90 ? 5.5 : 4.0;
+        } else if (bulletsCount === 1) {
+            tfScore = wordCount >= 90 ? 3.5 : 2.5;
+        } else {
+            tfScore = 1.0; // Completely off-topic
+        }
+        if (isVeryShort) tfScore = Math.min(2.0, tfScore);
+        else if (isShort) tfScore = Math.min(4.5, tfScore);
+        tfDescText = `${reqLabels.join(' | ')}. Độ dài: ${wordCount} từ (${wordCount >= 120 ? 'Đạt chuẩn ≥120 từ' : 'Chưa đủ 120 từ'}).`;
     }
 
     // --- 2. ORGANIZATION (Thang 10) ---
@@ -3403,6 +3426,7 @@ function gradeExtraPractice(typeId, isAutoTimeUp = false, isSilentRestore = fals
     const hasOpening = /(thanks?\s+for|hope\s+you|writing\s+to|how\s+are\s+you|in\s+your\s+letter|i\s+am\s+writing)/i.test(lower);
     const hasClosingSentence = /(hope\s+my\s+advice|write\s+back|let\s+me\s+know|look\s+forward|hope\s+you\s+(can\s+help|will\s+find|will\s+look)|thank\s+you\s+for|thank\s+you\s+for\s+your\s+time)/i.test(lower);
     const hasSignOff = /(best\s+wishes|yours|regards|love)/i.test(lower);
+    const orgPartsCount = [hasGreeting, hasOpening, hasClosingSentence, hasSignOff].filter(Boolean).length;
 
     const linkingWords = ["firstly", "secondly", "next", "finally", "moreover", "besides", "furthermore", "in addition", "therefore", "for example", "first of all", "also", "because"];
     let linkCount = 0;
@@ -3411,14 +3435,32 @@ function gradeExtraPractice(typeId, isAutoTimeUp = false, isSilentRestore = fals
     });
 
     let orgScore = 8.0;
-    if (hasGreeting && hasOpening && hasClosingSentence && hasSignOff && linkCount >= 4) {
-        orgScore = 8.5;
-    } else if (linkCount >= 3) {
-        orgScore = 7.5;
-    } else if (linkCount >= 1) {
-        orgScore = 6.5;
+    let orgDescText = '';
+    if (isSeverelyShort) {
+        orgScore = wordCount <= 3 ? 0.0 : 0.5;
+        orgDescText = `Bài viết quá ngắn (${wordCount} từ). Chưa hình thành cấu trúc thư (thiếu lời chào, mở bài, thân bài, kết bài và chữ ký).`;
     } else {
-        orgScore = 5.5;
+        if (orgPartsCount === 4 && linkCount >= 4 && wordCount >= 120) {
+            orgScore = 8.5;
+        } else if (orgPartsCount >= 3 && linkCount >= 2 && wordCount >= 90) {
+            orgScore = 7.0;
+        } else if (orgPartsCount >= 2 && wordCount >= 60) {
+            orgScore = 5.5;
+        } else if (isVeryShort) {
+            orgScore = 2.5;
+        } else {
+            orgScore = 4.0;
+        }
+        if (isVeryShort) orgScore = Math.min(3.0, orgScore);
+        else if (isShort) orgScore = Math.min(5.5, orgScore);
+
+        if (isVeryShort) {
+            orgDescText = `Bố cục còn rất sơ sài (${orgPartsCount}/4 phần). Bài viết quá ngắn (${wordCount} từ), thiếu tính liên kết giữa các ý.`;
+        } else if (orgPartsCount === 4 && linkCount >= 3) {
+            orgDescText = `Bố cục 5 phần chuẩn mực (4/4 phần cốt lõi: Greeting, Opening, Closing, Sign-off). Sử dụng ${linkCount} liên từ nối linh hoạt.`;
+        } else {
+            orgDescText = `Bố cục đạt ${orgPartsCount}/4 phần cốt lõi (${hasGreeting ? '✓ Chào' : '✗ Chào'}, ${hasOpening ? '✓ Mở' : '✗ Mở'}, ${hasClosingSentence ? '✓ Kết' : '✗ Kết'}, ${hasSignOff ? '✓ Ký tên' : '✗ Ký tên'}). Có ${linkCount} liên từ nối.`;
+        }
     }
 
     // --- 3. DIAGNOSE ERRORS FOR VOCABULARY & GRAMMAR ---
@@ -3428,30 +3470,63 @@ function gradeExtraPractice(typeId, isAutoTimeUp = false, isSilentRestore = fals
 
     // --- 4. VOCABULARY (Thang 10) ---
     let vocScore = 7.5;
-    if (vocabErrors.length >= 3) {
-        vocScore = 5.5;
-    } else if (vocabErrors.length === 2) {
-        vocScore = 6.0;
-    } else if (vocabErrors.length === 1) {
-        vocScore = 6.5;
+    let vocDescText = '';
+    if (isSeverelyShort) {
+        vocScore = wordCount <= 3 ? 0.0 : 0.5;
+        vocDescText = `Số lượng từ quá ít (${wordCount} từ), không đủ dữ liệu để đánh giá vốn từ vựng.`;
     } else {
-        vocScore = 7.5;
+        if (vocabErrors.length >= 3) {
+            vocScore = 5.5;
+        } else if (vocabErrors.length === 2) {
+            vocScore = 6.0;
+        } else if (vocabErrors.length === 1) {
+            vocScore = 6.5;
+        } else {
+            vocScore = 7.5;
+        }
+        if (isVeryShort) vocScore = Math.min(3.0, vocScore);
+        else if (isShort) vocScore = Math.min(5.0, vocScore);
+        else if (isUnderlength) vocScore = Math.min(6.5, vocScore);
+
+        if (isVeryShort) {
+            vocDescText = `Vốn từ vựng còn rất hạn chế do bài viết quá ngắn (${wordCount}/120 từ).`;
+        } else if (vocabErrors.length > 0) {
+            vocDescText = `Vốn từ vựng theo chủ đề đề bài. Bị trừ điểm do có ${vocabErrors.length} lỗi dùng từ / từ loại chưa chuẩn.`;
+        } else {
+            vocDescText = `Vốn từ vựng sử dụng chính xác, phù hợp chủ đề đề bài (${wordCount} từ).`;
+        }
     }
 
     // --- 5. GRAMMAR & ACCURACY (Thang 10) ---
     let gramScore = 7.0;
+    let gramDescText = '';
     const totalGrammarCount = grammarErrors.length + (errors.filter(e => e.category === 'punctuation' || e.category === 'spelling').length > 0 ? 1 : 0);
-
-    if (totalGrammarCount >= 6) {
-        gramScore = 5.5;
-    } else if (totalGrammarCount >= 4) {
-        gramScore = 6.0;
-    } else if (totalGrammarCount >= 2) {
-        gramScore = 6.5;
-    } else if (totalGrammarCount === 1) {
-        gramScore = 7.0;
+    if (isSeverelyShort) {
+        gramScore = wordCount <= 3 ? 0.0 : 0.5;
+        gramDescText = `Chưa hình thành câu văn hoàn chỉnh đạt chuẩn ngữ pháp.`;
     } else {
-        gramScore = 8.5;
+        if (totalGrammarCount >= 6) {
+            gramScore = 5.5;
+        } else if (totalGrammarCount >= 4) {
+            gramScore = 6.0;
+        } else if (totalGrammarCount >= 2) {
+            gramScore = 6.5;
+        } else if (totalGrammarCount === 1) {
+            gramScore = 7.0;
+        } else {
+            gramScore = 8.5;
+        }
+        if (isVeryShort) gramScore = Math.min(3.0, gramScore);
+        else if (isShort) gramScore = Math.min(5.5, gramScore);
+        else if (isUnderlength) gramScore = Math.min(7.0, gramScore);
+
+        if (isVeryShort) {
+            gramDescText = `Số lượng câu quá ít (${wordCount} từ) để đánh giá độ chính xác và đa dạng ngữ pháp.`;
+        } else if (totalGrammarCount > 0) {
+            gramDescText = `Bị trừ điểm do mắc ${totalGrammarCount} lỗi ngữ pháp / mạo từ / chính tả.`;
+        } else {
+            gramDescText = `Ngữ pháp chuẩn xác, câu văn rõ ràng, đúng thì và cấu trúc câu.`;
+        }
     }
 
     // Total VSTEP Band (Thang 10) & Quy đổi 30% bài thi Writing VSTEP (Thang 3.0 điểm)
@@ -3459,17 +3534,30 @@ function gradeExtraPractice(typeId, isAutoTimeUp = false, isSilentRestore = fals
     overallBand = Math.round(overallBand * 10) / 10;
 
     let convertedScore = Math.round((overallBand / 10.0) * 3.0 * 100) / 100;
+    if (isSeverelyShort) {
+        convertedScore = wordCount <= 3 ? 0.00 : Math.min(0.15, convertedScore);
+        overallBand = wordCount <= 3 ? 0.0 : Math.min(0.5, overallBand);
+    }
 
     let tfConv = Math.round((tfScore / 10.0) * 0.75 * 100) / 100;
     let orgConv = Math.round((orgScore / 10.0) * 0.75 * 100) / 100;
     let vocConv = Math.round((vocScore / 10.0) * 0.75 * 100) / 100;
     let gramConv = Math.round((gramScore / 10.0) * 0.75 * 100) / 100;
+    if (isSeverelyShort && wordCount <= 3) {
+        tfConv = 0.00; orgConv = 0.00; vocConv = 0.00; gramConv = 0.00;
+    }
 
     let vstepLevel = "B1 LEVEL (ĐẠT CHUẨN)";
     let levelDesc = "Bài viết đáp ứng đầy đủ yêu cầu đề bài, cấu trúc đoạn rõ ràng. Tuy nhiên còn một số lỗi ngữ pháp, mạo từ và dùng từ cần lưu ý sửa chữa.";
-    if (isCompletelyOffTopic) {
+    if (isSeverelyShort) {
+        vstepLevel = "CHƯA ĐẠT CHUẨN (BÀI QUÁ NGẮN)";
+        levelDesc = `Cảnh báo nghiêm trọng: Bài viết chỉ có ${wordCount} từ (dưới ngưỡng tối thiểu 20 từ để có thể đánh giá bài thi VSTEP Task 1). Bài viết nhận điểm liệt (${convertedScore.toFixed(2)}/3.00) cho toàn bộ 4 tiêu chí.`;
+    } else if (isVeryShort) {
+        vstepLevel = "DƯỚI CHUẨN B1 (THIẾU TỪ TRẦM TRỌNG)";
+        levelDesc = `Bài viết quá ngắn (${wordCount} từ so với chuẩn tối thiểu 120 từ). Cần bổ sung thêm nội dung và mở rộng các ý để bài viết hoàn chỉnh.`;
+    } else if (isCompletelyOffTopic) {
         vstepLevel = "LẠC ĐỀ HOÀN TOÀN (OFF-TOPIC)";
-        levelDesc = "Cảnh báo nghiêm trọng: Bài viết hoàn toàn không bám sát yêu cầu đề bài! Bị chấm điểm liệt Task Fulfilment (1.5/10) và khống chế điểm toàn bài.";
+        levelDesc = "Cảnh báo nghiêm trọng: Bài viết hoàn toàn không bám sát yêu cầu đề bài! Bị chấm điểm liệt Task Fulfilment (1.0/10) và khống chế điểm toàn bài.";
     } else if (isPartiallyOffTopic) {
         vstepLevel = "NGUY CƠ LẠC ĐỀ (PARTIALLY OFF-TOPIC)";
         levelDesc = "Cảnh báo: Bài viết chỉ chạm vào 1 ý nhỏ và bỏ sót hầu hết các yêu cầu cốt lõi của đề bài. Điểm Task Fulfilment bị trừ rất nặng.";
@@ -3484,18 +3572,38 @@ function gradeExtraPractice(typeId, isAutoTimeUp = false, isSilentRestore = fals
     const data = extraPracticeData[typeId];
 
     // Build Inline Annotated Essay HTML
-    // Segment and audit every single sentence
-    const segmentedSentences = segmentLetterSentences(rawText);
-    const sentenceAudits = segmentedSentences.map((s, idx) => 
-        auditIndividualSentence(s, idx, segmentedSentences.length, typeId, errors)
-    );
-    const sentenceAuditSectionHtml = renderSentenceAuditSectionHtml(sentenceAudits);
+    let sentenceAuditSectionHtml = '';
+    if (isSeverelyShort) {
+        sentenceAuditSectionHtml = `
+            <div class="extra-error-table-wrapper" style="margin-top: 25px;">
+                <div class="error-table-title" style="color: #9f1239; background: #fff1f2;">
+                    <i class="fa-solid fa-triangle-exclamation" style="color: #ef4444;"></i>
+                    CHƯA ĐỦ ĐIỀU KIỆN PHÂN TÍCH TỪNG CÂU (${wordCount} TỪ)
+                </div>
+                <div style="padding: 16px 20px; font-size: 14.5px; color: #4b5563;">
+                    Bài viết của bạn hiện tại quá ngắn (mới có <strong>${wordCount} từ</strong>) và chưa hình thành câu văn hoàn chỉnh. Hãy viết bài đầy đủ với các câu mở đầu, thân bài và kết thúc (≥120 từ) để hệ thống mổ xẻ phân tích từng câu nhé!
+                </div>
+            </div>
+        `;
+    } else {
+        const segmentedSentences = segmentLetterSentences(rawText);
+        const sentenceAudits = segmentedSentences.map((s, idx) => 
+            auditIndividualSentence(s, idx, segmentedSentences.length, typeId, errors)
+        );
+        sentenceAuditSectionHtml = renderSentenceAuditSectionHtml(sentenceAudits);
+    }
 
     const annotatedEssayHtml = buildAnnotatedEssayHtml(rawText, errors);
 
     // Build Error Table HTML
     let errorTableHtml = '';
-    if (errors.length > 0) {
+    if (isSeverelyShort) {
+        errorTableHtml = `
+            <div class="highlight-box" style="margin-top: 25px; background: #fff1f2; border: 1.5px solid #fda4af; color: #9f1239;">
+                <p><i class="fa-solid fa-triangle-exclamation" style="color: #ef4444;"></i> <strong>Bài viết quá ngắn (${wordCount} từ):</strong> Hệ thống không thể quét phân tích lỗi ngữ pháp hay từ vựng trên văn bản chưa hoàn chỉnh.</p>
+            </div>
+        `;
+    } else if (errors.length > 0) {
         let rowsHtml = errors.map((err, idx) => `
             <tr>
                 <td style="font-weight: 700; color: var(--primary-color); text-align: center;">${idx + 1}</td>
@@ -3540,7 +3648,19 @@ function gradeExtraPractice(typeId, isAutoTimeUp = false, isSilentRestore = fals
 
     // Build Off-Topic Alert Box
     let offTopicAlertHtml = '';
-    if (isCompletelyOffTopic) {
+    if (isSeverelyShort) {
+        offTopicAlertHtml = `
+            <div class="off-topic-alert-box" style="background: #fef2f2; border: 2.5px solid #ef4444; border-radius: 14px; padding: 20px 24px; margin-bottom: 24px; box-shadow: 0 4px 14px rgba(239, 68, 68, 0.15);">
+                <div style="display: flex; align-items: center; gap: 12px; color: #b91c1c; font-size: 19px; font-weight: 800;">
+                    <i class="fa-solid fa-triangle-exclamation" style="font-size: 26px; color: #ef4444;"></i>
+                    <span>CẢNH BÁO: BÀI VIẾT QUÁ NGẮN / CHƯA ĐỦ ĐIỀU KIỆN ĐÁNH GIÁ (${wordCount} TỪ)!</span>
+                </div>
+                <p style="margin: 12px 0 8px 0; color: #991b1b; font-size: 15px; line-height: 1.6;">
+                    ⚠️ Bạn chỉ mới viết <strong>${wordCount} từ</strong> (chuẩn VSTEP Task 1 yêu cầu tối thiểu 120 từ). Với độ dài này, bài viết chưa hình thành câu, từ vựng hay cấu trúc thư hoàn chỉnh. Theo quy chế chấm thi VSTEP của Bộ GD&ĐT, bài viết này nhận <strong>ĐIỂM LIỆT (${convertedScore.toFixed(2)} / 3.00 điểm - Band ${overallBand.toFixed(1)}/10)</strong> cho toàn bộ 4 tiêu chí. Vui lòng bấm <strong>"Viết lại (Đặt lại 20 phút)"</strong> để luyện tập đầy đủ bài viết nhé!
+                </p>
+            </div>
+        `;
+    } else if (isCompletelyOffTopic) {
         offTopicAlertHtml = `
             <div class="off-topic-alert-box" style="background: #fef2f2; border: 2.5px solid #ef4444; border-radius: 14px; padding: 20px 24px; margin-bottom: 24px; box-shadow: 0 4px 14px rgba(239, 68, 68, 0.15);">
                 <div style="display: flex; align-items: center; gap: 12px; color: #b91c1c; font-size: 19px; font-weight: 800;">
@@ -3662,8 +3782,7 @@ function gradeExtraPractice(typeId, isAutoTimeUp = false, isSilentRestore = fals
                     <span class="criterion-score">${tfConv.toFixed(2)}/0.75 <small style="font-size: 11px; font-weight: normal; color: var(--text-muted);">(${tfScore.toFixed(1)}/10)</small></span>
                 </div>
                 <div class="criterion-desc">
-                    ${reqLabels.join(' | ')}.
-                    Độ dài: ${wordCount >= 120 ? 'Đạt chuẩn (≥120 từ)' : 'Chưa đủ từ'}.
+                    ${tfDescText}
                 </div>
             </div>
             <div class="criterion-card">
@@ -3672,7 +3791,7 @@ function gradeExtraPractice(typeId, isAutoTimeUp = false, isSilentRestore = fals
                     <span class="criterion-score">${orgConv.toFixed(2)}/0.75 <small style="font-size: 11px; font-weight: normal; color: var(--text-muted);">(${orgScore.toFixed(1)}/10)</small></span>
                 </div>
                 <div class="criterion-desc">
-                    Bố cục 5 phần hoàn chỉnh. Sử dụng linh hoạt các liên từ nối chuyển tiếp câu.
+                    ${orgDescText}
                 </div>
             </div>
             <div class="criterion-card">
@@ -3681,7 +3800,7 @@ function gradeExtraPractice(typeId, isAutoTimeUp = false, isSilentRestore = fals
                     <span class="criterion-score">${vocConv.toFixed(2)}/0.75 <small style="font-size: 11px; font-weight: normal; color: var(--text-muted);">(${vocScore.toFixed(1)}/10)</small></span>
                 </div>
                 <div class="criterion-desc">
-                    Vốn từ vựng đúng chủ đề. ${vocabErrors.length > 0 ? `Bị trừ điểm do có ${vocabErrors.length} lỗi dùng từ/từ loại chưa chuẩn.` : 'Sử dụng từ vựng chính xác.'}
+                    ${vocDescText}
                 </div>
             </div>
             <div class="criterion-card">
@@ -3690,7 +3809,7 @@ function gradeExtraPractice(typeId, isAutoTimeUp = false, isSilentRestore = fals
                     <span class="criterion-score">${gramConv.toFixed(2)}/0.75 <small style="font-size: 11px; font-weight: normal; color: var(--text-muted);">(${gramScore.toFixed(1)}/10)</small></span>
                 </div>
                 <div class="criterion-desc">
-                    Áp dụng tốt cấu trúc câu chuẩn B1. ${totalGrammarCount > 0 ? `Bị trừ điểm do mắc ${totalGrammarCount} lỗi ngữ pháp/mạo từ/câu ghép.` : 'Ngữ pháp chuẩn xác.'}
+                    ${gramDescText}
                 </div>
             </div>
         </div>
@@ -7532,7 +7651,7 @@ function auditIndividualSentence(sentence, index, totalSentences, typeId, global
         roleName = "Lời chào kết thúc (Sign-off)";
         roleIcon = "fa-signature";
         isSignOff = true;
-    } else if (index === totalSentences - 1 && sTrim.split(/\s+/).length <= 3 && !/[.!?]$/.test(sTrim)) {
+    } else if (index === totalSentences - 1 && totalSentences > 1 && sTrim.split(/\s+/).length <= 3 && !/[.!?]$/.test(sTrim)) {
         roleName = "Ký tên người gửi (Signature)";
         roleIcon = "fa-user-pen";
         isSignOff = true;
@@ -7936,20 +8055,29 @@ function renderFullPracticeEvaluationResult(rawText, typeId, timeSpentStr) {
     const isCompletelyOffTopic = (coveredCount === 0);
     const isPartiallyOffTopic = (coveredCount === 1);
 
+    const isSeverelyShort = (wordCount < 20);
+    const isVeryShort = (wordCount >= 20 && wordCount < 60);
+    const isShort = (wordCount >= 60 && wordCount < 90);
+    const isUnderlength = (wordCount >= 90 && wordCount < 120);
+
     let tfScore = 8.5;
-    if (coveredCount === 4) {
-        tfScore = wordCount >= 140 ? 9.0 : (wordCount >= 120 ? 8.5 : 7.5);
-    } else if (coveredCount === 3) {
-        tfScore = wordCount >= 120 ? 7.5 : 6.5;
-    } else if (coveredCount === 2) {
-        tfScore = 5.5;
-    } else if (coveredCount === 1) {
-        tfScore = wordCount >= 120 ? 4.0 : 3.0;
+    if (isSeverelyShort) {
+        tfScore = wordCount <= 3 ? 0.0 : 0.5;
     } else {
-        tfScore = 1.5; // Completely off-topic (0 bullet points met)
+        if (coveredCount === 4) {
+            tfScore = wordCount >= 140 ? 9.0 : (wordCount >= 120 ? 8.5 : 7.5);
+        } else if (coveredCount === 3) {
+            tfScore = wordCount >= 120 ? 7.5 : 6.5;
+        } else if (coveredCount === 2) {
+            tfScore = 5.5;
+        } else if (coveredCount === 1) {
+            tfScore = wordCount >= 120 ? 4.0 : 3.0;
+        } else {
+            tfScore = 1.0; // Completely off-topic (0 bullet points met)
+        }
+        if (isVeryShort) tfScore = Math.min(2.5, tfScore);
+        else if (isShort) tfScore = Math.min(5.0, tfScore);
     }
-    if (wordCount < 100 && !isCompletelyOffTopic) tfScore = Math.max(2.0, tfScore - 2.0);
-    if (wordCount < 60 && !isCompletelyOffTopic) tfScore = Math.max(1.0, tfScore - 3.0);
 
     // --- 2. ORGANIZATION (0 - 10) ---
     const hasGreeting = /^dear\s+[a-z]+/i.test(rawText.trim()) || /dear\s+(mr|ms|mrs|sir|madam)/i.test(rawText.trim());
@@ -7970,16 +8098,24 @@ function renderFullPracticeEvaluationResult(rawText, typeId, timeSpentStr) {
 
     let orgScore = 8.0;
     let orgPartsCount = [hasGreeting, hasOpening, hasClosing, hasSignoff].filter(Boolean).length;
-    if (orgPartsCount === 4 && linkCount >= 4 && hasParagraphs) {
-        orgScore = 9.0;
-    } else if (orgPartsCount === 4 && linkCount >= 3) {
-        orgScore = 8.0;
-    } else if (orgPartsCount >= 3 && linkCount >= 2) {
-        orgScore = 7.0;
-    } else if (orgPartsCount >= 2) {
-        orgScore = 5.5;
+    if (isSeverelyShort) {
+        orgScore = wordCount <= 3 ? 0.0 : 0.5;
     } else {
-        orgScore = 4.0;
+        if (orgPartsCount === 4 && linkCount >= 4 && hasParagraphs && wordCount >= 120) {
+            orgScore = 9.0;
+        } else if (orgPartsCount === 4 && linkCount >= 3 && wordCount >= 100) {
+            orgScore = 8.0;
+        } else if (orgPartsCount === 3 && linkCount >= 2 && wordCount >= 80) {
+            orgScore = 7.0;
+        } else if (orgPartsCount === 2 && wordCount >= 60) {
+            orgScore = 5.5;
+        } else if (isVeryShort) {
+            orgScore = 2.5;
+        } else {
+            orgScore = 4.0;
+        }
+        if (isVeryShort) orgScore = Math.min(3.0, orgScore);
+        else if (isShort) orgScore = Math.min(5.5, orgScore);
     }
 
     // --- 3. DIAGNOSE ERRORS (VOCABULARY & GRAMMAR) ---
@@ -7994,26 +8130,39 @@ function renderFullPracticeEvaluationResult(rawText, typeId, timeSpentStr) {
 
     // --- 4. VOCABULARY (0 - 10) ---
     let vocScore = 8.5;
-    if (vocabErrors.length >= 3) {
-        vocScore = 6.0;
-    } else if (vocabErrors.length === 2) {
-        vocScore = 6.5;
-    } else if (vocabErrors.length === 1) {
-        vocScore = 7.5;
+    if (isSeverelyShort) {
+        vocScore = wordCount <= 3 ? 0.0 : 0.5;
+    } else {
+        if (vocabErrors.length >= 3) {
+            vocScore = 6.0;
+        } else if (vocabErrors.length === 2) {
+            vocScore = 6.5;
+        } else if (vocabErrors.length === 1) {
+            vocScore = 7.5;
+        }
+        if (isVeryShort) vocScore = Math.min(3.0, vocScore);
+        else if (isShort) vocScore = Math.min(5.0, vocScore);
+        else if (isUnderlength) vocScore = Math.min(6.5, vocScore);
     }
-    if (wordCount < 120) vocScore = Math.max(4.0, vocScore - 1.0);
 
     // --- 5. GRAMMAR & ACCURACY (0 - 10) ---
     let gramScore = 8.5;
     const totalGrammarImpact = grammarErrors.length + (mechanicsErrors.length > 0 ? 1 : 0);
-    if (totalGrammarImpact >= 6) {
-        gramScore = 5.5;
-    } else if (totalGrammarImpact >= 4) {
-        gramScore = 6.0;
-    } else if (totalGrammarImpact >= 2) {
-        gramScore = 7.0;
-    } else if (totalGrammarImpact === 1) {
-        gramScore = 8.0;
+    if (isSeverelyShort) {
+        gramScore = wordCount <= 3 ? 0.0 : 0.5;
+    } else {
+        if (totalGrammarImpact >= 6) {
+            gramScore = 5.5;
+        } else if (totalGrammarImpact >= 4) {
+            gramScore = 6.0;
+        } else if (totalGrammarImpact >= 2) {
+            gramScore = 7.0;
+        } else if (totalGrammarImpact === 1) {
+            gramScore = 8.0;
+        }
+        if (isVeryShort) gramScore = Math.min(3.0, gramScore);
+        else if (isShort) gramScore = Math.min(5.5, gramScore);
+        else if (isUnderlength) gramScore = Math.min(7.0, gramScore);
     }
 
     // --- TOTAL VSTEP SCORES & 30% EXAM CONVERSION ---
@@ -8022,21 +8171,36 @@ function renderFullPracticeEvaluationResult(rawText, typeId, timeSpentStr) {
 
     // Converted to 30% of VSTEP Writing exam (Max 3.00 points)
     let convertedScore = Math.round((overallBand / 10.0) * 3.0 * 100) / 100;
+    if (isSeverelyShort) {
+        convertedScore = wordCount <= 3 ? 0.00 : Math.min(0.15, convertedScore);
+        overallBand = wordCount <= 3 ? 0.0 : Math.min(0.5, overallBand);
+    }
 
     // 4 Criteria converted to 0.75 points each (0.75 x 4 = 3.00 points)
     let tfConv = Math.round((tfScore / 10.0) * 0.75 * 100) / 100;
     let orgConv = Math.round((orgScore / 10.0) * 0.75 * 100) / 100;
     let vocConv = Math.round((vocScore / 10.0) * 0.75 * 100) / 100;
     let gramConv = Math.round((gramScore / 10.0) * 0.75 * 100) / 100;
+    if (isSeverelyShort && wordCount <= 3) {
+        tfConv = 0.00; orgConv = 0.00; vocConv = 0.00; gramConv = 0.00;
+    }
 
     let vstepLevel = "B1 LEVEL (ĐẠT CHUẨN)";
     let levelBadgeStyle = "background: #10b981; color: #ffffff;";
     let levelSummary = "Bài viết đạt chuẩn yêu cầu VSTEP B1. Bố cục đầy đủ và nội dung bám sát đề thi. Cần xem lại các lỗi nhỏ được đánh dấu bên dưới để tối ưu điểm số.";
 
-    if (isCompletelyOffTopic) {
+    if (isSeverelyShort) {
+        vstepLevel = "CHƯA ĐẠT CHUẨN (BÀI QUÁ NGẮN)";
+        levelBadgeStyle = "background: #dc2626; color: #ffffff;";
+        levelSummary = `Cảnh báo nghiêm trọng: Bài viết chỉ có ${wordCount} từ (dưới ngưỡng tối thiểu 20 từ để có thể đánh giá bài thi VSTEP Task 1). Bài viết nhận điểm liệt (${convertedScore.toFixed(2)}/3.00) cho toàn bộ 4 tiêu chí.`;
+    } else if (isVeryShort) {
+        vstepLevel = "DƯỚI CHUẨN B1 (THIẾU TỪ TRẦM TRỌNG)";
+        levelBadgeStyle = "background: #dc2626; color: #ffffff;";
+        levelSummary = `Bài viết quá ngắn (${wordCount} từ so với chuẩn tối thiểu 120 từ). Cần bổ sung thêm nội dung và mở rộng các ý để bài viết hoàn chỉnh.`;
+    } else if (isCompletelyOffTopic) {
         vstepLevel = "LẠC ĐỀ HOÀN TOÀN (OFF-TOPIC)";
         levelBadgeStyle = "background: #dc2626; color: #ffffff;";
-        levelSummary = "Cảnh báo nghiêm trọng: Bài viết hoàn toàn không bám sát yêu cầu đề bài! Bị chấm điểm liệt Task Fulfilment (1.5/10) và khống chế điểm toàn bài.";
+        levelSummary = "Cảnh báo nghiêm trọng: Bài viết hoàn toàn không bám sát yêu cầu đề bài! Bị chấm điểm liệt Task Fulfilment (1.0/10) và khống chế điểm toàn bài.";
     } else if (isPartiallyOffTopic) {
         vstepLevel = "NGUY CƠ LẠC ĐỀ (PARTIALLY OFF-TOPIC)";
         levelBadgeStyle = "background: #d97706; color: #ffffff;";
@@ -8058,12 +8222,26 @@ function renderFullPracticeEvaluationResult(rawText, typeId, timeSpentStr) {
     const gramDesc = getRubricDescriptor('grammar', gramScore);
 
     // Build Inline Annotated Essay HTML
-    // Segment and audit every single sentence
-    const segmentedSentences = segmentLetterSentences(rawText);
-    const sentenceAudits = segmentedSentences.map((s, idx) => 
-        auditIndividualSentence(s, idx, segmentedSentences.length, typeId, errors)
-    );
-    const sentenceAuditSectionHtml = renderSentenceAuditSectionHtml(sentenceAudits);
+    let sentenceAuditSectionHtml = '';
+    if (isSeverelyShort) {
+        sentenceAuditSectionHtml = `
+            <div class="extra-error-table-wrapper" style="margin-top: 25px;">
+                <div class="error-table-title" style="color: #9f1239; background: #fff1f2;">
+                    <i class="fa-solid fa-triangle-exclamation" style="color: #ef4444;"></i>
+                    CHƯA ĐỦ ĐIỀU KIỆN PHÂN TÍCH TỪNG CÂU (${wordCount} TỪ)
+                </div>
+                <div style="padding: 16px 20px; font-size: 14.5px; color: #4b5563;">
+                    Bài viết của bạn hiện tại quá ngắn (mới có <strong>${wordCount} từ</strong>) và chưa hình thành câu văn hoàn chỉnh. Hãy viết bài đầy đủ với các câu mở đầu, thân bài và kết thúc (≥120 từ) để hệ thống mổ xẻ phân tích từng câu nhé!
+                </div>
+            </div>
+        `;
+    } else {
+        const segmentedSentences = segmentLetterSentences(rawText);
+        const sentenceAudits = segmentedSentences.map((s, idx) => 
+            auditIndividualSentence(s, idx, segmentedSentences.length, typeId, errors)
+        );
+        sentenceAuditSectionHtml = renderSentenceAuditSectionHtml(sentenceAudits);
+    }
 
     const annotatedEssayHtml = (typeof buildAnnotatedEssayHtml === 'function')
         ? buildAnnotatedEssayHtml(rawText, errors)
@@ -8071,7 +8249,13 @@ function renderFullPracticeEvaluationResult(rawText, typeId, timeSpentStr) {
 
     // Build Error Table HTML
     let errorTableHtml = '';
-    if (errors.length > 0) {
+    if (isSeverelyShort) {
+        errorTableHtml = `
+            <div class="highlight-box" style="margin-top: 25px; background: #fff1f2; border: 1.5px solid #fda4af; color: #9f1239;">
+                <p><i class="fa-solid fa-triangle-exclamation" style="color: #ef4444;"></i> <strong>Bài viết quá ngắn (${wordCount} từ):</strong> Hệ thống không thể quét phân tích lỗi ngữ pháp hay từ vựng trên văn bản chưa hoàn chỉnh.</p>
+            </div>
+        `;
+    } else if (errors.length > 0) {
         let rowsHtml = errors.map((err, idx) => `
             <tr>
                 <td style="font-weight: 700; color: var(--primary-color); text-align: center;">${idx + 1}</td>
@@ -8116,7 +8300,19 @@ function renderFullPracticeEvaluationResult(rawText, typeId, timeSpentStr) {
 
     // Build Off-Topic Alert Box if essay fails core prompts
     let offTopicAlertHtml = '';
-    if (isCompletelyOffTopic) {
+    if (isSeverelyShort) {
+        offTopicAlertHtml = `
+            <div class="off-topic-alert-box" style="background: #fef2f2; border: 2.5px solid #ef4444; border-radius: 14px; padding: 20px 24px; margin-bottom: 24px; box-shadow: 0 4px 14px rgba(239, 68, 68, 0.15);">
+                <div style="display: flex; align-items: center; gap: 12px; color: #b91c1c; font-size: 19px; font-weight: 800;">
+                    <i class="fa-solid fa-triangle-exclamation" style="font-size: 26px; color: #ef4444;"></i>
+                    <span>CẢNH BÁO: BÀI VIẾT QUÁ NGẮN / CHƯA ĐỦ ĐIỀU KIỆN ĐÁNH GIÁ (${wordCount} TỪ)!</span>
+                </div>
+                <p style="margin: 12px 0 8px 0; color: #991b1b; font-size: 15px; line-height: 1.6;">
+                    ⚠️ Bạn chỉ mới viết <strong>${wordCount} từ</strong> (chuẩn VSTEP Task 1 yêu cầu tối thiểu 120 từ). Với độ dài này, bài viết chưa hình thành câu, từ vựng hay cấu trúc thư hoàn chỉnh. Theo quy chế chấm thi VSTEP của Bộ GD&ĐT, bài viết này nhận <strong>ĐIỂM LIỆT (${convertedScore.toFixed(2)} / 3.00 điểm - Band ${overallBand.toFixed(1)}/10)</strong> cho toàn bộ 4 tiêu chí. Vui lòng bấm <strong>"Làm lại bài thực hành"</strong> bên dưới để luyện tập đầy đủ bài viết nhé!
+                </p>
+            </div>
+        `;
+    } else if (isCompletelyOffTopic) {
         offTopicAlertHtml = `
             <div class="off-topic-alert-box" style="background: #fef2f2; border: 2.5px solid #ef4444; border-radius: 14px; padding: 20px 24px; margin-bottom: 24px; box-shadow: 0 4px 14px rgba(239, 68, 68, 0.15);">
                 <div style="display: flex; align-items: center; gap: 12px; color: #b91c1c; font-size: 19px; font-weight: 800;">
@@ -8232,7 +8428,7 @@ function renderFullPracticeEvaluationResult(rawText, typeId, timeSpentStr) {
                 </div>
                 <div class="criterion-desc">
                     <div style="margin-bottom: 6px; font-weight: 600; color: var(--text-main);">
-                        ${reqLabels.join(' | ')}.
+                        ${isSeverelyShort ? `Bài viết quá ngắn (${wordCount} từ). Hoàn toàn chưa trả lời các ý hỏi cốt lõi của đề bài.` : reqLabels.join(' | ')}
                     </div>
                     <div>Độ dài: <strong>${wordCount} từ</strong> (${wordCount >= 120 ? 'Đạt chuẩn ≥120 từ' : 'Chưa đủ độ dài'}).</div>
                 </div>
@@ -8251,9 +8447,9 @@ function renderFullPracticeEvaluationResult(rawText, typeId, timeSpentStr) {
                 </div>
                 <div class="criterion-desc">
                     <div style="margin-bottom: 6px; font-weight: 600; color: var(--text-main);">
-                        Bố cục 5 phần chuẩn mực (${orgPartsCount}/4 phần cốt lõi: Greeting, Opening, Closing, Sign-off).
+                        ${isSeverelyShort ? `Bài viết quá ngắn (${wordCount} từ). Chưa hình thành cấu trúc thư (thiếu mở bài, thân bài, kết bài và chữ ký).` : (isVeryShort ? `Bố cục còn rất sơ sài (${orgPartsCount}/4 phần cốt lõi).` : `Bố cục 5 phần chuẩn mực (${orgPartsCount}/4 phần cốt lõi: Greeting, Opening, Closing, Sign-off).`)}
                     </div>
-                    <div>Sử dụng <strong>${linkCount} liên từ nối</strong> chuyển tiếp câu mạch lạc.</div>
+                    <div>${isSeverelyShort ? 'Chưa có liên từ nối liên kết câu.' : `Sử dụng <strong>${linkCount} liên từ nối</strong> chuyển tiếp câu mạch lạc.`}</div>
                 </div>
                 <div class="vstep-official-descriptor-box">
                     <span class="descriptor-tag"><i class="fa-solid fa-stamp"></i> Chuẩn VSTEP Band ${Math.round(orgScore)}:</span>
@@ -8270,9 +8466,9 @@ function renderFullPracticeEvaluationResult(rawText, typeId, timeSpentStr) {
                 </div>
                 <div class="criterion-desc">
                     <div style="margin-bottom: 6px; font-weight: 600; color: var(--text-main);">
-                        Vốn từ vựng theo chủ đề ${letterTitle}.
+                        ${isSeverelyShort ? `Số lượng từ quá ít (${wordCount} từ), không đủ dữ liệu để đánh giá vốn từ vựng.` : (isVeryShort ? `Vốn từ vựng còn rất hạn chế do bài viết quá ngắn (${wordCount}/120 từ).` : `Vốn từ vựng theo chủ đề ${letterTitle}.`)}
                     </div>
-                    <div>${vocabErrors.length > 0 ? `Bị trừ điểm do mắc <strong>${vocabErrors.length} lỗi</strong> từ vựng / từ loại.` : 'Sử dụng từ vựng chính xác, linh hoạt.'}</div>
+                    <div>${isSeverelyShort ? 'Chưa hình thành vốn từ theo chủ đề.' : (vocabErrors.length > 0 ? `Bị trừ điểm do mắc <strong>${vocabErrors.length} lỗi</strong> từ vựng / từ loại.` : 'Sử dụng từ vựng chính xác, linh hoạt.')}</div>
                 </div>
                 <div class="vstep-official-descriptor-box">
                     <span class="descriptor-tag"><i class="fa-solid fa-stamp"></i> Chuẩn VSTEP Band ${Math.round(vocScore)}:</span>
@@ -8289,9 +8485,9 @@ function renderFullPracticeEvaluationResult(rawText, typeId, timeSpentStr) {
                 </div>
                 <div class="criterion-desc">
                     <div style="margin-bottom: 6px; font-weight: 600; color: var(--text-main);">
-                        Cấu trúc câu đơn & câu phức B1.
+                        ${isSeverelyShort ? 'Chưa hình thành cấu trúc câu hoàn chỉnh đạt chuẩn ngữ pháp.' : (isVeryShort ? `Số lượng câu quá ít (${wordCount} từ) để đánh giá độ đa dạng ngữ pháp.` : 'Cấu trúc câu đơn & câu phức B1.')}
                     </div>
-                    <div>${totalGrammarImpact > 0 ? `Bị trừ điểm do phát hiện <strong>${grammarErrors.length} lỗi</strong> ngữ pháp/mạo từ và lỗi dấu câu/chính tả.` : 'Ngữ pháp chuẩn xác, câu văn trôi chảy.'}</div>
+                    <div>${isSeverelyShort ? 'Chưa có câu hoàn chỉnh để đánh giá ngữ pháp.' : (totalGrammarImpact > 0 ? `Bị trừ điểm do phát hiện <strong>${grammarErrors.length} lỗi</strong> ngữ pháp/mạo từ và lỗi dấu câu/chính tả.` : 'Ngữ pháp chuẩn xác, câu văn trôi chảy.')}</div>
                 </div>
                 <div class="vstep-official-descriptor-box">
                     <span class="descriptor-tag"><i class="fa-solid fa-stamp"></i> Chuẩn VSTEP Band ${Math.round(gramScore)}:</span>
@@ -8363,14 +8559,23 @@ function submitFullPractice(isAutoTimeUp = false) {
     const wordCount = countWords(userText);
 
     if (!isAutoTimeUp && !isTeacherUser()) {
-        let confirmMsg = 'BẠN CÓ CHẮC CHẮN MUỐN NỘP BÀI THỰC HÀNH KHÔNG?\n\n';
-        if (wordCount < 120) {
-            confirmMsg += `⚠️ Chú ý: Bài viết của bạn hiện có ${wordCount} từ (chưa đạt chuẩn tối thiểu 120 từ).\n\n`;
+        if (wordCount < 20) {
+            let confirmMsg = `⚠️ CẢNH BÁO: BÀI VIẾT QUÁ NGẮN (${wordCount} TỪ)!\n\n` +
+                `Bài viết của bạn hiện mới có ${wordCount} từ (chưa đạt độ dài tối thiểu 20 từ để chấm điểm VSTEP, yêu cầu ≥120 từ).\n\n` +
+                `Nếu nộp lúc này, hệ thống sẽ chấm ĐIỂM LIỆT (0.00 / 3.00 điểm - Band 0.0) cho toàn bộ 4 tiêu chí.\n\n` +
+                `Bạn có chắc chắn muốn nộp bài không?`;
+            if (!confirm(confirmMsg)) return;
+        } else if (wordCount < 120) {
+            let confirmMsg = `BẠN CÓ CHẮC CHẮN MUỐN NỘP BÀI THỰC HÀNH KHÔNG?\n\n` +
+                `⚠️ Chú ý: Bài viết của bạn hiện có ${wordCount} từ (chưa đạt chuẩn tối thiểu 120 từ nên sẽ bị trừ điểm độ dài).\n\n` +
+                `Hệ thống sẽ chấm điểm chi tiết theo 4 tiêu chí VSTEP (30%), chỉ ra từng lỗi sai ngữ pháp, và hiển thị bài mẫu đối chiếu trực tiếp trên màn hình của bạn!`;
+            if (!confirm(confirmMsg)) return;
         } else {
-            confirmMsg += `✓ Số từ đạt: ${wordCount} từ (đạt chuẩn độ dài VSTEP B1).\n\n`;
+            let confirmMsg = `BẠN CÓ CHẮC CHẮN MUỐN NỘP BÀI THỰC HÀNH KHÔNG?\n\n` +
+                `✓ Số từ đạt: ${wordCount} từ (đạt chuẩn độ dài VSTEP B1).\n\n` +
+                `Hệ thống sẽ chấm điểm chi tiết theo 4 tiêu chí VSTEP (30%), chỉ ra từng lỗi sai ngữ pháp, và hiển thị bài mẫu đối chiếu trực tiếp trên màn hình của bạn!`;
+            if (!confirm(confirmMsg)) return;
         }
-        confirmMsg += 'Hệ thống sẽ chấm điểm chi tiết theo 4 tiêu chí VSTEP (30%), chỉ ra từng lỗi sai ngữ pháp, và hiển thị bài mẫu đối chiếu trực tiếp trên màn hình của bạn!';
-        if (!confirm(confirmMsg)) return;
     }
 
     stopFullPracticeTimer();
