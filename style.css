@@ -73,6 +73,31 @@ input, textarea {
     -webkit-touch-callout: default !important;
 }
 
+/* Teacher Mode - 100% Unrestricted */
+body.teacher-mode,
+body.teacher-mode * {
+    -webkit-user-select: text !important;
+    -moz-user-select: text !important;
+    -ms-user-select: text !important;
+    user-select: text !important;
+    -webkit-touch-callout: default !important;
+}
+
+body.teacher-mode .tab-btn.tab-locked,
+body.teacher-mode .nav-item.nav-locked,
+body.teacher-mode .btn-locked {
+    pointer-events: auto !important;
+    opacity: 1 !important;
+    cursor: pointer !important;
+    filter: none !important;
+}
+
+body.teacher-mode #recitationLockedBanner,
+body.teacher-mode #fullPracticeLockedBanner,
+body.teacher-mode #cheatWarningModal {
+    display: none !important;
+}
+
 h1, h2, h3, h4, h5, h6 {
     font-family: var(--font-heading);
     font-weight: 700;
