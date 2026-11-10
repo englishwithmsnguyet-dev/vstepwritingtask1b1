@@ -3691,7 +3691,7 @@ let themeToggle;
 let isDarkMode = false;
 
 // Auth & Student Information
-const ALLOWED_CLASSES = ['CB206', 'CB210', 'CB211', 'CB213', 'ONB103', 'GV'];
+const ALLOWED_CLASSES = ['CB206', 'CB210', 'CB211', 'CB213', 'ONB103', 'B212', 'B2', 'GV'];
 const MANDATORY_PASSWORD = 'STUDYHARD';
 
 const STUDENTS_BY_CLASS = {
@@ -3771,6 +3771,40 @@ const STUDENTS_BY_CLASS = {
         'Nguyễn Thị Thanh Tuyền',
         'Trần Phạm Phương Uyên',
         'Trần Ngô Mỹ Vy'
+    ],
+    'B212': [
+        'Nguyễn Duy Hồng Anh',
+        'Nguyễn Ngọc Minh Anh',
+        'Nguyễn Lê Mỹ Hân',
+        'Nguyễn Hồng Minh Huy',
+        'Nguyễn Quốc Khải',
+        'Đoàn Nguyễn Đình Khang',
+        'Lê Nguyễn Gia Khánh',
+        'Nguyễn Hữu Khánh',
+        'Hồ Thị Ngọc Lan',
+        'Trần Thị Hồng Lỉnh',
+        'Trần Thị Hồng Lĩnh',
+        'Võ Thị Triệu Minh',
+        'Hứa Đình Nghi',
+        'Võ Thị Bảo Ngọc',
+        'Lê Tiến Phát',
+        'Nguyễn Hoàng Thông',
+        'Trần Hoàng Thông',
+        'Nguyễn Kim Tiền',
+        'Lê Thị Bảo Trân',
+        'Võ Thị Diễm Trinh',
+        'Nguyễn Tấn Trung',
+        'Nguyễn Tiến Trung',
+        'Trần Thị Ánh Tuyết',
+        'Đặng Nguyễn Khánh Uyên',
+        'Nguyễn Thị Chúc Yến'
+    ],
+    'B2': [
+        'Gia Tuệ',
+        'Gia Tuê',
+        'Nguyễn Gia Tuệ',
+        'Trần Gia Tuệ',
+        'Lê Gia Tuệ'
     ]
 };
 
@@ -3780,6 +3814,8 @@ const AUTHORIZED_STUDENTS = [
     ...STUDENTS_BY_CLASS['CB211'],
     ...STUDENTS_BY_CLASS['CB213'],
     ...STUDENTS_BY_CLASS['ONB103'],
+    ...STUDENTS_BY_CLASS['B212'],
+    ...STUDENTS_BY_CLASS['B2'],
     'PTMN'
 ];
 
@@ -7355,7 +7391,7 @@ function handleLoginSubmit() {
     const studentInfo = findStudentInfo(nameVal);
 
     if (!studentInfo) {
-        showLoginError('Họ và tên không nằm trong danh sách học viên (CB206, CB210, CB211, CB213, ONB103) hoặc giáo viên!');
+        showLoginError('Họ và tên không nằm trong danh sách học viên (CB206, CB210, CB211, CB213, ONB103, B212) hoặc giáo viên!');
         if (studentNameInput) studentNameInput.focus();
         return;
     }
@@ -7374,10 +7410,15 @@ function handleLoginSubmit() {
         } catch (e) {}
     } else {
         // Check student class
+        const isGiaTue = removeVietnameseTones(nameVal.toLowerCase()).includes('gia tue');
         if (classVal !== studentInfo.class) {
-            showLoginError('Lớp học không đúng! Học viên ' + studentInfo.name + ' thuộc lớp ' + studentInfo.class + '.');
-            if (classEl) classEl.focus();
-            return;
+            if (isGiaTue && (classVal === 'B212' || classVal === 'B2')) {
+                // Cho phép Gia Tuệ đăng nhập với mã lớp B212 hoặc B2
+            } else {
+                showLoginError('Lớp học không đúng! Học viên ' + studentInfo.name + ' thuộc lớp ' + studentInfo.class + '.');
+                if (classEl) classEl.focus();
+                return;
+            }
         }
 
         // Check password
