@@ -2066,8 +2066,16 @@ function renderExtraPracticePanel(typeId) {
         }).join('');
     }
 
-    const promptBullets = data.prompt.split('\n').filter(l => l.startsWith('•')).map(l => `<li>${l.replace('•', '').trim()}</li>`).join('');
-    const promptIntro = data.prompt.substring(0, data.prompt.indexOf('•')).trim();
+    let promptIntro = data.prompt || '';
+    let promptBullets = '';
+    if (data.prompt && data.prompt.includes('•')) {
+        const bulletIndex = data.prompt.indexOf('•');
+        promptIntro = data.prompt.substring(0, bulletIndex).trim();
+        promptBullets = data.prompt.substring(bulletIndex).split('\n')
+            .filter(l => l.trim().startsWith('•'))
+            .map(l => `<li>${l.replace('•', '').trim()}</li>`)
+            .join('');
+    }
 
     container.innerHTML = `
         <!-- Extra Practice Header Card with 20-min Timer -->
@@ -2100,9 +2108,10 @@ function renderExtraPracticePanel(typeId) {
             </div>
             <div class="sample-prompt-text">
                 <p>${promptIntro.replace(/\n+/g, '<br>')}</p>
+                ${promptBullets ? `
                 <ul style="margin-top: 8px;">
                     ${promptBullets}
-                </ul>
+                </ul>` : ''}
                 <p style="margin-top: 10px; font-style: italic; color: var(--text-muted);">
                     <i class="fa-solid fa-triangle-exclamation" style="color: #f59e0b;"></i> You should write at least 120 words. Do not include your name or address. Your response will be evaluated in terms of Task Fulfillment, Organization, Vocabulary, and Grammar.
                 </p>
