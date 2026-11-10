@@ -2216,11 +2216,16 @@ function renderExtraPracticePanel(typeId) {
 
     const panel = document.getElementById('extraPracticePanel');
     if (panel && panel.classList.contains('active')) {
-        const extraResult = document.getElementById('extraResultCard');
-        const isExtraResultShown = extraResult && !extraResult.classList.contains('hidden');
-        if (!isExtraResultShown) {
-            lockNavigationDuringExtraPractice();
-            startExtraPracticeTimer();
+        const savedExtraResult = getExtraPracticeResult(typeId);
+        if (savedExtraResult) {
+            displaySavedExtraPracticeResult(typeId);
+        } else {
+            const extraResult = document.getElementById('extraResultCard');
+            const isExtraResultShown = extraResult && !extraResult.classList.contains('hidden');
+            if (!isExtraResultShown) {
+                lockNavigationDuringExtraPractice();
+                startExtraPracticeTimer();
+            }
         }
     }
 }
@@ -2282,6 +2287,9 @@ function resetExtraPracticeArea() {
         try {
             if (currentExtraPracticeTypeId) {
                 localStorage.removeItem('vstep_draft_extra_practice_' + currentExtraPracticeTypeId);
+                const all = getExtraPracticeResults();
+                delete all[currentExtraPracticeTypeId];
+                localStorage.setItem('vstep_extra_practice_results', JSON.stringify(all));
             }
         } catch (e) {}
         updateExtraPracticeAutoSaveUI('Đã xóa bản nháp', false);
@@ -3270,13 +3278,13 @@ function renderSentenceAuditSectionHtml(sentenceAudits) {
 }
 
 
-function gradeExtraPractice(typeId, isAutoTimeUp = false) {
+function gradeExtraPractice(typeId, isAutoTimeUp = false, isSilentRestore = false) {
     const writingArea = document.getElementById('extraWritingArea');
     const resultCard = document.getElementById('extraResultCard');
     if (!writingArea || !resultCard) return;
 
     const rawText = writingArea.value.trim();
-    if (!rawText && !isAutoTimeUp) {
+    if (!rawText && !isAutoTimeUp && !isSilentRestore) {
         alert('Vui lòng nhập bài viết của bạn trước khi nộp bài!');
         writingArea.focus();
         return;
@@ -3285,7 +3293,7 @@ function gradeExtraPractice(typeId, isAutoTimeUp = false) {
     const words = rawText ? rawText.split(/\s+/).filter(w => w !== '') : [];
     const wordCount = words.length;
 
-    if (!isAutoTimeUp) {
+    if (!isAutoTimeUp && !isSilentRestore) {
         let confirmMsg = 'BẠN CÓ CHẮC CHẮN MUỐN NỘP BÀI LUYỆN TẬP THÊM KHÔNG?\n\n';
         if (wordCount < 120) {
             confirmMsg += `⚠️ Chú ý: Bài viết của bạn hiện có ${wordCount} từ (chưa đạt chuẩn tối thiểu 120 từ).\n\n`;
@@ -3592,6 +3600,21 @@ function gradeExtraPractice(typeId, isAutoTimeUp = false) {
         title: data ? data.title : 'Extra Practice',
         data
     };
+
+    if (!isSilentRestore) {
+        saveExtraPracticeResult(typeId, {
+            rawText,
+            typeId,
+            timeSpentStr,
+            wordCount,
+            overallBand,
+            convertedScore,
+            vstepLevel,
+            completedAt: new Date().toISOString(),
+            completedAtFormatted: new Date().toLocaleString('vi-VN')
+        });
+        updateGlobalProgress();
+    }
 
     // Build Results HTML
     resultCard.innerHTML = `
@@ -4234,6 +4257,9 @@ function applyNavigationLock(activeTab) {
     if (btnEditStudent) btnEditStudent.classList.add('btn-locked');
     const btnReset = document.getElementById('btnResetProgress');
     if (btnReset) btnReset.classList.add('btn-locked');
+    document.querySelectorAll('.btn-mini-backup, .btn-progress-action').forEach(b => {
+        b.classList.add('btn-locked');
+    });
 }
 
 function removeNavigationLock() {
@@ -4251,6 +4277,9 @@ function removeNavigationLock() {
         if (btnEditStudent) btnEditStudent.classList.remove('btn-locked');
         const btnReset = document.getElementById('btnResetProgress');
         if (btnReset) btnReset.classList.remove('btn-locked');
+        document.querySelectorAll('.btn-mini-backup, .btn-progress-action').forEach(b => {
+            b.classList.remove('btn-locked');
+        });
     }
 }
 
@@ -5680,8 +5709,119 @@ function displaySavedRecitationResult(letterId) {
     return true;
 }
 
+// --- Full Practice Results Storage & Persistence ---
+function getFullPracticeResults() {
+    try {
+        const saved = localStorage.getItem('vstep_full_practice_results');
+        return saved ? JSON.parse(saved) : {};
+    } catch (e) {
+        return {};
+    }
+}
+
+function getFullPracticeResult(letterId) {
+    const results = getFullPracticeResults();
+    return results[letterId] || null;
+}
+
+function saveFullPracticeResult(letterId, resultData) {
+    if (!letterId || !resultData) return;
+    try {
+        const allResults = getFullPracticeResults();
+        allResults[letterId] = resultData;
+        localStorage.setItem('vstep_full_practice_results', JSON.stringify(allResults));
+    } catch (e) {
+        console.error('Error saving full practice result', e);
+    }
+}
+
+function displaySavedFullPracticeResult(letterId) {
+    const saved = getFullPracticeResult(letterId);
+    if (!saved) return false;
+
+    stopFullPracticeTimer();
+    unlockNavigationAfterFullPractice();
+
+    if (fullPracticeWritingBox) fullPracticeWritingBox.classList.add('hidden');
+    if (fullPracticeResultBox) {
+        fullPracticeResultBox.classList.remove('hidden');
+        renderFullPracticeEvaluationResult(saved.userText, letterId, saved.timeSpentStr || '20:00');
+        
+        const existingStatus = fullPracticeResultBox.querySelector('.recitation-report-status');
+        if (existingStatus) {
+            existingStatus.innerHTML = `
+                <i class="fa-solid fa-cloud-arrow-up report-status-icon" style="color: #10b981; font-size: 18px;"></i>
+                <span>💾 <strong>TIẾN ĐỘ ĐÃ ĐƯỢC LƯU AN TOÀN TRÊN TRÌNH DUYỆT:</strong> Bài thực hành này đã hoàn thành vào lúc <strong>${saved.completedAtFormatted || 'Trước đó'}</strong>. Bạn có thể tải bài mẫu/phiếu chấm (.doc) hoặc bấm <strong>"Làm lại bài thực hành"</strong> bên dưới nếu muốn viết lại!</span>
+            `;
+        }
+    }
+    return true;
+}
+
+// --- Extra Practice Results Storage & Persistence ---
+function getExtraPracticeResults() {
+    try {
+        const saved = localStorage.getItem('vstep_extra_practice_results');
+        return saved ? JSON.parse(saved) : {};
+    } catch (e) {
+        return {};
+    }
+}
+
+function getExtraPracticeResult(letterId) {
+    const results = getExtraPracticeResults();
+    return results[letterId] || null;
+}
+
+function saveExtraPracticeResult(letterId, resultData) {
+    if (!letterId || !resultData) return;
+    try {
+        const allResults = getExtraPracticeResults();
+        allResults[letterId] = resultData;
+        localStorage.setItem('vstep_extra_practice_results', JSON.stringify(allResults));
+    } catch (e) {
+        console.error('Error saving extra practice result', e);
+    }
+}
+
+function displaySavedExtraPracticeResult(typeId) {
+    const saved = getExtraPracticeResult(typeId);
+    if (!saved) return false;
+
+    stopExtraPracticeTimer();
+    unlockNavigationAfterExtraPractice();
+
+    const writingArea = document.getElementById('extraWritingArea');
+    if (writingArea) {
+        writingArea.value = saved.rawText || '';
+    }
+    updateExtraWordCount();
+
+    gradeExtraPractice(typeId, false, true);
+
+    const resultCard = document.getElementById('extraResultCard');
+    if (resultCard) {
+        resultCard.classList.remove('hidden');
+        const noticeEl = document.createElement('div');
+        noticeEl.className = 'recitation-report-status';
+        noticeEl.style.cssText = 'margin-bottom: 20px; background: #ecfdf5; border: 1.5px solid #10b981; border-radius: 12px; padding: 14px 18px; color: #065f46; display: flex; align-items: center; gap: 10px;';
+        noticeEl.innerHTML = `
+            <i class="fa-solid fa-cloud-arrow-up" style="color: #10b981; font-size: 20px;"></i>
+            <span>💾 <strong>TIẾN ĐỘ ĐÃ ĐƯỢC LƯU TỰ ĐỘNG:</strong> Bài luyện tập thêm này đã hoàn thành vào lúc <strong>${saved.completedAtFormatted || 'Trước đó'}</strong>. Bạn có thể tải phiếu chấm (.doc) hoặc bấm <strong>"Viết lại (Đặt lại 20 phút)"</strong> bên trên nếu muốn làm lại!</span>
+        `;
+        resultCard.prepend(noticeEl);
+    }
+    return true;
+}
+
 // --- Progress Backup (Export) & Restore (Import) Files ---
 function exportProgressBackup() {
+    if (!isTeacherUser()) {
+        if (isRecitationInProgress || isFullPracticeInProgress || isExtraPracticeInProgress) {
+            showToastNotice('🔒 Đang trong thời gian làm bài (20 phút)! Bạn không thể sao lưu tiến độ lúc này.', 'fa-solid fa-lock');
+            return;
+        }
+    }
     try {
         const studentName = currentStudentName || localStorage.getItem('vstep_student_name') || 'Học viên';
         const studentClass = currentStudentClass || localStorage.getItem('vstep_student_class') || 'Chưa rõ';
@@ -5709,7 +5849,7 @@ function exportProgressBackup() {
 
         const backupData = {
             system: 'VSTEP_WRITING_B1_TASK1',
-            version: '59.0',
+            version: '70.0',
             exportedAt: new Date().toISOString(),
             exportedAtFormatted: new Date().toLocaleString('vi-VN'),
             student: {
@@ -5721,6 +5861,8 @@ function exportProgressBackup() {
             totalLetters: letterTypes.length,
             progressPercentage: letterTypes.length > 0 ? Math.round((completedLetters.length / letterTypes.length) * 100) : 0,
             recitationResults: getRecitationResults(),
+            fullPracticeResults: getFullPracticeResults(),
+            extraPracticeResults: getExtraPracticeResults(),
             drafts: {
                 fullPractice: fullPracticeDrafts,
                 extraPractice: extraPracticeDrafts,
@@ -6291,6 +6433,12 @@ function downloadRecitationDoc() {
 
 function importProgressBackup(file) {
     if (!file) return;
+    if (!isTeacherUser()) {
+        if (isRecitationInProgress || isFullPracticeInProgress || isExtraPracticeInProgress) {
+            showToastNotice('🔒 Đang trong thời gian làm bài (20 phút)! Bạn không thể khôi phục tiến độ lúc này.', 'fa-solid fa-lock');
+            return;
+        }
+    }
     const reader = new FileReader();
     reader.onload = function(e) {
         try {
@@ -6334,6 +6482,20 @@ function importProgressBackup(file) {
             if (data.recitationResults && typeof data.recitationResults === 'object') {
                 try {
                     localStorage.setItem('vstep_recitation_results', JSON.stringify(data.recitationResults));
+                } catch (e) {}
+            }
+
+            // Restore full practice results
+            if (data.fullPracticeResults && typeof data.fullPracticeResults === 'object') {
+                try {
+                    localStorage.setItem('vstep_full_practice_results', JSON.stringify(data.fullPracticeResults));
+                } catch (e) {}
+            }
+
+            // Restore extra practice results
+            if (data.extraPracticeResults && typeof data.extraPracticeResults === 'object') {
+                try {
+                    localStorage.setItem('vstep_extra_practice_results', JSON.stringify(data.extraPracticeResults));
                 } catch (e) {}
             }
 
@@ -6408,11 +6570,15 @@ function markLetterCompleted(letterId) {
 function resetLearningProgress() {
     if (!isTeacherUser()) {
         if (isRecitationInProgress) {
-            triggerRecitationCheatWarning('làm mới tiến độ học tập trong lúc trả bài');
+            triggerCheatWarning('làm mới tiến độ học tập trong lúc trả bài');
             return;
         }
         if (isFullPracticeInProgress) {
             showToastNotice('🔒 Đang trong thời gian làm bài thực hành! Không thể làm mới tiến độ lúc này.', 'fa-solid fa-lock');
+            return;
+        }
+        if (isExtraPracticeInProgress) {
+            showToastNotice('🔒 Đang trong thời gian làm bài luyện tập thêm! Không thể làm mới tiến độ lúc này.', 'fa-solid fa-lock');
             return;
         }
     }
@@ -6420,6 +6586,8 @@ function resetLearningProgress() {
         try {
             localStorage.removeItem('vstep_completed_letters');
             localStorage.removeItem('vstep_recitation_results');
+            localStorage.removeItem('vstep_full_practice_results');
+            localStorage.removeItem('vstep_extra_practice_results');
             letterTypes.forEach(t => {
                 localStorage.removeItem('vstep_draft_full_practice_' + t.id);
                 localStorage.removeItem('vstep_draft_extra_practice_' + t.id);
@@ -6467,20 +6635,34 @@ function updateGlobalProgress() {
         }
     }
 
-    // Dashboard Recitation Scores Summary (v59.0)
+    // Dashboard Activities Summary
     const recSummary = document.getElementById('dashboardRecitationSummary');
     const recResults = getRecitationResults();
-    const resultKeys = Object.keys(recResults);
+    const fullResults = getFullPracticeResults();
+    const extraResults = getExtraPracticeResults();
+    const hasAnyResults = Object.keys(recResults).length > 0 || Object.keys(fullResults).length > 0 || Object.keys(extraResults).length > 0;
     if (recSummary) {
-        if (resultKeys.length > 0) {
+        if (hasAnyResults) {
             recSummary.classList.remove('hidden');
-            let pillsHtml = '<div class="recitation-summary-title"><i class="fa-solid fa-clipboard-check"></i> Kết quả trả bài đã sao lưu:</div><div class="recitation-summary-pills">';
+            let pillsHtml = '<div class="recitation-summary-title"><i class="fa-solid fa-clipboard-check"></i> Tiến độ các bài đã hoàn thành & sao lưu:</div><div class="recitation-summary-pills">';
             letterTypes.forEach(t => {
                 const r = recResults[t.id];
-                if (r) {
-                    const isPassed = r.status === 'ĐẠT' || r.averageScore >= 90;
-                    pillsHtml += `<span class="rec-summary-pill ${isPassed ? 'passed' : 'failed'}" title="${t.titleEn}: ${r.averageScore}% (${r.status}) - Làm lúc: ${r.completedAtFormatted || ''}">
-                        <strong>${t.titleEn}</strong>: ${r.averageScore}% ${isPassed ? '✓ ĐẠT' : '✗'}
+                const fp = fullResults[t.id];
+                const ep = extraResults[t.id];
+                if (r || fp || ep) {
+                    let parts = [];
+                    if (r) {
+                        const isPassed = r.status === 'ĐẠT' || r.averageScore >= 90;
+                        parts.push(`Trả bài: <strong>${r.averageScore}%</strong> ${isPassed ? '✓' : ''}`);
+                    }
+                    if (fp) {
+                        parts.push(`Thực hành: <strong>${fp.convertedScore !== undefined ? fp.convertedScore : (fp.overallBand || '✓')}</strong>/3.0`);
+                    }
+                    if (ep) {
+                        parts.push(`Luyện tập: <strong>${ep.convertedScore !== undefined ? ep.convertedScore : (ep.overallBand || '✓')}</strong>/3.0`);
+                    }
+                    pillsHtml += `<span class="rec-summary-pill passed" title="${t.titleEn}">
+                        <strong>${t.titleEn}</strong> [${parts.join(' | ')}]
                     </span>`;
                 }
             });
@@ -7065,6 +7247,15 @@ function updateFullPracticeWordCount() {
 
 function resetFullPracticeUI() {
     resetFullPracticeTimer();
+
+    // Clear saved full practice result for this letter type
+    if (activeLetterTypeId) {
+        try {
+            const all = getFullPracticeResults();
+            delete all[activeLetterTypeId];
+            localStorage.setItem('vstep_full_practice_results', JSON.stringify(all));
+        } catch (e) {}
+    }
 
     if (fullPracticeInput) {
         fullPracticeInput.value = '';
@@ -8192,6 +8383,18 @@ function submitFullPractice(isAutoTimeUp = false) {
     if (fullPracticeResultBox) {
         fullPracticeResultBox.classList.remove('hidden');
         renderFullPracticeEvaluationResult(userText, activeLetterTypeId, timeSpentStr);
+        saveFullPracticeResult(activeLetterTypeId, {
+            userText,
+            typeId: activeLetterTypeId,
+            timeSpentStr,
+            wordCount,
+            overallBand: lastFullPracticeEvaluationData ? lastFullPracticeEvaluationData.overallBand : 0,
+            convertedScore: lastFullPracticeEvaluationData ? lastFullPracticeEvaluationData.convertedScore : 0,
+            vstepLevel: lastFullPracticeEvaluationData ? lastFullPracticeEvaluationData.vstepLevel : '',
+            completedAt: new Date().toISOString(),
+            completedAtFormatted: new Date().toLocaleString('vi-VN')
+        });
+        updateGlobalProgress();
         setTimeout(() => {
             fullPracticeResultBox.scrollIntoView({ behavior: 'smooth', block: 'start' });
         }, 100);
@@ -8672,12 +8875,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
             // Handle 20-minute timer and tab locking for THỰC HÀNH
             if (tabId === 'fullPractice') {
-                const isFullResultShown = fullPracticeResultBox && !fullPracticeResultBox.classList.contains('hidden');
-                if (!isFullResultShown) {
-                    lockNavigationDuringFullPractice();
-                    startFullPracticeTimer();
-                    if (fullPracticeInput && !fullPracticeInput.value) {
-                        loadFullPracticeDraft(activeLetterTypeId);
+                const savedFullResult = getFullPracticeResult(activeLetterTypeId);
+                if (savedFullResult) {
+                    displaySavedFullPracticeResult(activeLetterTypeId);
+                } else {
+                    const isFullResultShown = fullPracticeResultBox && !fullPracticeResultBox.classList.contains('hidden');
+                    if (!isFullResultShown) {
+                        lockNavigationDuringFullPractice();
+                        startFullPracticeTimer();
+                        if (fullPracticeInput && !fullPracticeInput.value) {
+                            loadFullPracticeDraft(activeLetterTypeId);
+                        }
                     }
                 }
             } else {
@@ -8686,12 +8894,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
             // Handle 20-minute timer for BÀI LUYỆN TẬP THÊM
             if (tabId === 'extraPractice') {
-                const extraResult = document.getElementById('extraResultCard');
-                const isExtraResultShown = extraResult && !extraResult.classList.contains('hidden');
-                if (!isExtraResultShown) {
-                    lockNavigationDuringExtraPractice();
-                    startExtraPracticeTimer();
-                    loadExtraPracticeDraft(currentExtraPracticeTypeId);
+                const savedExtraResult = getExtraPracticeResult(currentExtraPracticeTypeId);
+                if (savedExtraResult) {
+                    displaySavedExtraPracticeResult(currentExtraPracticeTypeId);
+                } else {
+                    const extraResult = document.getElementById('extraResultCard');
+                    const isExtraResultShown = extraResult && !extraResult.classList.contains('hidden');
+                    if (!isExtraResultShown) {
+                        lockNavigationDuringExtraPractice();
+                        startExtraPracticeTimer();
+                        loadExtraPracticeDraft(currentExtraPracticeTypeId);
+                    }
                 }
             } else {
                 stopExtraPracticeTimer();
