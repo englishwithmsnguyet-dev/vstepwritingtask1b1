@@ -3,8 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
     <title>PHÒNG ÔN TẬP THƯ B1 - ENGLISH WITH MISS NGUYET</title>
-    <link rel="stylesheet" href="style.css?v=72.0">
+    <link rel="stylesheet" href="style.css?v=73.0">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400..700;1,400..700&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap" rel="stylesheet">
@@ -38,7 +41,9 @@
             }
             var extra = !col ? '' : '\nCột: ' + col;
             extra += !error ? '' : '\nLỗi chi tiết: ' + error.stack;
-            debugDiv.innerHTML = '<strong>Phát hiện lỗi JavaScript!</strong>\nThông điệp: ' + msg + '\nTệp: ' + url + '\nDòng: ' + line + extra;
+            debugDiv.innerHTML = '<div style="margin-bottom: 8px;"><strong>Phát hiện lỗi JavaScript!</strong> (Trình duyệt có thể đang dùng bản cũ)</div>' +
+                'Thông điệp: ' + msg + '\nTệp: ' + url + '\nDòng: ' + line + extra +
+                '<div style="margin-top: 12px;"><button onclick="location.reload(true)" style="background: #dc2626; color: white; border: none; padding: 8px 18px; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 13px;">🔄 Tải lại trang (Bản nháp bài viết của bạn được tự động lưu nguyên vẹn)</button></div>';
             return false;
         };
     </script>
@@ -586,6 +591,6 @@
         <input type="hidden" name="pageHistory" value="0">
     </form>
 
-    <script src="app.js?v=72.0"></script>
+    <script src="app.js?v=73.0"></script>
 </body>
 </html>
