@@ -3406,9 +3406,9 @@ function gradeExtraPractice(typeId, isAutoTimeUp = false, isSilentRestore = fals
         tfDescText = `Bài viết quá ngắn (${wordCount} từ). Hoàn toàn chưa trả lời các yêu cầu cốt lõi của đề bài.`;
     } else {
         if (bulletsCount === 4) {
-            tfScore = wordCount >= 120 ? 8.5 : (wordCount >= 90 ? 7.5 : 6.0);
+            tfScore = wordCount >= 120 ? 8.5 : (wordCount >= 90 ? 5.5 : 3.5);
         } else if (bulletsCount === 3) {
-            tfScore = wordCount >= 120 ? 7.0 : (wordCount >= 90 ? 6.0 : 5.0);
+            tfScore = wordCount >= 120 ? 7.0 : (wordCount >= 90 ? 5.0 : 3.5);
         } else if (bulletsCount === 2) {
             tfScore = wordCount >= 90 ? 5.5 : 4.0;
         } else if (bulletsCount === 1) {
@@ -3531,9 +3531,9 @@ function gradeExtraPractice(typeId, isAutoTimeUp = false, isSilentRestore = fals
 
     // Total VSTEP Band (Thang 10) & Quy đổi 30% bài thi Writing VSTEP (Thang 3.0 điểm)
     let overallBand = (tfScore + orgScore + vocScore + gramScore) / 4.0;
-    overallBand = Math.round(overallBand * 10) / 10;
+    overallBand = Math.round(overallBand * 2) / 2;
 
-    let convertedScore = Math.round((overallBand / 10.0) * 3.0 * 100) / 100;
+    let convertedScore = Math.round((overallBand / 3.0) * 100) / 100;
     if (isSeverelyShort) {
         convertedScore = wordCount <= 3 ? 0.00 : Math.min(0.15, convertedScore);
         overallBand = wordCount <= 3 ? 0.0 : Math.min(0.5, overallBand);
@@ -3863,6 +3863,10 @@ function gradeExtraPractice(typeId, isAutoTimeUp = false, isSilentRestore = fals
 
     resultCard.classList.remove('hidden');
     resultCard.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    if (window.VstepAIGrader) {
+        const _pEl = document.getElementById('extraPracticePrompt') || document.querySelector('.extra-practice-prompt, .prompt-box');
+        window.VstepAIGrader.mountSingle(resultCard, { taskType: 'task1', targetLevel: 'B1', prompt: (_pEl ? _pEl.innerText : ('VSTEP Task 1 Letter - ' + typeId)), essay: rawText });
+    }
 
     // Send Form Report to Teacher
     const offTopicStatus = isCompletelyOffTopic ? '⚠️ LẠC ĐỀ HOÀN TOÀN' : (isPartiallyOffTopic ? '⚠️ NGUY CƠ LẠC ĐỀ' : '✓ ĐÚNG ĐỀ');
@@ -8554,6 +8558,10 @@ function renderFullPracticeEvaluationResult(rawText, typeId, timeSpentStr) {
     // Attach restart listener
     const btnRestart = document.getElementById('btnRestartFullPractice');
     if (btnRestart) btnRestart.addEventListener('click', resetFullPracticeUI);
+    if (window.VstepAIGrader && fullPracticeResultBox) {
+        const _fpPrompt = (document.querySelector('#fullPracticePrompt, .sample-prompt-container') || {}).innerText || letterTitle;
+        window.VstepAIGrader.mountSingle(fullPracticeResultBox, { taskType: 'task1', targetLevel: 'B1', prompt: _fpPrompt, essay: rawText });
+    }
 
     // Send Google Form report to Teacher
     const now = new Date().toLocaleString('vi-VN');
